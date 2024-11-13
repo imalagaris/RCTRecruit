@@ -221,7 +221,7 @@ a$plot(y)
 
 
 
-
+load_all()
 LoadData(gripsIM, ScreenDt, Enrolled)
 train <- the$TrainVector
 the$datWeeks[1:5, ]; cat("...\n"); the$datWeeks[48:52, ]
@@ -235,7 +235,6 @@ bnWt <- stats::dbinom(0L:51L, 51L, 0.5)
 idWt <- \(t) ((0L:51L + 26L - t) %% 52L) + 1L
 getWts <- \(t) (bnWt[idWt(t)] * nonGap) |> (\(x) x / sum(x))()
 p <- lapply(gapIdx, getWts) |> setNames(paste("Week", gapIdx))
-
 len <- length(gapIdx)
 out <- numeric(len) |> setNames(names(p))
 
@@ -244,29 +243,23 @@ fillBase <- \() {
   out
 }
 
-fillBinom <- \(n = 1, repl. = FALSE) {
-  for (i in seq_len(len)) out[i] <- mean(sample(train, n, repl., p[[i]]))
+fillBinom <- \(n = 1) {
+  for (i in seq_len(len)) out[i] <- mean(sample(train, n, FALSE, p[[i]]))
   out
 }
 
 list2df <- \(x) do.call(rbind, x) |> as.data.frame()
 nSim <- seq_len(1e4)
 
-
-
 dfs <- list()
-dfs[["Naive"]] <- lapply(nSim, \(x) fillBase()) |> list2df()
-dfs[["BinomMuOf1"]] <- lapply(nSim, \(x) fillBinom()) |> list2df()
-dfs[["BinomMuOf3"]] <- lapply(nSim, \(x) fillBinom(3)) |> list2df()
-dfs[["BinomMuOf6"]] <- lapply(nSim, \(x) fillBinom(6)) |> list2df()
-dfs[["BinomMuOf9"]] <- lapply(nSim, \(x) fillBinom(9)) |> list2df()
-
-
+dfs[["Bootstrap"]] <- lapply(nSim, \(x) fillBase()) |> list2df()
+dfs[["BinomWt"]] <- lapply(nSim, \(x) fillBinom()) |> list2df()
+dfs[["BinomWtMean3"]] <- lapply(nSim, \(x) fillBinom(3)) |> list2df()
+dfs[["BinomWtMean6"]] <- lapply(nSim, \(x) fillBinom(6)) |> list2df()
+dfs[["BinomWtMean9"]] <- lapply(nSim, \(x) fillBinom(9)) |> list2df()
 
 reportMeanCVUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x) / mean(x))
 reportMeanSdUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x))
-
-
 reportMeanCV <- function(df) {
   out <- lapply(df, reportMeanCVUnit) |> cbind()
   N <- ((apply(df, 1, sum)) + 18) |> reportMeanSdUnit()
@@ -276,12 +269,13 @@ MeanCV <- lapply(dfs, reportMeanCV)
 do.call(data.frame, MeanCV)
 
 NTotalQuantiles <- lapply(dfs, \(x) {
-  (rowSums(x) + 18) |> 
-    round() |> 
-    quantile(c(.025, .5, .975))
-  }) |> 
-  do.call(rbind, args = _)
+  (rowSums(x) + 18) |>  round() |>  quantile(c(.025, .5, .975))
+}) |> do.call(rbind, args = _)
 NTotalQuantiles
+
+
+
+
 
 
 
