@@ -13,7 +13,7 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
    Package: \tab RCTRecruit \cr
    Type: \tab Package \cr
    Version: \tab 0.1.0 \cr
-   Date: \tab 2024-11-12 \cr
+   Date: \tab 2024-11-13 \cr
 }
 }
 \references{
