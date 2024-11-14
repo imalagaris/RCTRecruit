@@ -235,6 +235,12 @@ bnWt <- stats::dbinom(0L:51L, 51L, 0.5)
 idWt <- \(t) ((0L:51L + 26L - t) %% 52L) + 1L
 getWts <- \(t) (bnWt[idWt(t)] * nonGap) |> (\(x) x / sum(x))()
 p <- lapply(gapIdx, getWts) |> setNames(paste("Week", gapIdx))
+
+oldPar <- par(no.readonly = TRUE)
+par(fin = c(6, 6), las = 1, cex.axis = 1.2, cex.lab = 1.2);
+plot(p$`Week 20`, type = "h")
+do.call(par, oldPar)
+
 len <- length(gapIdx)
 out <- numeric(len) |> setNames(names(p))
 
@@ -253,10 +259,10 @@ nSim <- seq_len(1e4)
 
 dfs <- list()
 dfs[["Bootstrap"]] <- lapply(nSim, \(x) fillBase()) |> list2df()
-dfs[["BinomWt"]] <- lapply(nSim, \(x) fillBinom()) |> list2df()
-dfs[["BinomWtMean3"]] <- lapply(nSim, \(x) fillBinom(3)) |> list2df()
-dfs[["BinomWtMean6"]] <- lapply(nSim, \(x) fillBinom(6)) |> list2df()
-dfs[["BinomWtMean9"]] <- lapply(nSim, \(x) fillBinom(9)) |> list2df()
+dfs[["Binom"]] <- lapply(nSim, \(x) fillBinom()) |> list2df()
+dfs[["BinomMu3"]] <- lapply(nSim, \(x) fillBinom(3)) |> list2df()
+dfs[["BinomMu6"]] <- lapply(nSim, \(x) fillBinom(6)) |> list2df()
+dfs[["BinomMu9"]] <- lapply(nSim, \(x) fillBinom(9)) |> list2df()
 
 reportMeanCVUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x) / mean(x))
 reportMeanSdUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x))
@@ -265,13 +271,16 @@ reportMeanCV <- function(df) {
   N <- ((apply(df, 1, sum)) + 18) |> reportMeanSdUnit()
   rbind(out, N)
 }
-MeanCV <- lapply(dfs, reportMeanCV)
-do.call(data.frame, MeanCV)
 
-NTotalQuantiles <- lapply(dfs, \(x) {
-  (rowSums(x) + 18) |>  round() |>  quantile(c(.025, .5, .975))
-}) |> do.call(rbind, args = _)
-NTotalQuantiles
+for (i in seq_len(len)) out[i] <- sum(train * p[[i]])
+WtMean <- c(out, 18 + sum(out)) |> sprintf(fmt = "%5.2f", ... = _)
+MeanCV <- lapply(dfs, reportMeanCV) |> as.data.frame()
+
+cbind(WtMean, MeanCV)
+
+
+lapply(dfs, \(x) { round(rowSums(x) + 18) |>  quantile(c(.025, .5, .975))}) |> 
+  do.call(rbind, args = _)
 
 
 
