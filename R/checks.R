@@ -53,18 +53,24 @@ checkExportedFunctionsArgs <- \() {
 }
 
 
-getCall <- \() {
-  arg2string <- \(x) {
-    y <- bquote(substitute(.(x), sys.frame(1)))
-    eval(y) |> deparse() |> gsub("^(\"|\')(.+)(\"|\')$", "\\2", x = _)
+getCall <- \(n = 0L) {
+  deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
+  carg <- formals(sys.function(sys.parent(1L + n)))
+  cl <- as.list(sys.call(-1L-n))[-1L]
+  for (nn in names(carg)) {
+    if (hasName(cl, nn)) {
+      carg[[nn]] <- deparseSymbol(cl[[nn]])
+      cl[[nn]] <- NULL
+    }
   }
-  nams <- names(formals(sys.function(1)))
-  lapply(nams, as.name) |> lapply(arg2string) |> stats::setNames(nams)
+  id <- carg |> vapply(is.symbol, logical(1L)) |> which()
+  for (i in seq_along(id)) carg[[id[[i]]]] <- deparseSymbol(cl[[i]])
+  carg
 }
 
 checkArgs <- function(name) {
-  cargs <- getCall();
-  dat <- get(cargs$data, sys.frame(1))
+  cargs <- getCall(1L);
+  dat <- get(cargs$data, parent.frame())
   dataStr <- cargs$data
   varStr <- eval(substitute(cargs$name));
   if (!utils::hasName(dat, varStr)) {

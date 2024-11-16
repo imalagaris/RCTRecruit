@@ -1,0 +1,213 @@
+---
+title: "GRIPS code review"
+author: "Ioannis Malagaris"
+knit: |
+  (function(input, ...) {
+    hout <- rmarkdown::html_document(
+      highlight = "tango",
+      css = "style.css",
+      theme = NULL,
+      df_print = "kable",
+      template = NULL,
+      extra_dependencies = list(rmarkdown::html_dependency_jquery())
+    )
+    knitr::opts_chunk$set(cache.path = paste("cache/", input, sep = "-"))
+    rmarkdown::render(
+      input,
+      output_format = hout,
+      output_dir = "output"
+    )
+  })
+---
+
+```{r setup, include=FALSE, attr.source='.numberLines', cache.path="cache/"}
+knitr::opts_chunk$set(echo = TRUE, cache.path = "cache/")
+library(devtools)
+```
+
+
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+Code below is taken from the **'grips code all.R'** file in the **'GRIPS code'** folder. I will refer to it as **'source'**.
+
+## Data management
+
+```{r}
+load_all()
+oldPar <- par(no.readonly = TRUE)
+LoadData(gripsIM, ScreenDt, Enrolled)
+train <- the$TrainVector
+nonGap <- the$datWeeks$cnt != 0
+gapIdx <- which(!nonGap)
+the$datWeeks[gapIdx, ]
+nonGapVals <- train[nonGap]
+
+```
+
+```{r}
+bnWt <- stats::dbinom(0L:51L, 51L, 0.5)
+idWt <- \(t) ((0L:51L + 26L - t) %% 52L) + 1L
+getWts <- \(t) (bnWt[idWt(t)] * nonGap) |> (\(x) x / sum(x))()
+p <- lapply(gapIdx, getWts) |> setNames(paste("Week", gapIdx))
+
+
+gPar <- list(
+  fig = c(0, .5, 0, 1), 
+  mar = c(0, 4, 1.2, 0), 
+  oma = c(2,0,2,0),  
+  pty = "s",
+  las = 1, 
+  cex.axis = 1.2, 
+  cex.lab = 1.2, 
+  font.lab = 2,
+  new = FALSE
+)
+
+plotPar <- list(
+  x = p[["Week 20"]],
+  type = "h", 
+  xlab = "", 
+  ylab = "Sampling Weights",
+  main = "Week 20",
+  lwd = 3,
+  ylim = c(0, 0.55)
+)
+
+
+addLnPnt <- \(x) {
+  points(x, 0, cex = 1.2, pch = 19, col = "red")
+  abline(h = c(1:5) / 10, lty = 2, col = "gray80")
+}
+
+do.call(par, gPar)
+do.call(plot, plotPar)
+addLnPnt(20)
+
+gPar[c("fig", "new")] = list(c(.5, 1, 0, 1), TRUE)
+plotPar[c("x", "main", "ylab")] = list(p[["Week 28"]], "Week 28", "")
+do.call(par, gPar)
+do.call(plot, plotPar)
+addLnPnt(28)
+
+mtext("Weights for Filling Gaps", 3, -2, TRUE, cex = 1.5, font = 2)
+mtext("Weeks", 1, 0, TRUE, cex = 1.2, font = 2)
+
+do.call(par, oldPar)
+
+```
+
+
+```{r}
+
+len <- length(gapIdx)
+wk <- seq_len(len) |> setNames(names(p))
+
+btstrp <- \() vapply(wk, \(x) sample(nonGapVals, 1), 0L)
+bnm <- \(n = 1) vapply(wk, \(x) mean(sample(train, n, FALSE, p[[x]])), .0)
+list2df <- \(x) do.call(rbind, x) |> as.data.frame()
+
+nSim <- seq_len(1e4)
+dfs <- list()
+dfs[["Bootstrap"]] <- lapply(nSim, \(x) btstrp()) |> list2df()
+dfs[["Binom"]]     <- lapply(nSim, \(x) bnm(1L))  |> list2df()
+dfs[["BinomMu3"]]  <- lapply(nSim, \(x) bnm(3L))  |> list2df()
+dfs[["BinomMu6"]]  <- lapply(nSim, \(x) bnm(6L))  |> list2df()
+dfs[["BinomMu9"]]  <- lapply(nSim, \(x) bnm(9L))  |> list2df()
+
+out <- numeric(len) |> setNames(names(p))
+reportMeanCVUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x) / mean(x))
+reportMeanSdUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x))
+reportMeanCV <- function(df) {
+  out <- lapply(df, reportMeanCVUnit) |> cbind()
+  N <- ((apply(df, 1, sum)) + 18) |> reportMeanSdUnit()
+  rbind(out, N)
+}
+
+for (i in seq_len(len)) out[i] <- sum(train * p[[i]])
+WtMean <- c(out, 18 + sum(out)) |> sprintf(fmt = "%5.2f", ... = _)
+MeanCV <- lapply(dfs, reportMeanCV) |> as.data.frame()
+
+cbind(WtMean, MeanCV)
+lapply(dfs, \(x) { round(rowSums(x) + 18) |>  quantile(c(.025, .5, .975))}) |> 
+  do.call(rbind, args = _) |>
+  as.data.frame()
+
+```
+
+
+On lines [8](#cb1-8)-[9](#cb1-9) (15-16 in source), the **'isoweek'** and **'year'** functions are used to create new columns in the **'grips'**. The year 2019 appears to have logs in its 1st week although recruitment started on the 25th.
+
+
+I think we should use **'isoyear'** function instead of the **'year'** function.
+
+<div style="page-break-before:always">&nbsp;</div>
+
+## Seasonality out of sync?
+
+The **'onesimulationwt'** function is defined on line 211 in **'source'**.
+Loop starts with **'probvector'** aligned for week 1 ([line 13](#cb4-13)) and increments ([line 17](#cb4-17)) until enough subjects are included.
+I think it should start with the first **week index** of the period we make the prediction for.
+This is the 25th week for **'grips2ndy'** (prediction dataset).
+
+
+<div style="page-break-before:always">&nbsp;</div>
+
+## Gap weeks
+
+
+The **`fillgaps`** function is defined on line 501 in **`source`**.
+**`fillgaps`** 2nd argument (**`variable`**) is the variable column index to be used to check for gaps weeks.
+We should definitely change it to varname instead of index.
+On [line 15](#cb6-15) (515 in source), the function is called with **`variable = 4`**.
+This is the index of the **Sum_Meets_Crit** `(weekly summation of criteria met)` column.
+Was this the intended column?
+
+
+
+Also, **`fillgaps`** replaces the whole row of gap weeks with non-gap weeks. That is, even the **`week`** and **`year`** columns are replaced.
+Finally, should we use weights for more probable sampling from adjacent weeks?
+
+<div style="page-break-before:always">&nbsp;</div>
+
+## Account for holidays
+
+The **onesimulationwtd** function is defined on line 648 in **source**.
+It is implemented using **'dataset = grips1sty'** as 1st argument on line 717 in source.
+The **`grips1sty$isholiday`** variable is the sum of holidays within each calendar week (each row).
+On [line 6](#cb9-6) (684 in source), the boolean vector **'a'** is created as **`dataset$isholiday == 0`**. That is, for weeks with no holidays it equals **'1 (TRUE)'** and **'0 (FALSE)'** for weeks that had at least one day out of 5 business days as a holiday.
+On [line 7](#cb9-7), the binomial weights vector is created based on current week index.
+On [line 8](#cb9-8), the weights are adjusted using the **'a'** boolean vector.
+**Questions/issues**:
+
+* We assign **0** (zero) weight to weeks with just one holiday.
+* We do not take into account whether the current week index for target dataset (grips2ndy) is a week with a holiday or not.
+
+<div style="page-break-before:always">&nbsp;</div>
+
+## Code efficiency
+Here, I will use the **'onesimulationwt'** function, presented also in **Comment 2**, as a representative example.
+Please, note that this function is called once for every simulation.
+
+
+1. [Line 5](#cb10-5): **'wt1'** is a vector is calculated anew for every simulation.
+2. [Line 6](#cb10-6): **'wtatt'** function is defined anew every time (inside the main function).
+3. [Line 11](#cb10-11): **'scalar1** function the same as above.
+4. [Line 14](#cb10-14): We just need to sample 1 value from the **Sum_Enrolled** column. It is inefficient to sample/query the whole row of a dataframe.
+5. [Line 14](#cb10-14): **nrow(dataset))** is calculated [#Simulations * #Loops] times although is a constant.
+6. [Line 15](#cb10-15): Using **'rbind'** to add a row to a data frame is inefficient.
+7. [Line 16](#cb10-16): **'probvector'** is recalculated for every row of the simulation data frame.
+
+We can calculate weights (replace **wt1**) and define **'wtatt'** function in the global environment once as follows
+
+```{r}
+binomWt <- dbinom(0L:51L, 51L, 0.5) |> (\(x)  x / sum(x))()
+indxWt <- function(t) ((0L:51L + 26L - t) %% 52L) + 1L
+probVec <- function(t) binomWt[indxWt(t)]
+```
+
+The above, while it is more efficient, it requires calling **probVec** every time.
+We can calculate the weights for every week once in the global environment as follows
+
+<div style="page-break-before:always">&nbsp;</div>
+
+
