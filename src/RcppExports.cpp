@@ -10,67 +10,10 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// sim1
-int sim1(IntegerVector x, List probs, int nSubjects, int startWeek);
-RcppExport SEXP _RCTRecruit_sim1(SEXP xSEXP, SEXP probsSEXP, SEXP nSubjectsSEXP, SEXP startWeekSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< List >::type probs(probsSEXP);
-    Rcpp::traits::input_parameter< int >::type nSubjects(nSubjectsSEXP);
-    Rcpp::traits::input_parameter< int >::type startWeek(startWeekSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim1(x, probs, nSubjects, startWeek));
-    return rcpp_result_gen;
-END_RCPP
-}
-// getPredVec
-IntegerVector getPredVec(IntegerVector x, List probs);
-RcppExport SEXP _RCTRecruit_getPredVec(SEXP xSEXP, SEXP probsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< List >::type probs(probsSEXP);
-    rcpp_result_gen = Rcpp::wrap(getPredVec(x, probs));
-    return rcpp_result_gen;
-END_RCPP
-}
-// getDistance
-double getDistance(IntegerVector x, IntegerVector y, List probs);
-RcppExport SEXP _RCTRecruit_getDistance(SEXP xSEXP, SEXP ySEXP, SEXP probsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type y(ySEXP);
-    Rcpp::traits::input_parameter< List >::type probs(probsSEXP);
-    rcpp_result_gen = Rcpp::wrap(getDistance(x, y, probs));
-    return rcpp_result_gen;
-END_RCPP
-}
-// PredCIbyWk
-List PredCIbyWk(IntegerVector x, List probs, int nSim, NumericVector pq);
-RcppExport SEXP _RCTRecruit_PredCIbyWk(SEXP xSEXP, SEXP probsSEXP, SEXP nSimSEXP, SEXP pqSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< List >::type probs(probsSEXP);
-    Rcpp::traits::input_parameter< int >::type nSim(nSimSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pq(pqSEXP);
-    rcpp_result_gen = Rcpp::wrap(PredCIbyWk(x, probs, nSim, pq));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP _rcpp_module_boot_mod();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RCTRecruit_sim1", (DL_FUNC) &_RCTRecruit_sim1, 4},
-    {"_RCTRecruit_getPredVec", (DL_FUNC) &_RCTRecruit_getPredVec, 2},
-    {"_RCTRecruit_getDistance", (DL_FUNC) &_RCTRecruit_getDistance, 3},
-    {"_RCTRecruit_PredCIbyWk", (DL_FUNC) &_RCTRecruit_PredCIbyWk, 4},
     {"_rcpp_module_boot_mod", (DL_FUNC) &_rcpp_module_boot_mod, 0},
     {NULL, NULL, 0}
 };
