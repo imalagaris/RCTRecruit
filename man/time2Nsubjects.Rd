@@ -35,6 +35,6 @@ Function: Simulate number of weeks needed to recruit a given number of
 subjects
 }
 \examples{
-LoadData(gripsIM, ScreenDt, Enrolled)
+LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- time2Nsubjects()
 }

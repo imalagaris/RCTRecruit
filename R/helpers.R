@@ -2,29 +2,41 @@
 the <- new.env(parent = emptyenv())
 Rcpp::loadModule(module = "mod", TRUE, env =  environment())
 load("R/sysdata.rda")
-the$probs = the$binomWt <- wts[["binomial"]]
-the$cauchyWt <- wts[["cauchy"]] 
+the$binomWt <- wts[["binomial"]]
+the$probs <- the$binomWt
+the$cauchyWt <- wts[["cauchy"]]
 the$color <- .Platform$GUI %in% c("RStudio", "RTerm")
 
+# On data load, this function exports the methods of the C++ module to the `the`
+# internal environment
 exportModuleMethods <- \(instance) {
-  cl <- substitute(instance);
+  cl <- substitute(instance)
   if (!methods::is(the$cppModule, "Rcpp_rct")) stop("For internal use only")
   mn <- rct@methods |> names()
   mthds <- lapply(mn, as.name)
-  fx <- (\(x, y) lapply(y, \(z) {z <- z; x <- x; substitute(x$z)}))
+  fx <- \(x, y) {
+    lapply(y, \(z) {
+      z <- z
+      x <- x
+      substitute(x$z)
+    })
+  }
   fx(cl, mthds) |> lapply(eval, topenv())
   lapply(mn, \(m) the[[m]] <- get(m, instance)) |> invisible()
 }
 
-
+# It is call within exported functions to set the training data as filled or not
 useFilled <- function(fill = FALSE, env = the) {
   train <- if (fill) env$Trainfilled else env$TrainVector
-  the$cppModule$train = env$train <- train
+  the$cppModule$train <- train
+  env$train <- train
 }
 
+# It is call within exported functions to set the efficiency coefficient
 applyCoeff <- function(coeff) {
   if (coeff != 1) {
-    the$train = the$cppModule$train <- the$train * coeff;
+    the$train <- the$train * coeff
+    the$cppModule$train <- the$train
   }
 }
 
@@ -34,7 +46,7 @@ fixDate <- function(dateVar) {
   type <- typeof(dateVar)
   if (type == "character") {
     fmtDate <- c(
-      "Ymd", "Ymd HM", "Ymd HMS", "mdY", "mdY IMp", 
+      "Ymd", "Ymd HM", "Ymd HMS", "mdY", "mdY IMp",
       "mdY IMSp", "dmY", "dmY HM", "dmY HMS"
     )
     out <- dateVar |> lubridate::parse_date_time(fmtDate) |> as.Date()
@@ -68,9 +80,8 @@ fixEnrolled <- function(TrainVector) {
 }
 
 # Aggregate the data by week
-#' @export
 days2weeks <- function(date, enrolled) {
-  dat <- data.frame(date, enrolled);
+  dat <- data.frame(date, enrolled)
   nn <- length(date)
   gaps <- c(as.integer(diff(date)) - 1L, 0L)
   slen <- seq_len(sum(gaps))
@@ -88,7 +99,7 @@ days2weeks <- function(date, enrolled) {
   cnt <- stats::setNames(integer(53L), seq_len(53L))
   tab <- table(lubridate::isoweek(date))
   cnt[names(tab)] <- tab
-  
+
   dlist <- do.call(rbind.data.frame,  dlist)
   dat <- rbind(dat, dlist)
   dat <- dat[order(dat$date), ]
@@ -101,7 +112,7 @@ days2weeks <- function(date, enrolled) {
   datw$cnt <- 0L
   datw$cnt <- cnt[datw$week]
   rownames(datw) <- NULL
-  
+
   return(datw[1L:52L, ])
 }
 
@@ -116,20 +127,12 @@ fillEmptyWeeks <- function(x, id0) {
 }
 
 refill <- function() {
-  pre <- sum(the$Trainfilled);
+  pre <- sum(the$Trainfilled)
   zeroIdx <- which(the$datWeeks$cnt == 0)
   nonZeroVals <- the$TrainVector[-zeroIdx]
   for (i in zeroIdx) {
     the$Trainfilled[i] <- sample(nonZeroVals, 1)
   }
-  post <- sum(the$Trainfilled);
+  post <- sum(the$Trainfilled)
   cat(pre, "->", post, "\n")
 }
-
-
-
-
-
-
-
-

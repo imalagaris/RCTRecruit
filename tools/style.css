@@ -15,18 +15,10 @@ p {
   margin-block-end: .5em;
 }
 
-/* a:-webkit-any-link {
-  color: inherit;
-} */
-
-
-
-
 h1, h2 {
   margin-block-start: 0;
   margin-block-end: .5em;
 }
-
 
 div.section > pre, div.kable-table {
   width: max-content;
@@ -53,7 +45,6 @@ pre > code.sourceCode {
 
 }
 
-
 pre.sourceCode {
   border-radius: 6px;
   box-shadow: var(--ui-shadow);
@@ -66,11 +57,8 @@ pre.sourceCode.numberSource {
 }
 
 pre.sourceCode.r {
-  /*background: rgb(240, 240, 240);*/
   max-width: 95ch;
   width: max-content;
-
-  /* margin: 10px; */
 }
 
 code span.dv, code span.dt {
@@ -88,23 +76,10 @@ code span.st {
 code span.ot {
   font-weight: bold;
 }
-/*
-code.sourceCode >  span > a {
-  padding-right: 2px;
-  padding-left: 0px;
-}
-*/
-
-
 
 @page {
   margin: 1cm;
 }
-
-/*
-header {
-  display: none;
-} */
 
 pre.numberSource code > span > a:first-child::before {
   left: -.8em;
@@ -138,7 +113,6 @@ pre > code.sourceCode > span {
   border-bottom: 1px solid black;
 }
 
-
 .kable-table table th, .kable-table table  td {
   padding: 0 6px;
   text-align: right;
@@ -147,9 +121,3 @@ pre > code.sourceCode > span {
 .kable-table > table > colgroup > col {
   width: auto!important;
 }
-
-
-
-
-
-

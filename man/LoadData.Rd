@@ -17,5 +17,5 @@ LoadData(data, date, enrolled)
 Function: Load recruitment data
 }
 \examples{
-LoadData(gripsIM, ScreenDt, Enrolled)
+LoadData(gripsYR1, ScreenDt, Enrolled)
 }

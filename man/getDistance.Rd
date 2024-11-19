@@ -36,7 +36,6 @@ Function: Calculate CI of Euclidean distance of predicted recruitment with
 actual recruitment
 }
 \examples{
-LoadData(gripsIM, ScreenDt, Enrolled)
-target <- days2weeks(gripsYR2$ScreenDt, gripsYR2$Enrolled)$enrolled
-res <- getDistance(target)
+LoadData(gripsYR1, ScreenDt, Enrolled)
+res <- getDistance(gripsWeeklyYR2$enrolled)
 }

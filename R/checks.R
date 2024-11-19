@@ -1,6 +1,7 @@
+# Error messages collect in a named list
 msgL <- list(
   Load = 'Please, use "%s" function to load your data',
-  boolean = '%s must be TRUE or FALSE',
+  boolean = "%s must be TRUE or FALSE",
   len = "%s must have length = 1",
   range = "%s must be between %s and %s",
   num = "%s must be a numeric or integer",
@@ -8,13 +9,14 @@ msgL <- list(
   success = "Variables %s and %s were successfully loaded from data %s\n\n",
   notFound = '"%s" not found in data "%s"\n'
 )
-
+# Simple function to check for user input validity
 notScalar <- \(x) length(x) != 1
 isNotBool <- \(x) !is.logical(x)
 isNotNum <- \(x) !(typeof(x) %in% c("integer", "double"))
 
+# List of functions to check user input
 argsTests <- list(
-  nSim = \(nam, x) {
+  "nSim" = function(nam, x) {
     if (isNotNum(x)) err(msgL$num, nam)
     else if (notScalar(x)) err(msgL$len, nam)
     else if (x < 1 || x > 1e4) {
@@ -23,16 +25,16 @@ argsTests <- list(
       err(msgL$range, nam, low, high)
     }
   },
-  fillGaps = \(nam, x) {
+  "fillGaps" = function(nam, x) {
     if (isNotBool(x)) err(msgL$boolean, nam)
     else if (notScalar(x)) err(msgL$len, nam)
   },
-  cauchyWt = \(nam, x) {
+  "cauchyWt" = function(nam, x) {
     if (isNotBool(x)) err(msgL$boolean, nam)
     else if (notScalar(x)) err(msgL$len, nam)
   },
-  nSub = \(nam, x) {
-    maxN <- sum(the$TrainVector) * 10L 
+  "nSub" = function(nam, x) {
+    maxN <- sum(the$TrainVector) * 10L
     if (isNotNum(x)) err(msgL$num, nam)
     else if (notScalar(x)) err(msgL$len, nam)
     else if (x < 1 || x > maxN) {
@@ -41,21 +43,23 @@ argsTests <- list(
       err(msgL$range, nam, low, high)
     }
   },
-  coeff = \(nam, x) {
+  "coeff" = function(nam, x) {
     if (x < 0.1 || x > 2) err("coeff must be between 0.1 and 2")
   },
-  target = \(nam, x) {
+  "target" = function(nam, x) {
     if (isNotNum(x)) err(msgL$num, nam)
     else if (length(x) < 1) err(msgL$len, nam)
   }
 )
 
+# A function to be run first within exported functions to check for user input
 checkExportedFunctionsArgs <- \() {
   if (is.null(the$TrainVector)) err(msgL$Load, fmt("LoadData", 160))
   fArgs <- getCall(1L)
   for (nam in names(fArgs)) argsTests[[nam]](bold(nam, 160), fArgs[[nam]])
 }
 
+# Gets the arguments of the calling function
 getCall <- \(n = 0L) {
   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
   carg <- formals(sys.function(sys.parent(1L + n)))
@@ -71,11 +75,12 @@ getCall <- \(n = 0L) {
   carg
 }
 
+# Check the validity of user input `Date` and 'Enrolled' columns
 checkArgs <- function(name) {
-  cargs <- getCall(1L);
+  cargs <- getCall(1L)
   dat <- get(cargs$data, parent.frame())
   dataStr <- cargs$data
-  varStr <- eval(substitute(cargs$name));
+  varStr <- eval(substitute(cargs$name))
   if (!utils::hasName(dat, varStr)) {
     err(msgL$notFound, bold(varStr, 160), bold(dataStr, 160))
   }
@@ -84,6 +89,7 @@ checkArgs <- function(name) {
   else fixDate(out)
 }
 
+# Print success message after loading data
 LoadSuccess <- \(x) {
   y <- lapply(x, bold, 28)
   log(msgL$success, y$enrolled, y$date, y$data)

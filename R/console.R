@@ -1,20 +1,19 @@
 log <- \(x, ...) do.call(sprintf, c(x, list(...))) |> cat()
 err <- \(x, ...) do.call(sprintf, c(x, list(...))) |> stop(call. = FALSE)
-wrn <- \(x, ...) do.call(sprintf, c(x, list(...))) |> 
+wrn <- \(x, ...) do.call(sprintf, c(x, list(...))) |>
   warning(call. = FALSE, immediate. = TRUE)
 
-logPrint <- \(x) print(x) |> 
-  utils::capture.output() |> 
+logPrint <- \(x) print(x) |>
+  utils::capture.output() |>
   cat(... = _, "", sep = "\n")
 
 isMarkdown <- \() {
   if (base::requireNamespace("knitr", quietly = TRUE)) {
-    knitr::is_html_output() || knitr::is_latex_output() 
+    knitr::is_html_output() || knitr::is_latex_output()
   } else {
     FALSE
   }
 }
-
 # Utility to colorize text
 fmt <- \(str, fg = 0, bk = 0, fx = NULL) {
   if (!the$color || isMarkdown()) return(str)

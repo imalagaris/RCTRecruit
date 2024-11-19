@@ -44,7 +44,7 @@ use_description(m)
 the$datWeeks
 
 
-LoadData(gripsIM, ScreenDt, Enrolled);
+LoadData(gripsYR1, ScreenDt, Enrolled);
 datWeeks <- the$datWeeks
 
 labs <- list(
@@ -98,7 +98,7 @@ rownames(gripsYR1) <- NULL
 gripsYR2 <- grips[grips$ScreenDt >= minDtyr2 & grips$ScreenDt <= maxDtyr2, ]
 rownames(gripsYR2) <- NULL
 
-yr2 <- with(gripsYR2, days2weeks(ScreenDt, Enrolled))$enrolled 
+yr2 <- with(gripsYR2, days2weeks(ScreenDt, Enrolled))$enrolled
 
 
 
@@ -182,7 +182,7 @@ lines(x, c(0, target), col = "red", lwd = 2)
 
 
 
-predPlot <- R6::R6Class("predPlot", 
+predPlot <- R6::R6Class("predPlot",
   public = list(
     env = NULL,
     initialize = function(env) {self$env <- env},
@@ -241,7 +241,7 @@ newFill <- \(n = 1, repl. = FALSE) {
 newFill1 <- \(x) {
   out <- the$TrainVector;
   out <- setNames(numeric(length(id0)), paste0("w", id0))
-  for (i in seq_len(length(id0))) { 
+  for (i in seq_len(length(id0))) {
     wk <- id0[i]
     out[i] <- mean(sample(the$TrainVector, 8, replace = FALSE, prob = p[[wk]]))
   }
