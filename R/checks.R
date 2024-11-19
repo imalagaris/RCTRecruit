@@ -43,12 +43,16 @@ argsTests <- list(
   },
   coeff = \(nam, x) {
     if (x < 0.1 || x > 2) err("coeff must be between 0.1 and 2")
+  },
+  target = \(nam, x) {
+    if (isNotNum(x)) err(msgL$num, nam)
+    else if (length(x) < 1) err(msgL$len, nam)
   }
 )
 
 checkExportedFunctionsArgs <- \() {
   if (is.null(the$TrainVector)) err(msgL$Load, fmt("LoadData", 160))
-  fArgs <- mget(names(formals(sys.function(1L))), sys.frame(-1L))
+  fArgs <- getCall(1L)
   for (nam in names(fArgs)) argsTests[[nam]](bold(nam, 160), fArgs[[nam]])
 }
 

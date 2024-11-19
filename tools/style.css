@@ -141,5 +141,15 @@ pre > code.sourceCode > span {
 
 .kable-table table th, .kable-table table  td {
   padding: 0 6px;
+  text-align: right;
 }
+
+.kable-table > table > colgroup > col {
+  width: auto!important;
+}
+
+
+
+
+
 

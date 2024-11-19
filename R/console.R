@@ -3,7 +3,9 @@ err <- \(x, ...) do.call(sprintf, c(x, list(...))) |> stop(call. = FALSE)
 wrn <- \(x, ...) do.call(sprintf, c(x, list(...))) |> 
   warning(call. = FALSE, immediate. = TRUE)
 
-logPrint <- \(x) print(x) |> utils::capture.output() |> cat(... = _, "", sep = "\n")
+logPrint <- \(x) print(x) |> 
+  utils::capture.output() |> 
+  cat(... = _, "", sep = "\n")
 
 isMarkdown <- \() {
   if (base::requireNamespace("knitr", quietly = TRUE)) {

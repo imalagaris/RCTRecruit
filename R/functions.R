@@ -49,8 +49,11 @@ time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
 #' Function: Calculate CI of Euclidean distance of predicted recruitment with
 #'     actual recruitment
 #' @param target A vector with the actual recruitment by week
-#' @param fillGaps Whether to fill gaps in the data
 #' @param nSim Number of simulations to run
+#' @param fillGaps Whether to fill gaps in the data
+#' @param cauchyWt Whether to use Cauchy weights for sampling (default = FALSE).
+#'    If FALSE, binomial weights are used. 
+#' @param coeff A coefficient to apply to the recruitment rate (default = 1)
 #' @return A list with two elements. The first element `dist` is a numeric
 #'     vector with length equal to `nSim` containing the simulated Euclidean
 #'     distance. The second `CI` shows the median and the 95%CI Euclidean 
@@ -59,16 +62,18 @@ time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
 #' @examples
 #' LoadData(gripsIM, ScreenDt, Enrolled)
 #' target <- days2weeks(gripsYR2$ScreenDt, gripsYR2$Enrolled)$enrolled
-#' res <- simDistance(target)
-simDistance <- function(target, fillGaps = FALSE, nSim = 1e4L) {
-  if (is.null(the$TrainVector)) stop("TrainVector not loaded")
-  the$train <- if (fillGaps) the$Trainfilled else the$TrainVector
+#' res <- getDistance(target)
+getDistance <- function(target, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
+                        coeff = 1) {
+  useFilled(fillGaps)
+  the$useCauchy(cauchyWt)
+  applyCoeff(coeff)
+  target <- fixEnrolled(target);
   len <- length(the$train)
   if (length(target) < len) stop("target is smaller")
   if (length(target) > len) target <- target[seq.int(len)]
-  target <- cumsum(target);
-  dummyFun <- \(x) getDistance(the$train, target, the$probs)
-  dist <- vapply(seq.int(nSim), dummyFun , numeric(1L), USE.NAMES = FALSE)
+  the$setTarget(target)
+  dist <- the$getDistance(nSim);
   CI <- stats::quantile(x = dist, probs = c(.025, .5, .975))
   print(round(CI))
   invisible(list(dist = dist, CI = CI))
@@ -85,6 +90,8 @@ simDistance <- function(target, fillGaps = FALSE, nSim = 1e4L) {
 #' @examples
 #' LoadData(gripsIM, ScreenDt, Enrolled)
 #' getWeeksPredCI()
+#' getWeeksPredCI(fillGaps = TRUE)
+#' getWeeksPredCI(fillGaps = TRUE, coeff = 1.5)
 getWeeksPredCI <- \(nSim = 1e4L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)

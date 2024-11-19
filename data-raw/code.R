@@ -3,7 +3,7 @@ trials (RCT) remains anongoing challenge. Previous prediction models rely on
 parametric assumptions. We present functions for non-parametric RCT recruitment
 prediction under several scenarios."
 
-ttl <- "Non-parametric Recruitment Prediction for Randomized Clinical Trials"
+ttl <- "Non-Parametric Recruitment Prediction for Randomized Clinical Trials"
 def <- use_description_defaults("RCTrecruit", fields = list(
   Title = ttl,
   Description = gsub("\\n", "", desc),
@@ -221,103 +221,6 @@ a$plot(y)
 
 
 
-load_all()
-oldPar <- par(no.readonly = TRUE)
-LoadData(gripsIM, ScreenDt, Enrolled)
-train <- the$TrainVector
-the$datWeeks[1:5, ]; cat("...\n"); the$datWeeks[48:52, ]
-nonGap <- the$datWeeks$cnt != 0
-gapIdx <- which(!nonGap)
-the$datWeeks[gapIdx, ]
-nonGapVals <- train[nonGap]
-
-
-bnWt <- stats::dbinom(0L:51L, 51L, 0.5)
-idWt <- \(t) ((0L:51L + 26L - t) %% 52L) + 1L
-getWts <- \(t) (bnWt[idWt(t)] * nonGap) |> (\(x) x / sum(x))()
-p <- lapply(gapIdx, getWts) |> setNames(paste("Week", gapIdx))
-
-
-
-gPar <- list(
-  fig = c(0, .5, 0, 1), 
-  mar = c(0, 4, 1.2, 0), 
-  oma = c(2,2,2,1),  
-  pty = "s",
-  las = 1, 
-  cex.axis = 1.2, 
-  cex.lab = 1.2, 
-  font.lab = 2,
-  new = FALSE
-)
-
-plotPar <- list(
-  x = p[["Week 20"]],
-  type = "h", 
-  xlab = "", 
-  ylab = "Sampling Weights",
-  main = "Week 20",
-  lwd = 3,
-  ylim = c(0, 0.55)
-)
-
-
-addLnPnt <- \(x) {
-  points(x, 0, cex = 1.2, pch = 19, col = "red")
-  abline(h = c(1:5) / 10, lty = 2, col = "gray80")
-}
-
-do.call(par, gPar)
-do.call(plot, plotPar)
-addLnPnt(20)
-
-gPar[c("fig", "new")] = list(c(.5, 1, 0, 1), TRUE)
-plotPar[c("x", "main", "ylab")] = list(p[["Week 28"]], "Week 28", "")
-do.call(par, gPar)
-do.call(plot, plotPar)
-addLnPnt(28)
-
-mtext("Weights for Filling Gaps", 3, -2, TRUE, cex = 1.5, font = 2)
-mtext("Weeks", 1, 0, TRUE, cex = 1.2, font = 2)
-
-do.call(par, oldPar)
-
-
-len <- length(gapIdx)
-wk <- seq_len(len) |> setNames(names(p))
-
-btstrp <- \() vapply(wk, \(x) sample(nonGapVals, 1), 0L)
-bnm <- \(n = 1) vapply(wk, \(x) mean(sample(train, n, FALSE, p[[x]])), .0)
-list2df <- \(x) do.call(rbind, x) |> as.data.frame()
-
-nSim <- seq_len(1e4)
-dfs <- list()
-dfs[["Bootstrap"]] <- lapply(nSim, \(x) btstrp()) |> list2df()
-dfs[["Binom"]]     <- lapply(nSim, \(x) bnm(1L))  |> list2df()
-dfs[["BinomMu3"]]  <- lapply(nSim, \(x) bnm(3L))  |> list2df()
-dfs[["BinomMu6"]]  <- lapply(nSim, \(x) bnm(6L))  |> list2df()
-dfs[["BinomMu9"]]  <- lapply(nSim, \(x) bnm(9L))  |> list2df()
-
-
-out <- numeric(len) |> setNames(names(p))
-reportMeanCVUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x) / mean(x))
-reportMeanSdUnit <- \(x) sprintf("%5.2f (%3.1f)", mean(x), sd(x))
-reportMeanCV <- function(df) {
-  out <- lapply(df, reportMeanCVUnit) |> cbind()
-  N <- ((apply(df, 1, sum)) + 18) |> reportMeanSdUnit()
-  rbind(out, N)
-}
-
-for (i in seq_len(len)) out[i] <- sum(train * p[[i]])
-WtMean <- c(out, 18 + sum(out)) |> sprintf(fmt = "%5.2f", ... = _)
-MeanCV <- lapply(dfs, reportMeanCV) |> as.data.frame()
-
-cbind(WtMean, MeanCV)
-lapply(dfs, \(x) { round(rowSums(x) + 18) |>  quantile(c(.025, .5, .975))}) |> 
-  do.call(rbind, args = _)
-
-
-
 
 
 
@@ -345,59 +248,4 @@ newFill1 <- \(x) {
   out
 }
 
-gaps <- lapply(1:1000, newFill1) |> do.call(rbind, args = _) |> as.data.frame()
-one <- lapply(gaps, \(x) sd(x)/ mean(x)) |> cbind()
-
-eight <- lapply(gaps, \(x) sd(x)/ mean(x)) |> cbind()
-
-
-
-fill1 <- \(x) {
-  refill() |> capture.output() |> invisible()
-  sum(the$Trainfilled)
-}
-
-fill2 <- \(x) {
-  newFill() |> sum() |> round()
-}
-
-f1 <- vapply(seq_len(1e4), fill1, 0L)
-f2 <- vapply(seq_len(1e4), fill2, 1)
-
-tab1 <- table(f1)
-tab2 <- table(f2)
-
-f2 |> quantile()
-
-
-wk <- 15
-p0 <- p[indxWt(wk)]
-p0[id0] <- 0
-p0 <- p0 / sum(p0)
-cbind(the$TrainVector, round(p0 * 1000, 3), p0 == 0)
-
-
-binomWt <- stats::dbinom(0L:51L, 51L, 0.5) |> (\(x) x / sum(x))()
-
-id0 = which(the$datWeeks$cnt == 0)
-
-getCall <- \(n = 0L) {
-  deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
-  carg <- formals(sys.function(sys.parent()))
-  cl <- as.list(sys.call(-1L-n))[-1L]
-  for (nn in names(carg)) {
-    if (hasName(cl, nn)) {
-      carg[[nn]] <- deparseSymbol(cl[[nn]])
-      cl[[nn]] <- NULL
-    }
-  }
-  id <- carg |> vapply(is.symbol, logical(1L)) |> which()
-  for (i in seq_along(id)) carg[[id[[i]]]] <- deparseSymbol(cl[[i]])
-  carg
-}
-aek(a = a1, d = d1, b1 , e1)
-
-aek <- function(a, b, d, e, fuck = TRUE) {
-  getCall()
-}
 

@@ -2,8 +2,8 @@
 
 export(LoadData)
 export(days2weeks)
+export(getDistance)
 export(getWeeksPredCI)
-export(simDistance)
 export(time2Nsubjects)
 importFrom(Rcpp,sourceCpp)
 useDynLib(RCTRecruit, .registration = TRUE)

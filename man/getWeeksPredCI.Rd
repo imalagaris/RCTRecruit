@@ -25,4 +25,6 @@ Function: Calculate median recruitment with CI for the next 52 weeks
 \examples{
 LoadData(gripsIM, ScreenDt, Enrolled)
 getWeeksPredCI()
+getWeeksPredCI(fillGaps = TRUE)
+getWeeksPredCI(fillGaps = TRUE, coeff = 1.5)
 }
