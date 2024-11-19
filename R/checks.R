@@ -52,13 +52,12 @@ checkExportedFunctionsArgs <- \() {
   for (nam in names(fArgs)) argsTests[[nam]](bold(nam, 160), fArgs[[nam]])
 }
 
-
 getCall <- \(n = 0L) {
   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
   carg <- formals(sys.function(sys.parent(1L + n)))
-  cl <- as.list(sys.call(-1L-n))[-1L]
+  cl <- as.list(sys.call(-1L - n))[-1L]
   for (nn in names(carg)) {
-    if (hasName(cl, nn)) {
+    if (utils::hasName(cl, nn)) {
       carg[[nn]] <- deparseSymbol(cl[[nn]])
       cl[[nn]] <- NULL
     }
@@ -81,17 +80,9 @@ checkArgs <- function(name) {
   else fixDate(out)
 }
 
-
-
 LoadSuccess <- \(x) {
   y <- lapply(x, bold, 28)
   log(msgL$success, y$enrolled, y$date, y$data)
-}
-
-
-
-testArgs <- \(nSim = 1e4L, nSub = 50L, fillGaps = FALSE, cauchyWt = FALSE) {
-  checkExportedFunctionsArgs()
 }
 
 # Check input is of correct type

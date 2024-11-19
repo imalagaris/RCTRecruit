@@ -107,21 +107,30 @@ document.addEventListener('DOMContentLoaded', function(e) {
 <h1 class="title">Filling Gap Weeks</h1>
 <h2 class="author">Ioannis Malagaris</h2>
 </div>
-<p>Code below is taken from the <strong>‘grips code all.R’</strong> file
-in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
-<strong>‘source’</strong>.</p>
-<div id="data-management" class="section level2">
-<h2>Data management</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">load_all</span>()</span></code></pre></div>
-<pre><code>## ℹ Loading RCTRecruit</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>oldPar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">LoadData</span>(gripsIM, ScreenDt, Enrolled)</span></code></pre></div>
-<pre><code>## Variables Enrolled and ScreenDt were successfully loaded from data gripsIM</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>train <span class="ot">&lt;-</span> the<span class="sc">$</span>TrainVector</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>nonGap <span class="ot">&lt;-</span> the<span class="sc">$</span>datWeeks<span class="sc">$</span>cnt <span class="sc">!=</span> <span class="dv">0</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>nonGapVals <span class="ot">&lt;-</span> train[nonGap]</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>gapIdx <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span>nonGap)</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>the<span class="sc">$</span>datWeeks[gapIdx, ]</span></code></pre></div>
+<p>Purpose: Proper implementation of
+<strong><code>Filling Gaps</code></strong> functionality (Code can be
+executed in project’s dir).</p>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<ul>
+<li>After loading the data, we get variables of interest from the
+internal dataframe <strong><code>datWeeks</code></strong>.
+<ul>
+<li>The variable <strong><code>enrolled</code></strong> is the number of
+subjects enrolled in each week.</li>
+<li>The variable <strong><code>cnt</code></strong> is the number of
+active recruitment days in each week.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">load_all</span>()</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="do">## ℹ Loading RCTRecruit</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">LoadData</span>(gripsIM, ScreenDt, Enrolled)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">## Variables Enrolled and ScreenDt were successfully loaded from data gripsIM</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>train <span class="ot">&lt;-</span> the<span class="sc">$</span>datWeeks<span class="sc">$</span>enrolled</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>nonGap <span class="ot">&lt;-</span> the<span class="sc">$</span>datWeeks<span class="sc">$</span>cnt <span class="sc">!=</span> <span class="dv">0</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>nonGapVals <span class="ot">&lt;-</span> train[nonGap]</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>gapIdx <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span>nonGap)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>the<span class="sc">$</span>datWeeks[gapIdx, ]</span></code></pre></div>
 <div class="kable-table">
 <table>
 <thead>
@@ -274,81 +283,112 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>bnWt <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">dbinom</span>(<span class="dv">0</span><span class="dt">L</span><span class="sc">:</span><span class="dv">51</span><span class="dt">L</span>, <span class="dv">51</span><span class="dt">L</span>, <span class="fl">0.5</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>idWt <span class="ot">&lt;-</span> \(t) ((<span class="dv">0</span><span class="dt">L</span><span class="sc">:</span><span class="dv">51</span><span class="dt">L</span> <span class="sc">+</span> <span class="dv">26</span><span class="dt">L</span> <span class="sc">-</span> t) <span class="sc">%%</span> <span class="dv">52</span><span class="dt">L</span>) <span class="sc">+</span> <span class="dv">1</span><span class="dt">L</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>getWts <span class="ot">&lt;-</span> \(t) (bnWt[<span class="fu">idWt</span>(t)] <span class="sc">*</span> nonGap) <span class="sc">|&gt;</span> (\(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))()</span>
-<span id="cb6-4"><a href="#cb6-4"></a>p <span class="ot">&lt;-</span> <span class="fu">lapply</span>(gapIdx, getWts) <span class="sc">|&gt;</span> <span class="fu">setNames</span>(<span class="fu">paste</span>(<span class="st">&quot;Week&quot;</span>, gapIdx))</span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="fu">sapply</span>(p, which.max)</span></code></pre></div>
+<p>We see there are 17 gap weeks. I will refer to each gap week by its
+order in the dataset (or rowname) and I wont’ use the variable
+<strong><code>week</code></strong>. i.e. I will use
+<strong><code>Week 14</code></strong> insted of
+<strong><code>Week 38</code></strong>.</p>
+<div id="calculating-sampling-weights" class="section level3">
+<h3>Calculating Sampling Weights</h3>
+<ul>
+<li>I used the binomial weights used in the rest of the package while
+<ul>
+<li>The weights for all gap weeks are set to zero.</li>
+<li>Weights are normalized to sum to 1.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>bnWt <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">dbinom</span>(<span class="dv">0</span><span class="dt">L</span><span class="sc">:</span><span class="dv">51</span><span class="dt">L</span>, <span class="dv">51</span><span class="dt">L</span>, <span class="fl">0.5</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>idWt <span class="ot">&lt;-</span> \(t) ((<span class="dv">0</span><span class="dt">L</span><span class="sc">:</span><span class="dv">51</span><span class="dt">L</span> <span class="sc">+</span> <span class="dv">26</span><span class="dt">L</span> <span class="sc">-</span> t) <span class="sc">%%</span> <span class="dv">52</span><span class="dt">L</span>) <span class="sc">+</span> <span class="dv">1</span><span class="dt">L</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>getWts <span class="ot">&lt;-</span> \(t) (bnWt[<span class="fu">idWt</span>(t)] <span class="sc">*</span> nonGap) <span class="sc">|&gt;</span> (\(x) x <span class="sc">/</span> <span class="fu">sum</span>(x))()</span>
+<span id="cb2-4"><a href="#cb2-4"></a>p <span class="ot">&lt;-</span> <span class="fu">lapply</span>(gapIdx, getWts) <span class="sc">|&gt;</span> <span class="fu">setNames</span>(<span class="fu">paste</span>(<span class="st">&quot;Week&quot;</span>, gapIdx))</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">sapply</span>(p, which.max)</span></code></pre></div>
 <pre><code>## Week 14 Week 15 Week 16 Week 17 Week 18 Week 20 Week 21 Week 22 Week 23 Week 24 
 ##      13      13      19      19      19      19      19      19      26      26 
 ## Week 25 Week 28 Week 41 Week 42 Week 43 Week 44 Week 45 
 ##      26      29      40      40      46      46      46</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>gPar <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="at">fig =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">1</span>), </span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb8-5"><a href="#cb8-5"></a>  <span class="at">pty =</span> <span class="st">&quot;s&quot;</span>,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>  <span class="at">las =</span> <span class="dv">1</span>, </span>
-<span id="cb8-7"><a href="#cb8-7"></a>  <span class="at">cex.axis =</span> <span class="fl">1.2</span>, </span>
-<span id="cb8-8"><a href="#cb8-8"></a>  <span class="at">cex.lab =</span> <span class="fl">1.2</span>, </span>
-<span id="cb8-9"><a href="#cb8-9"></a>  <span class="at">font.lab =</span> <span class="dv">2</span>,</span>
-<span id="cb8-10"><a href="#cb8-10"></a>  <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">3</span>, .<span class="dv">8</span>, <span class="dv">0</span>),</span>
-<span id="cb8-11"><a href="#cb8-11"></a>  <span class="at">new =</span> <span class="cn">FALSE</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a>)</span>
-<span id="cb8-13"><a href="#cb8-13"></a>plotPar <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb8-14"><a href="#cb8-14"></a>  <span class="at">x =</span> p[[<span class="st">&quot;Week 20&quot;</span>]],</span>
-<span id="cb8-15"><a href="#cb8-15"></a>  <span class="at">type =</span> <span class="st">&quot;h&quot;</span>, </span>
-<span id="cb8-16"><a href="#cb8-16"></a>  <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb8-17"><a href="#cb8-17"></a>  <span class="at">ylab =</span> <span class="st">&quot;Sampling Weights&quot;</span>,</span>
-<span id="cb8-18"><a href="#cb8-18"></a>  <span class="at">main =</span> <span class="st">&quot;Week 20&quot;</span>,</span>
-<span id="cb8-19"><a href="#cb8-19"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
-<span id="cb8-20"><a href="#cb8-20"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.55</span>)</span>
-<span id="cb8-21"><a href="#cb8-21"></a>)</span>
-<span id="cb8-22"><a href="#cb8-22"></a>addLnPnt <span class="ot">&lt;-</span> \(x) {</span>
-<span id="cb8-23"><a href="#cb8-23"></a>  <span class="fu">points</span>(x, <span class="sc">-</span>.<span class="dv">01</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb8-24"><a href="#cb8-24"></a>  <span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">/</span> <span class="dv">10</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;gray80&quot;</span>)</span>
-<span id="cb8-25"><a href="#cb8-25"></a>}</span>
-<span id="cb8-26"><a href="#cb8-26"></a><span class="fu">do.call</span>(par, gPar)</span>
-<span id="cb8-27"><a href="#cb8-27"></a><span class="fu">do.call</span>(plot, plotPar)</span>
-<span id="cb8-28"><a href="#cb8-28"></a><span class="fu">addLnPnt</span>(<span class="dv">20</span>)</span>
-<span id="cb8-29"><a href="#cb8-29"></a>gPar[<span class="fu">c</span>(<span class="st">&quot;fig&quot;</span>, <span class="st">&quot;mar&quot;</span>,  <span class="st">&quot;new&quot;</span>)] <span class="ot">=</span> <span class="fu">list</span>(<span class="fu">c</span>(.<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="cn">TRUE</span>)</span>
-<span id="cb8-30"><a href="#cb8-30"></a>plotPar[<span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;main&quot;</span>, <span class="st">&quot;ylab&quot;</span>)] <span class="ot">=</span> <span class="fu">list</span>(p[[<span class="st">&quot;Week 28&quot;</span>]], <span class="st">&quot;Week 28&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
-<span id="cb8-31"><a href="#cb8-31"></a><span class="fu">do.call</span>(par, gPar)</span>
-<span id="cb8-32"><a href="#cb8-32"></a><span class="fu">do.call</span>(plot, plotPar)</span>
-<span id="cb8-33"><a href="#cb8-33"></a><span class="fu">addLnPnt</span>(<span class="dv">28</span>)</span>
-<span id="cb8-34"><a href="#cb8-34"></a><span class="fu">mtext</span>(<span class="st">&quot;Weights for Filling Gaps&quot;</span>, <span class="dv">3</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">font =</span> <span class="dv">2</span>)</span>
-<span id="cb8-35"><a href="#cb8-35"></a><span class="fu">mtext</span>(<span class="st">&quot;Weeks&quot;</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="fl">1.2</span>, <span class="at">font =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img role="img" src="data:image/png;base64,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" width="672" /></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">do.call</span>(par, oldPar)</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>len <span class="ot">&lt;-</span> <span class="fu">length</span>(gapIdx)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>wk <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(len) <span class="sc">|&gt;</span> <span class="fu">setNames</span>(<span class="fu">names</span>(p))</span>
-<span id="cb10-3"><a href="#cb10-3"></a></span>
-<span id="cb10-4"><a href="#cb10-4"></a>btstrp <span class="ot">&lt;-</span> \() <span class="fu">vapply</span>(wk, \(x) <span class="fu">sample</span>(nonGapVals, <span class="dv">1</span>), <span class="dv">0</span><span class="dt">L</span>)</span>
-<span id="cb10-5"><a href="#cb10-5"></a>bnm <span class="ot">&lt;-</span> \(<span class="at">n =</span> <span class="dv">1</span>) <span class="fu">vapply</span>(wk, \(x) <span class="fu">mean</span>(<span class="fu">sample</span>(train, n, <span class="cn">FALSE</span>, p[[x]])), .<span class="dv">0</span>)</span>
-<span id="cb10-6"><a href="#cb10-6"></a>list2df <span class="ot">&lt;-</span> \(x) <span class="fu">do.call</span>(rbind, x) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb10-7"><a href="#cb10-7"></a></span>
-<span id="cb10-8"><a href="#cb10-8"></a>nSim <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(<span class="fl">1e4</span>)</span>
-<span id="cb10-9"><a href="#cb10-9"></a>dfs <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb10-10"><a href="#cb10-10"></a>dfs[[<span class="st">&quot;Bootstrap&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">btstrp</span>()) <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
-<span id="cb10-11"><a href="#cb10-11"></a>dfs[[<span class="st">&quot;Binom&quot;</span>]]     <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">1</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
-<span id="cb10-12"><a href="#cb10-12"></a>dfs[[<span class="st">&quot;BinomMu3&quot;</span>]]  <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">3</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
-<span id="cb10-13"><a href="#cb10-13"></a>dfs[[<span class="st">&quot;BinomMu6&quot;</span>]]  <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">6</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
-<span id="cb10-14"><a href="#cb10-14"></a>dfs[[<span class="st">&quot;BinomMu9&quot;</span>]]  <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">9</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
-<span id="cb10-15"><a href="#cb10-15"></a></span>
-<span id="cb10-16"><a href="#cb10-16"></a></span>
-<span id="cb10-17"><a href="#cb10-17"></a>reportMeanCVUnit <span class="ot">&lt;-</span> \(x) <span class="fu">sprintf</span>(<span class="st">&quot;%5.2f (%3.1f)&quot;</span>, <span class="fu">mean</span>(x), <span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">mean</span>(x))</span>
-<span id="cb10-18"><a href="#cb10-18"></a>reportMeanSdUnit <span class="ot">&lt;-</span> \(x) <span class="fu">sprintf</span>(<span class="st">&quot;%5.2f (%3.1f)&quot;</span>, <span class="fu">mean</span>(x), <span class="fu">sd</span>(x))</span>
-<span id="cb10-19"><a href="#cb10-19"></a>out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(len) <span class="sc">|&gt;</span> <span class="fu">setNames</span>(<span class="fu">names</span>(p))</span>
-<span id="cb10-20"><a href="#cb10-20"></a>reportMeanCV <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb10-21"><a href="#cb10-21"></a>  out <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df, reportMeanCVUnit) <span class="sc">|&gt;</span> <span class="fu">cbind</span>()</span>
-<span id="cb10-22"><a href="#cb10-22"></a>  N <span class="ot">&lt;-</span> ((<span class="fu">apply</span>(df, <span class="dv">1</span>, sum)) <span class="sc">+</span> <span class="dv">18</span>) <span class="sc">|&gt;</span> <span class="fu">reportMeanSdUnit</span>()</span>
-<span id="cb10-23"><a href="#cb10-23"></a>  <span class="fu">rbind</span>(out, N)</span>
-<span id="cb10-24"><a href="#cb10-24"></a>}</span>
-<span id="cb10-25"><a href="#cb10-25"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(len)) out[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(train <span class="sc">*</span> p[[i]])</span>
-<span id="cb10-26"><a href="#cb10-26"></a>WtMean <span class="ot">&lt;-</span> <span class="fu">c</span>(out, <span class="dv">18</span> <span class="sc">+</span> <span class="fu">sum</span>(out)) <span class="sc">|&gt;</span> <span class="fu">sprintf</span>(<span class="at">fmt =</span> <span class="st">&quot;%5.2f&quot;</span>, <span class="at">... =</span> _)</span>
-<span id="cb10-27"><a href="#cb10-27"></a>MeanCV <span class="ot">&lt;-</span> <span class="fu">lapply</span>(dfs, reportMeanCV) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb10-28"><a href="#cb10-28"></a></span>
-<span id="cb10-29"><a href="#cb10-29"></a><span class="fu">cbind</span>(WtMean, MeanCV)</span></code></pre></div>
+<p>The variable <strong><code>p</code></strong> is a list of 17 vectors,
+with each vector containing the weights for the corresponding gap week.
+The output above shows which <strong>non-gap</strong> week has the
+highest weight for each gap week.</p>
+</div>
+<div id="visual-inspection-of-sampling-weights" class="section level3">
+<h3>Visual Inspection of sampling weights</h3>
+<p>For visual inspection, I plot the weights for the gap weeks 20 and
+28.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>pPar <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.55</span>), <span class="at">type =</span> <span class="st">&quot;h&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>gPar <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">las =</span> <span class="dv">1</span>, <span class="at">font.lab =</span> <span class="dv">2</span>, <span class="at">cex.main =</span> <span class="dv">1</span>, <span class="at">cex.lab =</span> <span class="dv">1</span>, <span class="at">cex.axis =</span> <span class="dv">1</span>,</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="at">fig =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">3</span>, .<span class="dv">8</span>, <span class="dv">0</span>), <span class="at">pty =</span> <span class="st">&quot;s&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>plotWeek <span class="ot">&lt;-</span> \(x, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="fu">paste</span>(<span class="st">&quot;Week&quot;</span>, x)) {</span>
+<span id="cb4-6"><a href="#cb4-6"></a>  pPar[<span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;ylab&quot;</span>, <span class="st">&quot;main&quot;</span>)] <span class="ot">&lt;-</span>  <span class="fu">list</span>(p[[y]], ylab, y)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">do.call</span>(par, gPar); <span class="fu">do.call</span>(plot, pPar);</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="fu">points</span>(x, <span class="sc">-</span>.<span class="dv">01</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">/</span> <span class="dv">10</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;gray80&quot;</span>)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11"></a>oldPar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="fu">plotWeek</span>(<span class="dv">20</span>, <span class="st">&quot;Sampling Weights&quot;</span>)</span>
+<span id="cb4-13"><a href="#cb4-13"></a>gPar[<span class="fu">c</span>(<span class="st">&quot;fig&quot;</span>, <span class="st">&quot;mar&quot;</span>,  <span class="st">&quot;new&quot;</span>)] <span class="ot">=</span> <span class="fu">list</span>(<span class="fu">c</span>(.<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="cn">TRUE</span>)</span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="fu">plotWeek</span>(<span class="dv">28</span>)</span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="fu">mtext</span>(<span class="st">&quot;Weights for Filling Gaps&quot;</span>, <span class="dv">3</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="fl">1.1</span>, <span class="at">font =</span> <span class="dv">2</span>)</span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="fu">mtext</span>(<span class="st">&quot;Weeks&quot;</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="cn">TRUE</span>, <span class="at">font =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" width="672" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">do.call</span>(par, oldPar)</span></code></pre></div>
+<p>We observe that there are gaps in what would have been a bell-shaped
+curve. Also, in the case of <strong>Week 20</strong>, the weight of week
+19 is very high as there are not other non-gap weeks in the
+vicinity.</p>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="simulation-results" class="section level2">
+<h2>Simulation Results</h2>
+<p>I will refer to the weights created above simply as
+<strong><code>weights</code></strong>. I run 10,000 simulations, for
+each of 5 different sampling methods and I present the generated
+sample’s mean and CV [MEAN (SD/MEAN)] for each gap week. The five
+sampling method are:</p>
+<ul>
+<li><strong>Bootstrap</strong>: Sample 1 value from the non-gap weeks
+(equal weights for all).</li>
+<li><strong>Binomial</strong>: Sample 1 value using the weights.</li>
+<li><strong>BinomialMu3</strong>, <strong>BinomialMu6</strong> and
+<strong>BinomialMu9</strong>: Mean of 3, 6, or 9 sampled values using
+the weights.</li>
+</ul>
+<p>The results of each method are presented as a column in the table
+below. The first column is the dot product of the real sample with the
+corresponding weights of each gap week (Expected Enrollment Value). The
+last row is resulting total enrollment as [Total (SD of Total)]
+(reminder: init N = 18)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>len <span class="ot">&lt;-</span> <span class="fu">length</span>(gapIdx)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>wk <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(len) <span class="sc">|&gt;</span> <span class="fu">setNames</span>(<span class="fu">names</span>(p))</span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>btstrp <span class="ot">&lt;-</span> \() <span class="fu">vapply</span>(wk, \(x) <span class="fu">sample</span>(nonGapVals, <span class="dv">1</span>), <span class="dv">0</span><span class="dt">L</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>bnm <span class="ot">&lt;-</span> \(<span class="at">n =</span> <span class="dv">1</span>) <span class="fu">vapply</span>(wk, \(x) <span class="fu">mean</span>(<span class="fu">sample</span>(train, n, <span class="cn">FALSE</span>, p[[x]])), .<span class="dv">0</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>list2df <span class="ot">&lt;-</span> \(x) <span class="fu">do.call</span>(rbind, x) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a>nSim <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(<span class="fl">1e4</span>)</span>
+<span id="cb6-9"><a href="#cb6-9"></a>dfs <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb6-10"><a href="#cb6-10"></a>dfs[[<span class="st">&quot;Bootstrap&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">btstrp</span>()) <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
+<span id="cb6-11"><a href="#cb6-11"></a>dfs[[<span class="st">&quot;Binom&quot;</span>]]     <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">1</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
+<span id="cb6-12"><a href="#cb6-12"></a>dfs[[<span class="st">&quot;BinomMu3&quot;</span>]]  <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">3</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
+<span id="cb6-13"><a href="#cb6-13"></a>dfs[[<span class="st">&quot;BinomMu6&quot;</span>]]  <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">6</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
+<span id="cb6-14"><a href="#cb6-14"></a>dfs[[<span class="st">&quot;BinomMu9&quot;</span>]]  <span class="ot">&lt;-</span> <span class="fu">lapply</span>(nSim, \(x) <span class="fu">bnm</span>(<span class="dv">9</span><span class="dt">L</span>))  <span class="sc">|&gt;</span> <span class="fu">list2df</span>()</span>
+<span id="cb6-15"><a href="#cb6-15"></a></span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a>reportMeanCVUnit <span class="ot">&lt;-</span> \(x) <span class="fu">sprintf</span>(<span class="st">&quot;%5.2f (%3.1f)&quot;</span>, <span class="fu">mean</span>(x), <span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">mean</span>(x))</span>
+<span id="cb6-18"><a href="#cb6-18"></a>reportMeanSdUnit <span class="ot">&lt;-</span> \(x) <span class="fu">sprintf</span>(<span class="st">&quot;%5.2f (%3.1f)&quot;</span>, <span class="fu">mean</span>(x), <span class="fu">sd</span>(x))</span>
+<span id="cb6-19"><a href="#cb6-19"></a>out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(len) <span class="sc">|&gt;</span> <span class="fu">setNames</span>(<span class="fu">names</span>(p))</span>
+<span id="cb6-20"><a href="#cb6-20"></a>reportMeanCV <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb6-21"><a href="#cb6-21"></a>  out <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df, reportMeanCVUnit) <span class="sc">|&gt;</span> <span class="fu">cbind</span>()</span>
+<span id="cb6-22"><a href="#cb6-22"></a>  N <span class="ot">&lt;-</span> ((<span class="fu">apply</span>(df, <span class="dv">1</span>, sum)) <span class="sc">+</span> <span class="dv">18</span>) <span class="sc">|&gt;</span> <span class="fu">reportMeanSdUnit</span>()</span>
+<span id="cb6-23"><a href="#cb6-23"></a>  <span class="fu">rbind</span>(out, N)</span>
+<span id="cb6-24"><a href="#cb6-24"></a>}</span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(len)) out[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(train <span class="sc">*</span> p[[i]])</span>
+<span id="cb6-26"><a href="#cb6-26"></a>WtMean <span class="ot">&lt;-</span> <span class="fu">c</span>(out, <span class="dv">18</span> <span class="sc">+</span> <span class="fu">sum</span>(out)) <span class="sc">|&gt;</span> <span class="fu">sprintf</span>(<span class="at">fmt =</span> <span class="st">&quot;%5.2f&quot;</span>, <span class="at">... =</span> _)</span>
+<span id="cb6-27"><a href="#cb6-27"></a>MeanCV <span class="ot">&lt;-</span> <span class="fu">lapply</span>(dfs, reportMeanCV) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb6-28"><a href="#cb6-28"></a></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="fu">cbind</span>(WtMean, MeanCV)</span></code></pre></div>
 <div class="kable-table">
 <table>
 <colgroup>
@@ -375,8 +415,8 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 <tr class="odd">
 <td align="left">Week 14</td>
 <td align="left">0.14</td>
-<td align="left">0.50 (1.5)</td>
-<td align="left">0.14 (2.6)</td>
+<td align="left">0.52 (1.5)</td>
+<td align="left">0.13 (2.6)</td>
 <td align="left">0.15 (1.3)</td>
 <td align="left">0.17 (0.6)</td>
 <td align="left">0.21 (0.4)</td>
@@ -384,8 +424,8 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 <tr class="even">
 <td align="left">Week 15</td>
 <td align="left">0.21</td>
-<td align="left">0.50 (1.5)</td>
-<td align="left">0.22 (1.9)</td>
+<td align="left">0.52 (1.5)</td>
+<td align="left">0.21 (2.0)</td>
 <td align="left">0.21 (0.9)</td>
 <td align="left">0.19 (0.5)</td>
 <td align="left">0.24 (0.4)</td>
@@ -393,8 +433,8 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 <tr class="odd">
 <td align="left">Week 16</td>
 <td align="left">0.33</td>
-<td align="left">0.52 (1.5)</td>
-<td align="left">0.32 (1.5)</td>
+<td align="left">0.51 (1.5)</td>
+<td align="left">0.33 (1.5)</td>
 <td align="left">0.28 (0.7)</td>
 <td align="left">0.24 (0.6)</td>
 <td align="left">0.29 (0.4)</td>
@@ -403,7 +443,7 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 <td align="left">Week 17</td>
 <td align="left">0.47</td>
 <td align="left">0.51 (1.5)</td>
-<td align="left">0.48 (1.1)</td>
+<td align="left">0.49 (1.1)</td>
 <td align="left">0.37 (0.6)</td>
 <td align="left">0.32 (0.5)</td>
 <td align="left">0.33 (0.2)</td>
@@ -411,26 +451,26 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 <tr class="odd">
 <td align="left">Week 18</td>
 <td align="left">0.64</td>
-<td align="left">0.51 (1.5)</td>
+<td align="left">0.52 (1.5)</td>
 <td align="left">0.64 (0.9)</td>
-<td align="left">0.49 (0.6)</td>
+<td align="left">0.50 (0.6)</td>
 <td align="left">0.41 (0.4)</td>
 <td align="left">0.34 (0.1)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 20</td>
 <td align="left">0.88</td>
-<td align="left">0.50 (1.5)</td>
-<td align="left">0.86 (0.8)</td>
-<td align="left">0.76 (0.4)</td>
-<td align="left">0.50 (0.2)</td>
+<td align="left">0.51 (1.5)</td>
+<td align="left">0.89 (0.8)</td>
+<td align="left">0.75 (0.4)</td>
+<td align="left">0.50 (0.1)</td>
 <td align="left">0.35 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 21</td>
 <td align="left">0.91</td>
 <td align="left">0.51 (1.5)</td>
-<td align="left">0.91 (0.8)</td>
+<td align="left">0.92 (0.8)</td>
 <td align="left">0.80 (0.4)</td>
 <td align="left">0.52 (0.2)</td>
 <td align="left">0.39 (0.3)</td>
@@ -438,74 +478,74 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 <tr class="even">
 <td align="left">Week 22</td>
 <td align="left">0.88</td>
-<td align="left">0.54 (1.5)</td>
-<td align="left">0.87 (1.0)</td>
+<td align="left">0.49 (1.5)</td>
+<td align="left">0.88 (1.0)</td>
 <td align="left">0.78 (0.4)</td>
-<td align="left">0.54 (0.2)</td>
+<td align="left">0.55 (0.2)</td>
 <td align="left">0.46 (0.3)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 23</td>
 <td align="left">0.81</td>
-<td align="left">0.50 (1.5)</td>
-<td align="left">0.81 (1.1)</td>
-<td align="left">0.72 (0.5)</td>
+<td align="left">0.53 (1.5)</td>
+<td align="left">0.80 (1.1)</td>
+<td align="left">0.71 (0.5)</td>
 <td align="left">0.57 (0.3)</td>
 <td align="left">0.55 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 24</td>
 <td align="left">0.72</td>
-<td align="left">0.51 (1.5)</td>
+<td align="left">0.50 (1.5)</td>
 <td align="left">0.72 (1.3)</td>
-<td align="left">0.66 (0.5)</td>
+<td align="left">0.65 (0.5)</td>
 <td align="left">0.57 (0.3)</td>
 <td align="left">0.62 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 25</td>
 <td align="left">0.64</td>
-<td align="left">0.52 (1.5)</td>
+<td align="left">0.53 (1.5)</td>
 <td align="left">0.64 (1.4)</td>
-<td align="left">0.60 (0.6)</td>
+<td align="left">0.59 (0.6)</td>
 <td align="left">0.56 (0.3)</td>
 <td align="left">0.64 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 28</td>
 <td align="left">0.52</td>
-<td align="left">0.52 (1.5)</td>
-<td align="left">0.50 (1.7)</td>
+<td align="left">0.51 (1.5)</td>
+<td align="left">0.51 (1.7)</td>
 <td align="left">0.54 (0.8)</td>
-<td align="left">0.59 (0.4)</td>
+<td align="left">0.58 (0.4)</td>
 <td align="left">0.69 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 41</td>
 <td align="left">0.63</td>
 <td align="left">0.51 (1.5)</td>
-<td align="left">0.62 (1.2)</td>
+<td align="left">0.64 (1.2)</td>
 <td align="left">0.66 (0.6)</td>
 <td align="left">0.72 (0.3)</td>
-<td align="left">0.78 (0.2)</td>
+<td align="left">0.77 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 42</td>
 <td align="left">0.58</td>
 <td align="left">0.51 (1.5)</td>
 <td align="left">0.58 (1.3)</td>
-<td align="left">0.61 (0.6)</td>
+<td align="left">0.61 (0.7)</td>
 <td align="left">0.65 (0.4)</td>
 <td align="left">0.70 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 43</td>
 <td align="left">0.56</td>
-<td align="left">0.52 (1.5)</td>
+<td align="left">0.51 (1.5)</td>
 <td align="left">0.56 (1.4)</td>
 <td align="left">0.57 (0.7)</td>
 <td align="left">0.59 (0.4)</td>
-<td align="left">0.61 (0.2)</td>
+<td align="left">0.62 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 44</td>
@@ -513,33 +553,48 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 <td align="left">0.51 (1.5)</td>
 <td align="left">0.56 (1.4)</td>
 <td align="left">0.55 (0.7)</td>
-<td align="left">0.54 (0.4)</td>
+<td align="left">0.55 (0.4)</td>
 <td align="left">0.54 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 45</td>
 <td align="left">0.55</td>
 <td align="left">0.52 (1.5)</td>
-<td align="left">0.57 (1.4)</td>
+<td align="left">0.55 (1.4)</td>
 <td align="left">0.54 (0.7)</td>
 <td align="left">0.51 (0.4)</td>
-<td align="left">0.50 (0.2)</td>
+<td align="left">0.50 (0.3)</td>
 </tr>
 <tr class="even">
 <td align="left">N</td>
 <td align="left">28.01</td>
-<td align="left">26.73 (3.2)</td>
-<td align="left">28.01 (3.0)</td>
-<td align="left">27.28 (1.4)</td>
-<td align="left">26.20 (0.7)</td>
-<td align="left">26.22 (0.5)</td>
+<td align="left">26.72 (3.2)</td>
+<td align="left">28.03 (3.0)</td>
+<td align="left">27.24 (1.4)</td>
+<td align="left">26.19 (0.7)</td>
+<td align="left">26.23 (0.5)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">lapply</span>(dfs, \(x) { <span class="fu">round</span>(<span class="fu">rowSums</span>(x) <span class="sc">+</span> <span class="dv">18</span>) <span class="sc">|&gt;</span>  <span class="fu">quantile</span>(<span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">5</span>, .<span class="dv">975</span>))}) <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">do.call</span>(rbind, <span class="at">args =</span> _) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div>
+<p>The main takeaways from the table above are:</p>
+<ul>
+<li><strong><code>Bootstrap</code></strong>: assigns the same value (0.5
+subjects) on all weeks regardless of position, and variation is high (CV
+of 1.5).</li>
+<li><strong><code>Binomial</code></strong>: Weekly means are close to
+the expected values, but the variability is even higher in some
+cases.</li>
+<li><strong>Mean of 3,6,9 sampled values</strong>: As we take the mean
+of more values, the variability decreases but the mean progressively
+deviates from the Expected Value.</li>
+</ul>
+<p>Finally, the table below shows the 95% confidence interval for the
+total of resulting enrollment (rounded to the closest integer) for each
+method.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">lapply</span>(dfs, \(x) { <span class="fu">round</span>(<span class="fu">rowSums</span>(x) <span class="sc">+</span> <span class="dv">18</span>) <span class="sc">|&gt;</span>  <span class="fu">quantile</span>(<span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">5</span>, .<span class="dv">975</span>))}) <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">do.call</span>(rbind, <span class="at">args =</span> _) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div>
 <div class="kable-table">
 <table>
 <thead>
@@ -584,113 +639,9 @@ in the <strong>‘GRIPS code’</strong> folder. I will refer to it as
 </tbody>
 </table>
 </div>
-<p>On lines <a href="#cb1-8">8</a>-<a href="#cb1-9">9</a> (15-16 in
-source), the <strong>‘isoweek’</strong> and <strong>‘year’</strong>
-functions are used to create new columns in the
-<strong>‘grips’</strong>. The year 2019 appears to have logs in its 1st
-week although recruitment started on the 25th.</p>
-<p>I think we should use <strong>‘isoyear’</strong> function instead of
-the <strong>‘year’</strong> function.</p>
-<div style="page-break-before:always">
- 
-</div>
-</div>
-<div id="seasonality-out-of-sync" class="section level2">
-<h2>Seasonality out of sync?</h2>
-<p>The <strong>‘onesimulationwt’</strong> function is defined on line
-211 in <strong>‘source’</strong>. Loop starts with
-<strong>‘probvector’</strong> aligned for week 1 (<a href="#cb4-13">line
-13</a>) and increments (<a href="#cb4-17">line 17</a>) until enough
-subjects are included. I think it should start with the first
-<strong>week index</strong> of the period we make the prediction for.
-This is the 25th week for <strong>‘grips2ndy’</strong> (prediction
-dataset).</p>
-<div style="page-break-before:always">
- 
-</div>
-</div>
-<div id="gap-weeks" class="section level2">
-<h2>Gap weeks</h2>
-<p>The <strong><code>fillgaps</code></strong> function is defined on
-line 501 in <strong><code>source</code></strong>.
-<strong><code>fillgaps</code></strong> 2nd argument
-(<strong><code>variable</code></strong>) is the variable column index to
-be used to check for gaps weeks. We should definitely change it to
-varname instead of index. On <a href="#cb6-15">line 15</a> (515 in
-source), the function is called with
-<strong><code>variable = 4</code></strong>. This is the index of the
-<strong>Sum_Meets_Crit</strong>
-<code>(weekly summation of criteria met)</code> column. Was this the
-intended column?</p>
-<p>Also, <strong><code>fillgaps</code></strong> replaces the whole row
-of gap weeks with non-gap weeks. That is, even the
-<strong><code>week</code></strong> and
-<strong><code>year</code></strong> columns are replaced. Finally, should
-we use weights for more probable sampling from adjacent weeks?</p>
-<div style="page-break-before:always">
- 
-</div>
-</div>
-<div id="account-for-holidays" class="section level2">
-<h2>Account for holidays</h2>
-<p>The <strong>onesimulationwtd</strong> function is defined on line 648
-in <strong>source</strong>. It is implemented using <strong>‘dataset =
-grips1sty’</strong> as 1st argument on line 717 in source. The
-<strong><code>grips1sty$isholiday</code></strong> variable is the sum of
-holidays within each calendar week (each row). On <a href="#cb9-6">line
-6</a> (684 in source), the boolean vector <strong>‘a’</strong> is
-created as <strong><code>dataset$isholiday == 0</code></strong>. That
-is, for weeks with no holidays it equals <strong>‘1 (TRUE)’</strong> and
-<strong>‘0 (FALSE)’</strong> for weeks that had at least one day out of
-5 business days as a holiday. On <a href="#cb9-7">line 7</a>, the
-binomial weights vector is created based on current week index. On <a href="#cb9-8">line 8</a>, the weights are adjusted using the
-<strong>‘a’</strong> boolean vector.
-<strong>Questions/issues</strong>:</p>
-<ul>
-<li>We assign <strong>0</strong> (zero) weight to weeks with just one
-holiday.</li>
-<li>We do not take into account whether the current week index for
-target dataset (grips2ndy) is a week with a holiday or not.</li>
-</ul>
-<div style="page-break-before:always">
- 
-</div>
-</div>
-<div id="code-efficiency" class="section level2">
-<h2>Code efficiency</h2>
-<p>Here, I will use the <strong>‘onesimulationwt’</strong> function,
-presented also in <strong>Comment 2</strong>, as a representative
-example. Please, note that this function is called once for every
-simulation.</p>
-<ol style="list-style-type: decimal">
-<li><a href="#cb10-5">Line 5</a>: <strong>‘wt1’</strong> is a vector is
-calculated anew for every simulation.</li>
-<li><a href="#cb10-6">Line 6</a>: <strong>‘wtatt’</strong> function is
-defined anew every time (inside the main function).</li>
-<li><a href="#cb10-11">Line 11</a>: <strong>’scalar1</strong> function
-the same as above.</li>
-<li><a href="#cb10-14">Line 14</a>: We just need to sample 1 value from
-the <strong>Sum_Enrolled</strong> column. It is inefficient to
-sample/query the whole row of a dataframe.</li>
-<li><a href="#cb10-14">Line 14</a>: <strong>nrow(dataset))</strong> is
-calculated [#Simulations * #Loops] times although is a constant.</li>
-<li><a href="#cb10-15">Line 15</a>: Using <strong>‘rbind’</strong> to
-add a row to a data frame is inefficient.</li>
-<li><a href="#cb10-16">Line 16</a>: <strong>‘probvector’</strong> is
-recalculated for every row of the simulation data frame.</li>
-</ol>
-<p>We can calculate weights (replace <strong>wt1</strong>) and define
-<strong>‘wtatt’</strong> function in the global environment once as
-follows</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>binomWt <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="dt">L</span><span class="sc">:</span><span class="dv">51</span><span class="dt">L</span>, <span class="dv">51</span><span class="dt">L</span>, <span class="fl">0.5</span>) <span class="sc">|&gt;</span> (\(x)  x <span class="sc">/</span> <span class="fu">sum</span>(x))()</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>indxWt <span class="ot">&lt;-</span> <span class="cf">function</span>(t) ((<span class="dv">0</span><span class="dt">L</span><span class="sc">:</span><span class="dv">51</span><span class="dt">L</span> <span class="sc">+</span> <span class="dv">26</span><span class="dt">L</span> <span class="sc">-</span> t) <span class="sc">%%</span> <span class="dv">52</span><span class="dt">L</span>) <span class="sc">+</span> <span class="dv">1</span><span class="dt">L</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>probVec <span class="ot">&lt;-</span> <span class="cf">function</span>(t) binomWt[<span class="fu">indxWt</span>(t)]</span></code></pre></div>
-<p>The above, while it is more efficient, it requires calling
-<strong>probVec</strong> every time. We can calculate the weights for
-every week once in the global environment as follows</p>
-<div style="page-break-before:always">
- 
-</div>
+<p>Again, we observed that sampling only one value using the binomial
+weights is probably not the best approach because of the high
+variability.</p>
 </div>
 </body>
 </html>

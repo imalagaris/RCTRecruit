@@ -4,7 +4,7 @@
 \name{RCTRecruit-package}
 \alias{RCTRecruit}
 \alias{RCTRecruit-package}
-\title{RCTRecruit: Non-parametric Recruitment Prediction for Randomized Clinical Trials}
+\title{RCTRecruit: Non-Parametric Recruitment Prediction for Randomized Clinical Trials}
 \description{
 Accurate prediction of subject recruitment for randomized clinical trials (RCT) remains an ongoing challenge. Previous prediction models rely on parametric assumptions. We present functions for non-parametric RCT recruitment prediction under several scenarios.
 }
@@ -13,7 +13,7 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
    Package: \tab RCTRecruit \cr
    Type: \tab Package \cr
    Version: \tab 0.1.0 \cr
-   Date: \tab 2024-11-13 \cr
+   Date: \tab 2024-11-18 \cr
 }
 }
 \references{
@@ -22,19 +22,15 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
 non-parametric approach to predict the recruitment for randomized
 clinical trials: an example in elderly inpatient settings." \emph{BMC
 medical research methodology}, \emph{24}, 189. ISSN 1471-2288,
-doi:10.1186/s12874-024-02314-2
-\url{https://doi.org/10.1186/s12874-024-02314-2},
-\url{http://www.ncbi.nlm.nih.gov/pubmed/39210285\%20http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=PMC11363376}.
+\url{https://pubmed.ncbi.nlm.nih.gov/39210285/}.
 \item Gajewski BJ, Simon SD, Carlson SE (2008). "Predicting accrual in
 clinical trials with Bayesian posterior predictive distributions."
 \emph{Statistics in medicine}, \emph{27}, 2328-40. ISSN 0277-6715,
-doi:10.1002/sim.3128 \url{https://doi.org/10.1002/sim.3128},
-\url{http://www.ncbi.nlm.nih.gov/pubmed/17979152}.
+\url{https://pubmed.ncbi.nlm.nih.gov/17979152/}.
 \item Jiang Y, Simon S, Mayo MS, Gajewski BJ (2015). "Modeling and validating
 Bayesian accrual models on clinical data and simulations using adaptive
 priors." \emph{Statistics in medicine}, \emph{34}, 613-29. ISSN 1097-0258,
-doi:10.1002/sim.6359 \url{https://doi.org/10.1002/sim.6359},
-\url{http://www.ncbi.nlm.nih.gov/pubmed/25376910\%20http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=PMC4314351}.
+\url{https://pubmed.ncbi.nlm.nih.gov/25376910/}.
 }
 }
 \seealso{
