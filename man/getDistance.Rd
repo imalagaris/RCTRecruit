@@ -7,7 +7,7 @@ recruitment}
 \usage{
 GetDistance(
   target,
-  nSim = 10000,
+  nSim = 10000L,
   fillGaps = FALSE,
   cauchyWt = FALSE,
   coeff = 1
@@ -38,4 +38,5 @@ recruitment
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- GetDistance(gripsWeeklyYR2$enrolled)
+str(res)
 }

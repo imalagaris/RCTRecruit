@@ -1,13 +1,10 @@
-# Setup variables
-
 e <- (\() {
-  citationPath = "tools/citations/"
+  citationPath <- "tools/citations/"
 
-  # https://jsta.rbind.io/blog/automated-roxygen-documentation-of-r-package-data/
   # modified from http://r-pkgs.had.co.nz/man.html
-  tabular <- function(df, ...) {
+  tabular <- \(df, ...) {
     stopifnot(is.data.frame(df))
-    align <- function(x) if (is.numeric(x)) "r" else "l"
+    align <- \(x) if (is.numeric(x)) "r" else "l"
     col_align <- vapply(df, align, character(1))
     cols <- lapply(df, format, ...)
     argContents <- c(cols, list(sep = " \\tab ", collapse = "\\cr\n"))
@@ -19,15 +16,15 @@ e <- (\() {
     )
   }
 
-  get_table_metadata <- function(csvDatName) {
+  get_table_metadata <- \(csvDatName) {
     path <- paste0("data-raw/", csvDatName, ".csv")
     dt <- utils::read.csv(path, stringsAsFactors = FALSE)
     paste0(readLines(textConnection(tabular(dt))))
   }
 
-  genDataDoc <- function(dat) {
+  genDataDoc <- \(dat) {
     nams <- names(dat)
-    contents <- lapply(seq_along(nams), function(i) {
+    contents <- lapply(seq_along(nams), \(i) {
       nn <- nams[[i]]
       c(paste0("\\[,", i,  "\\]"),
         nn,
@@ -62,23 +59,19 @@ e <- (\() {
     }
   }
 
-  readDesc <- function() {
+  readDesc <- \() {
     read.dcf("DESCRIPTION") |>
       as.data.frame() |>
       lapply(\(x) gsub("\\n", "", x))
   }
 
-  getExportedFunctions <- function() {
+  getExportedFunctions <- \() {
     reg <- "^export\\((\\w+)\\)$"
     readLines("NAMESPACE") |>
       grep(reg, x = _, value = TRUE) |>
       gsub(reg, "\\1", x = _) |>
       paste0("[", ... = _, "]", collapse = ", ")
   }
+
   return(environment())
 })()
-
-
-
-
-

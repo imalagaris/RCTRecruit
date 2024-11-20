@@ -16,7 +16,7 @@ isNotNum <- \(x) !(typeof(x) %in% c("integer", "double"))
 
 # List of functions to check user input
 argsTests <- list(
-  "nSim" = function(nam, x) {
+  "nSim" = \(nam, x) {
     if (isNotNum(x)) err(msgL$num, nam)
     else if (notScalar(x)) err(msgL$len, nam)
     else if (x < 1 || x > 1e4) {
@@ -25,15 +25,15 @@ argsTests <- list(
       err(msgL$range, nam, low, high)
     }
   },
-  "fillGaps" = function(nam, x) {
+  "fillGaps" = \(nam, x) {
     if (isNotBool(x)) err(msgL$boolean, nam)
     else if (notScalar(x)) err(msgL$len, nam)
   },
-  "cauchyWt" = function(nam, x) {
+  "cauchyWt" = \(nam, x) {
     if (isNotBool(x)) err(msgL$boolean, nam)
     else if (notScalar(x)) err(msgL$len, nam)
   },
-  "nSub" = function(nam, x) {
+  "nSub" = \(nam, x) {
     maxN <- sum(the$TrainVector) * 10L
     if (isNotNum(x)) err(msgL$num, nam)
     else if (notScalar(x)) err(msgL$len, nam)
@@ -43,36 +43,57 @@ argsTests <- list(
       err(msgL$range, nam, low, high)
     }
   },
-  "coeff" = function(nam, x) {
+  "coeff" = \(nam, x) {
     if (x < 0.1 || x > 2) err("coeff must be between 0.1 and 2")
   },
-  "target" = function(nam, x) {
+  "target" = \(nam, x) {
     if (isNotNum(x)) err(msgL$num, nam)
     else if (length(x) < 1) err(msgL$len, nam)
   }
 )
 
-# A function to be run first within exported functions to check for user input
+#A function to be run first within exported functions to check for user input
 checkExportedFunctionsArgs <- \() {
   if (is.null(the$TrainVector)) err(msgL$Load, fmt("LoadData", 160))
   fArgs <- getCall(1L)
-  for (nam in names(fArgs)) argsTests[[nam]](bold(nam, 160), fArgs[[nam]])
+  for (nam in names(fArgs)) {
+    nn <- bold(nam, 160)
+    val <- eval(fArgs[[nam]])
+    argsTests[[nam]](nn, val)
+  }
 }
 
-# Gets the arguments of the calling function
+#Gets the arguments of the calling function
+# getCall <- \(n = 0L) {
+#   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
+#   carg <- formals(sys.function(sys.parent(1L + n)))
+#   cl <- as.list(sys.call(-1L - n))[-1L]
+#   for (nn in names(carg)) {
+#     if (utils::hasName(cl, nn)) {
+#       carg[[nn]] <- deparseSymbol(cl[[nn]])
+#       cl[[nn]] <- NULL
+#     }
+#   }
+#   id <- carg |> vapply(is.symbol, logical(1L)) |> which()
+#   for (i in seq_along(id)) carg[[id[[i]]]] <- deparseSymbol(cl[[i]])
+#   carg
+# }
+
 getCall <- \(n = 0L) {
   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
-  carg <- formals(sys.function(sys.parent(1L + n)))
-  cl <- as.list(sys.call(-1L - n))[-1L]
-  for (nn in names(carg)) {
-    if (utils::hasName(cl, nn)) {
-      carg[[nn]] <- deparseSymbol(cl[[nn]])
-      cl[[nn]] <- NULL
+  dArgs <- formals(sys.function(sys.parent(1L + n)))
+  defNams <- names(dArgs)
+  cArgs <- as.list(sys.call(-1L - n))[-1L]
+  out <- list()
+  for (nn in defNams) {
+    if (utils::hasName(cArgs, nn)) {
+      out[[nn]] <- deparseSymbol(cArgs[[nn]])
+      cArgs[[nn]] <- NULL
+      dArgs[[nn]] <- NULL
     }
   }
-  id <- carg |> vapply(is.symbol, logical(1L)) |> which()
-  for (i in seq_along(id)) carg[[id[[i]]]] <- deparseSymbol(cl[[i]])
-  carg
+  for (i in seq_along(cArgs)) dArgs[[i]] <- deparseSymbol(cArgs[[i]])
+  c(out, dArgs)[defNams]
 }
 
 # Check the validity of user input `Date` and 'Enrolled' columns
@@ -109,3 +130,5 @@ checkInvalidValues <- function(x) {
   if (any(is.na(x))) stop("x has NAs")
   if (any(x < 0L)) stop("x has negative values")
 }
+
+

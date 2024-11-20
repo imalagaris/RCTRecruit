@@ -5,8 +5,8 @@
 \title{Simulate number of weeks needed to recruit a given number of subjects}
 \usage{
 Time2Nsubjects(
-  nSub = 50,
-  nSim = 10000,
+  nSub = 50L,
+  nSim = 10000L,
   fillGaps = FALSE,
   cauchyWt = FALSE,
   coeff = 1
@@ -35,4 +35,5 @@ Simulate number of weeks needed to recruit a given number of subjects
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- Time2Nsubjects()
+str(res)
 }

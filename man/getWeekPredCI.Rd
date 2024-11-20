@@ -24,7 +24,6 @@ Calculate median recruitment with CI for the next 52 weeks
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
-GetWeekPredCI()
-GetWeekPredCI(fillGaps = TRUE)
-GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
+res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
+str(res)
 }

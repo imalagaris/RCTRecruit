@@ -39,7 +39,7 @@ dataframe **`datWeeks`**.
 
 ```{r, collapse = TRUE}
 load_all()
-LoadData(gripsIM, ScreenDt, Enrolled)
+LoadData(gripsYR1, ScreenDt, Enrolled)
 train <- the$datWeeks$enrolled
 nonGap <- the$datWeeks$cnt != 0
 nonGapVals <- train[nonGap]

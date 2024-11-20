@@ -1,3 +1,4 @@
+# LoadData ---------------------------------------------------------------
 #' Load recruitment data
 #' @param data Main dataset
 #' @param date Date column
@@ -5,7 +6,7 @@
 #' @return NULL
 #' @export
 #' @examples LoadData(gripsYR1, ScreenDt, Enrolled)
-LoadData <- function(data, date, enrolled) {
+LoadData <- \(data, date, enrolled) {
   if (is.null(data)) stop("data is NULL")
   if (!("data.frame" %in% class(data))) stop("data must be a dataframe")
   cargs <- getCall()
@@ -20,6 +21,8 @@ LoadData <- function(data, date, enrolled) {
   exportModuleMethods(the$cppModule)
   LoadSuccess(cargs)
 }
+
+# Time2Nsubjects ----------------------------------------------------------
 #' Simulate number of weeks needed to recruit a given number of subjects
 #' @param nSub Number of subjects to recruit (default = 50)
 #' @param nSim Number of simulations to run (default = 1e4)
@@ -34,8 +37,14 @@ LoadData <- function(data, date, enrolled) {
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' res <- Time2Nsubjects()
-Time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
-                    coeff = 1) {
+#' str(res)
+Time2Nsubjects <- \(
+  nSub = 50L,
+  nSim = 1e4L,
+  fillGaps = FALSE,
+  cauchyWt = FALSE,
+  coeff = 1
+) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
@@ -45,6 +54,8 @@ Time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
   print(round(out$CI))
   invisible(out)
 }
+
+# GetDistance ------------------------------------------------------------
 #' Calculate CI of Euclidean distance of predicted recruitment with actual
 #'     recruitment
 #' @param target A vector with the actual recruitment by week
@@ -57,8 +68,14 @@ Time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' res <- GetDistance(gripsWeeklyYR2$enrolled)
-GetDistance <- function(target, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
-                        coeff = 1) {
+#' str(res)
+GetDistance <- \(
+  target,
+  nSim = 1e4L,
+  fillGaps = FALSE,
+  cauchyWt = FALSE,
+  coeff = 1
+) {
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
   applyCoeff(coeff)
@@ -72,16 +89,22 @@ GetDistance <- function(target, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
   print(round(CI))
   invisible(list(dist = dist, CI = CI))
 }
+
+# GetWeekPredCI ----------------------------------------------------------
 #' Calculate median recruitment with CI for the next 52 weeks
 #' @inheritParams Time2Nsubjects
 #' @return An 52x3 matrix with the 2.5%, 50% and 97.5% percentiles for each week
 #' @export
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' GetWeekPredCI()
-#' GetWeekPredCI(fillGaps = TRUE)
-#' GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-GetWeekPredCI <- \(nSim = 1e4L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1) {
+#' res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
+#' str(res)
+GetWeekPredCI <- \(
+  nSim = 1e4L,
+  fillGaps = FALSE,
+  cauchyWt = FALSE,
+  coeff = 1
+  ) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
