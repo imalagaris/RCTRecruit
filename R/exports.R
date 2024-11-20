@@ -16,7 +16,7 @@ LoadData <- \(data, date, enrolled) {
   the$datWeeks <- days2weeks(date, enrolled)
   the$train <- the$datWeeks$enrolled
   the$TrainVector <- the$train
-  the$Trainfilled <- fillEmptyWeeks(the$TrainVector, the$datWeeks$cnt)
+  the$Trainfilled <- fillEmptyWeeks()
   the$cppModule <- methods::new(rct, the)
   exportModuleMethods(the$cppModule)
   LoadSuccess(cargs)

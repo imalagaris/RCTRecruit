@@ -51,8 +51,7 @@ labs <- list(
   week = "Calendar week",
   year = "Calendar year",
   enrolled = "Number of people enrolled that week",
-  holiday = "Number of federal holidays that week",
-  cnt = "Number of days in that week when recruitment was active"
+  ActiveDays = "Number of days in that week when recruitment was active"
 )
 
 for (x in names(datWeeks)) {
@@ -233,7 +232,7 @@ a$plot(y)
 newFill <- \(n = 1, repl. = FALSE) {
   indxWt <- \(t) ((0L:51L + 26L - t) %% 52L) + 1L
   bn <- the$binomWt[[26]]
-  id0 = which(the$datWeeks$cnt == 0)
+  id0 = which(the$datWeeks$activeDays == 0)
   p <- lapply(1L:52L, \(t) bn[indxWt(t)] |> (\(x) {x[id0] <- 0; x / sum(x)})())
   out = train = the$TrainVector
   for (wk in id0) out[wk] <- mean(sample(train, n, repl., p[[wk]]))
@@ -250,5 +249,7 @@ newFill1 <- \(x) {
   }
   out
 }
+
+
 
 

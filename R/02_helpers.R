@@ -40,6 +40,20 @@ applyCoeff <- function(coeff) {
   }
 }
 
+# Fill gap weeks with its expected value
+fillEmptyWeeks <- \() {
+  train <- the$datWeeks$enrolled
+  gapIdx <- which(the$datWeeks$activeDays == 0)
+  out <- train
+  for (i in gapIdx) {
+    wt <- the$binomWt[[i]]
+    wt[gapIdx] <- 0
+    wt <- wt / sum(wt)
+    out[i] <- sum(train * wt)
+  }
+  out
+}
+
 # Try parse string to date format
 fixDate <- function(dateVar) {
   if (is.null(dateVar)) stop("strDate is NULL")
@@ -72,11 +86,11 @@ fixDate <- function(dateVar) {
 }
 
 # Fix the input vector to be integer and without invalid values
-fixEnrolled <- function(TrainVector) {
-  checkIntNumType(TrainVector)
-  TrainVector <- as.integer(TrainVector)
-  checkInvalidValues(TrainVector)
-  TrainVector
+fixEnrolled <- function(enrolled) {
+  checkIntNumType(enrolled)
+  enrolled <- as.integer(enrolled)
+  checkInvalidValues(enrolled)
+  enrolled
 }
 
 # Aggregate the data by week and year
@@ -99,40 +113,14 @@ days2weeks <- function(date, enrolled) {
   cnt <- stats::setNames(integer(53L), seq_len(53L))
   tab <- table(lubridate::isoweek(date))
   cnt[names(tab)] <- tab
-
   dlist <- do.call(rbind.data.frame,  dlist)
   dat <- rbind(dat, dlist)
   dat <- dat[order(dat$date), ]
-  dat <- within(dat, {
-    week <- lubridate::isoweek(date) # nolint: object_usage_linter.
-    year <- lubridate::isoyear(date) # nolint: object_usage_linter.
-    holiday <- tis::isHoliday(date, TRUE, TRUE) * 1L # nolint
-  })
-  datw <- stats::aggregate(cbind(enrolled, holiday) ~ week + year, dat, sum)
-  datw$cnt <- 0L
-  datw$cnt <- cnt[datw$week]
+  dat$week <- lubridate::isoweek(dat$date)
+  dat$year <- lubridate::isoyear(dat$date)
+  datw <- stats::aggregate(enrolled ~ week + year, dat, sum)
+  datw$activeDays <- 0L
+  datw$activeDays <- cnt[datw$week]
   rownames(datw) <- NULL
-
   return(datw[1L:52L, ])
-}
-
-# Fill gap weeks with values sampled from non-zero weeks
-fillEmptyWeeks <- function(x, id0) {
-  zeroIdx <- which(id0 == 0)
-  nonZeroVals <- x[-zeroIdx]
-  for (i in zeroIdx) {
-    x[i] <- sample(nonZeroVals, 1)
-  }
-  x
-}
-
-refill <- function() {
-  pre <- sum(the$Trainfilled)
-  zeroIdx <- which(the$datWeeks$cnt == 0)
-  nonZeroVals <- the$TrainVector[-zeroIdx]
-  for (i in zeroIdx) {
-    the$Trainfilled[i] <- sample(nonZeroVals, 1)
-  }
-  post <- sum(the$Trainfilled)
-  cat(pre, "->", post, "\n")
 }

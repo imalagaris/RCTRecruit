@@ -29,8 +29,7 @@ desc <- list(
   week = "Calendar week",
   year = "Calendar year",
   enrolled = "Number of people enrolled that week",
-  holiday = "Number of federal holidays that week",
-  cnt = "Number of days in that week when recruitment was active"
+  activeDays = "Number of days in that week when recruitment was active"
 )
 
 for (x in names(gripsYR1)) {

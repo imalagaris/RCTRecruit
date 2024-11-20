@@ -59,6 +59,7 @@ checkExportedFunctionsArgs <- \() {
   for (nam in names(fArgs)) {
     nn <- bold(nam, 160)
     val <- eval(fArgs[[nam]])
+    print(typeof(val))
     argsTests[[nam]](nn, val)
   }
 }

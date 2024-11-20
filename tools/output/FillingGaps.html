@@ -118,8 +118,8 @@ internal dataframe <strong><code>datWeeks</code></strong>.
 <ul>
 <li>The variable <strong><code>enrolled</code></strong> is the number of
 subjects enrolled in each week.</li>
-<li>The variable <strong><code>cnt</code></strong> is the number of
-active recruitment days in each week.</li>
+<li>The variable <strong><code>activeDays</code></strong> is the number
+of active recruitment days in each week.</li>
 </ul></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">load_all</span>()</span>
@@ -127,7 +127,7 @@ active recruitment days in each week.</li>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">LoadData</span>(gripsYR1, ScreenDt, Enrolled)</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">## Variables Enrolled and ScreenDt were successfully loaded from data gripsYR1</span></span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>train <span class="ot">&lt;-</span> the<span class="sc">$</span>datWeeks<span class="sc">$</span>enrolled</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>nonGap <span class="ot">&lt;-</span> the<span class="sc">$</span>datWeeks<span class="sc">$</span>cnt <span class="sc">!=</span> <span class="dv">0</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>nonGap <span class="ot">&lt;-</span> the<span class="sc">$</span>datWeeks<span class="sc">$</span>activeDays <span class="sc">!=</span> <span class="dv">0</span></span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>nonGapVals <span class="ot">&lt;-</span> train[nonGap]</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>gapIdx <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span>nonGap)</span>
 <span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>the<span class="sc">$</span>datWeeks[gapIdx, ]</span></code></pre></div>
@@ -139,8 +139,7 @@ active recruitment days in each week.</li>
 <th align="right">week</th>
 <th align="right">year</th>
 <th align="right">enrolled</th>
-<th align="right">holiday</th>
-<th align="right">cnt</th>
+<th align="right">activeDays</th>
 </tr>
 </thead>
 <tbody>
@@ -150,13 +149,11 @@ active recruitment days in each week.</li>
 <td align="right">2019</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">15</td>
 <td align="right">39</td>
 <td align="right">2019</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
@@ -166,13 +163,11 @@ active recruitment days in each week.</li>
 <td align="right">2019</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">17</td>
 <td align="right">41</td>
 <td align="right">2019</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
@@ -181,14 +176,12 @@ active recruitment days in each week.</li>
 <td align="right">42</td>
 <td align="right">2019</td>
 <td align="right">0</td>
-<td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">20</td>
 <td align="right">44</td>
 <td align="right">2019</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
@@ -198,14 +191,12 @@ active recruitment days in each week.</li>
 <td align="right">2019</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">22</td>
 <td align="right">46</td>
 <td align="right">2019</td>
 <td align="right">0</td>
-<td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
@@ -214,14 +205,12 @@ active recruitment days in each week.</li>
 <td align="right">2019</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">24</td>
 <td align="right">48</td>
 <td align="right">2019</td>
 <td align="right">0</td>
-<td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
@@ -230,21 +219,18 @@ active recruitment days in each week.</li>
 <td align="right">2019</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">28</td>
 <td align="right">52</td>
 <td align="right">2019</td>
 <td align="right">0</td>
-<td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">41</td>
 <td align="right">13</td>
 <td align="right">2020</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
@@ -254,14 +240,12 @@ active recruitment days in each week.</li>
 <td align="right">2020</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">43</td>
 <td align="right">15</td>
 <td align="right">2020</td>
 <td align="right">0</td>
-<td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
@@ -270,13 +254,11 @@ active recruitment days in each week.</li>
 <td align="right">2020</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">45</td>
 <td align="right">17</td>
 <td align="right">2020</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>

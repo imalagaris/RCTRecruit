@@ -35,13 +35,14 @@ executed in project's dir).
 - After loading the data, we get variables of interest from the internal 
 dataframe **`datWeeks`**.
   - The variable **`enrolled`** is the number of subjects enrolled in each week.
-  - The variable **`cnt`** is the number of active recruitment days in each week.
+  - The variable **`activeDays`** is the number of active recruitment days in 
+each week.  
 
 ```{r, collapse = TRUE}
 load_all()
 LoadData(gripsYR1, ScreenDt, Enrolled)
 train <- the$datWeeks$enrolled
-nonGap <- the$datWeeks$cnt != 0
+nonGap <- the$datWeeks$activeDays != 0
 nonGapVals <- train[nonGap]
 gapIdx <- which(!nonGap)
 the$datWeeks[gapIdx, ]

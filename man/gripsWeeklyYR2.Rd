@@ -7,13 +7,12 @@
 \format{
 A data frame with
 \strong{52} observations of
-\strong{5} variables:
+\strong{4} variables:
 \tabular{llll}{
 [,1] \tab week \tab \code{double} \tab Calendar week\cr
 [,2] \tab year \tab \code{double} \tab Calendar year\cr
 [,3] \tab enrolled \tab \code{integer} \tab Number of people enrolled that week\cr
-[,4] \tab holiday \tab \code{integer} \tab Number of federal holidays that week\cr
-[,5] \tab cnt \tab \code{integer} \tab Number of days in that week when recruitment was active
+[,4] \tab activeDays \tab \code{integer} \tab Number of days in that week when recruitment was active
 }
 }
 \source{
