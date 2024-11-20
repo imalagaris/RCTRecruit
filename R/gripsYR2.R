@@ -8,8 +8,8 @@
 #' A data frame with
 #'     **`r nrow(dat)`** observations of
 #'     **`r length(dat)`** variables:
-#' `r genDataDoc(dat)`
+#' `r e$genDataDoc(dat)`
 #'
-#' @source `r addRef("Villasante2024")`
+#' @source `r e$addRef("Villasante2024")`
 #' @md
 "gripsYR2"
