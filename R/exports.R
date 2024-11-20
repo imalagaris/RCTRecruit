@@ -86,7 +86,7 @@ GetWeekPredCI <- \(nSim = 1e4L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1) {
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
   applyCoeff(coeff)
-  out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _)
+  out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _) |> round()
   rownames(out) <- 0:(nrow(out) - 1)
   utils::head(out) |> logPrint()
   utils::tail(out) |> logPrint()
