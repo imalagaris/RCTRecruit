@@ -7,11 +7,11 @@ the$probs <- the$binomWt
 the$cauchyWt <- wts[["cauchy"]]
 the$color <- .Platform$GUI %in% c("RStudio", "RTerm")
 
-# On data load, this function exports the methods of the C++ module to the `the`
+# On data load, export the methods of the C++ module to the `the`
 # internal environment
 exportModuleMethods <- \(instance) {
   cl <- substitute(instance)
-  if (!methods::is(the$cppModule, "Rcpp_rct")) stop("For internal use only")
+  if (!methods::is(instance, "Rcpp_rct")) stop("For internal use only")
   mn <- rct@methods |> names()
   mthds <- lapply(mn, as.name)
   fx <- \(x, y) {
@@ -25,14 +25,14 @@ exportModuleMethods <- \(instance) {
   lapply(mn, \(m) the[[m]] <- get(m, instance)) |> invisible()
 }
 
-# It is call within exported functions to set the training data as filled or not
+# Called within exported functions to set the training data as filled or not
 useFilled <- function(fill = FALSE, env = the) {
   train <- if (fill) env$Trainfilled else env$TrainVector
   the$cppModule$train <- train
   env$train <- train
 }
 
-# It is call within exported functions to set the efficiency coefficient
+# Called within exported functions to set the efficiency coefficient
 applyCoeff <- function(coeff) {
   if (coeff != 1) {
     the$train <- the$train * coeff
@@ -79,7 +79,7 @@ fixEnrolled <- function(TrainVector) {
   TrainVector
 }
 
-# Aggregate the data by week
+# Aggregate the data by week and year
 days2weeks <- function(date, enrolled) {
   dat <- data.frame(date, enrolled)
   nn <- length(date)

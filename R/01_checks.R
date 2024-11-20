@@ -64,21 +64,6 @@ checkExportedFunctionsArgs <- \() {
 }
 
 #Gets the arguments of the calling function
-# getCall <- \(n = 0L) {
-#   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
-#   carg <- formals(sys.function(sys.parent(1L + n)))
-#   cl <- as.list(sys.call(-1L - n))[-1L]
-#   for (nn in names(carg)) {
-#     if (utils::hasName(cl, nn)) {
-#       carg[[nn]] <- deparseSymbol(cl[[nn]])
-#       cl[[nn]] <- NULL
-#     }
-#   }
-#   id <- carg |> vapply(is.symbol, logical(1L)) |> which()
-#   for (i in seq_along(id)) carg[[id[[i]]]] <- deparseSymbol(cl[[i]])
-#   carg
-# }
-
 getCall <- \(n = 0L) {
   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
   dArgs <- formals(sys.function(sys.parent(1L + n)))
