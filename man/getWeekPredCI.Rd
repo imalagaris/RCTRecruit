@@ -2,14 +2,14 @@
 % Please edit documentation in R/functions.R
 \name{getWeekPredCI}
 \alias{getWeekPredCI}
-\title{Function: Calculate median recruitment with CI for the next 52 weeks}
+\title{Calculate median recruitment with CI for the next 52 weeks}
 \usage{
 getWeekPredCI(nSim = 10000L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1)
 }
 \arguments{
-\item{nSim}{Number of simulations to run}
+\item{nSim}{Number of simulations to run (default = 1e4)}
 
-\item{fillGaps}{Whether to fill gaps in the data}
+\item{fillGaps}{Whether to fill gaps in the data (default = FALSE)}
 
 \item{cauchyWt}{Whether to use Cauchy weights for sampling (default = FALSE).
 If FALSE, binomial weights are used.}
@@ -20,7 +20,7 @@ If FALSE, binomial weights are used.}
 An 52x3 matrix with the 2.5\%, 50\% and 97.5\% percentiles for each week
 }
 \description{
-Function: Calculate median recruitment with CI for the next 52 weeks
+Calculate median recruitment with CI for the next 52 weeks
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)

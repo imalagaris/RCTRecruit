@@ -60,16 +60,19 @@ for (x in names(datWeeks)) {
 }
 
 
-dpath <- system.file("DESCRIPTION", package = "accrual")
 
-read.dcf(dpath) |> as.data.frame() |> lapply(\(x) gsub("\\n", "", x))
+system.file("DESCRIPTION", package = "accrual") |>
+  read.dcf() |>
+  as.data.frame() |>
+  lapply(\(x) gsub("\\n", "", x))
+
 
 
 
 # (base::requireNamespace("knitr", quietly = TRUE)) {
 
 
-
+a <- readRDS("C:/Users/iomalaga/AppData/Local/R/win-library/4.4/accrual/Meta/package.rds")
 
 
 

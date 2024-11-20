@@ -1,4 +1,4 @@
-#' Function: Load recruitment data
+#' Load recruitment data
 #' @param data Main dataset
 #' @param date Date column
 #' @param enrolled Enrolled column
@@ -20,9 +20,7 @@ LoadData <- function(data, date, enrolled) {
   exportModuleMethods(the$cppModule)
   LoadSuccess(cargs)
 }
-
-#' Function: Simulate number of weeks needed to recruit a given number of
-#'     subjects
+#' Simulate number of weeks needed to recruit a given number of subjects
 #' @param nSub Number of subjects to recruit (default = 50)
 #' @param nSim Number of simulations to run (default = 1e4)
 #' @param fillGaps Whether to fill gaps in the data (default = FALSE)
@@ -47,14 +45,10 @@ time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
   print(round(out$CI))
   invisible(out)
 }
-#' Function: Calculate CI of Euclidean distance of predicted recruitment with
-#'     actual recruitment
+#' Calculate CI of Euclidean distance of predicted recruitment with actual
+#'     recruitment
 #' @param target A vector with the actual recruitment by week
-#' @param nSim Number of simulations to run
-#' @param fillGaps Whether to fill gaps in the data
-#' @param cauchyWt Whether to use Cauchy weights for sampling (default = FALSE).
-#'    If FALSE, binomial weights are used.
-#' @param coeff A coefficient to apply to the recruitment rate (default = 1)
+#' @inheritParams time2Nsubjects
 #' @return A list with two elements. The first element `dist` is a numeric
 #'     vector with length equal to `nSim` containing the simulated Euclidean
 #'     distance. The second `CI` shows the median and the 95%CI Euclidean
@@ -78,13 +72,8 @@ getDistance <- function(target, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
   print(round(CI))
   invisible(list(dist = dist, CI = CI))
 }
-
-#' Function: Calculate median recruitment with CI for the next 52 weeks
-#' @param nSim Number of simulations to run
-#' @param fillGaps Whether to fill gaps in the data
-#' @param cauchyWt Whether to use Cauchy weights for sampling (default = FALSE).
-#'    If FALSE, binomial weights are used.
-#' @param coeff A coefficient to apply to the recruitment rate (default = 1)
+#' Calculate median recruitment with CI for the next 52 weeks
+#' @inheritParams time2Nsubjects
 #' @return An 52x3 matrix with the 2.5%, 50% and 97.5% percentiles for each week
 #' @export
 #' @examples

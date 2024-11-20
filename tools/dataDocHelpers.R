@@ -65,3 +65,16 @@ readDesc <- function() {
     as.data.frame() |>
     lapply(\(x) gsub("\\n", "", x))
 }
+
+getExportedFunctions <- function() {
+  reg <- "^export\\((\\w+)\\)$"
+  readLines("NAMESPACE") |>
+    grep(reg, x = _, value = TRUE) |>
+    gsub(reg, "\\1", x = _) |>
+    paste0("[", ... = _, "]", collapse = ", ")
+}
+
+
+
+
+

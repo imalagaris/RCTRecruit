@@ -2,8 +2,8 @@
 % Please edit documentation in R/functions.R
 \name{getDistance}
 \alias{getDistance}
-\title{Function: Calculate CI of Euclidean distance of predicted recruitment with
-actual recruitment}
+\title{Calculate CI of Euclidean distance of predicted recruitment with actual
+recruitment}
 \usage{
 getDistance(
   target,
@@ -16,9 +16,9 @@ getDistance(
 \arguments{
 \item{target}{A vector with the actual recruitment by week}
 
-\item{nSim}{Number of simulations to run}
+\item{nSim}{Number of simulations to run (default = 1e4)}
 
-\item{fillGaps}{Whether to fill gaps in the data}
+\item{fillGaps}{Whether to fill gaps in the data (default = FALSE)}
 
 \item{cauchyWt}{Whether to use Cauchy weights for sampling (default = FALSE).
 If FALSE, binomial weights are used.}
@@ -32,8 +32,8 @@ distance. The second \code{CI} shows the median and the 95\%CI Euclidean
 distance.
 }
 \description{
-Function: Calculate CI of Euclidean distance of predicted recruitment with
-actual recruitment
+Calculate CI of Euclidean distance of predicted recruitment with actual
+recruitment
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)

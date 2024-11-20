@@ -2,8 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{time2Nsubjects}
 \alias{time2Nsubjects}
-\title{Function: Simulate number of weeks needed to recruit a given number of
-subjects}
+\title{Simulate number of weeks needed to recruit a given number of subjects}
 \usage{
 time2Nsubjects(
   nSub = 50,
@@ -31,8 +30,7 @@ vector with length equal to \code{nSim} containing the results of the
 simulation. The second \code{CI} shows the median and the 95\%CI.
 }
 \description{
-Function: Simulate number of weeks needed to recruit a given number of
-subjects
+Simulate number of weeks needed to recruit a given number of subjects
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
