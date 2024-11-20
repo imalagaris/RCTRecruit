@@ -33,8 +33,8 @@ LoadData <- function(data, date, enrolled) {
 #' @export
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' res <- time2Nsubjects()
-time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
+#' res <- Time2Nsubjects()
+Time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
                     coeff = 1) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
@@ -48,7 +48,7 @@ time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
 #' Calculate CI of Euclidean distance of predicted recruitment with actual
 #'     recruitment
 #' @param target A vector with the actual recruitment by week
-#' @inheritParams time2Nsubjects
+#' @inheritParams Time2Nsubjects
 #' @return A list with two elements. The first element `dist` is a numeric
 #'     vector with length equal to `nSim` containing the simulated Euclidean
 #'     distance. The second `CI` shows the median and the 95%CI Euclidean
@@ -56,8 +56,8 @@ time2Nsubjects <- \(nSub = 50, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
 #' @export
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' res <- getDistance(gripsWeeklyYR2$enrolled)
-getDistance <- function(target, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
+#' res <- GetDistance(gripsWeeklyYR2$enrolled)
+GetDistance <- function(target, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
                         coeff = 1) {
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
@@ -73,15 +73,15 @@ getDistance <- function(target, nSim = 1e4, fillGaps = FALSE, cauchyWt = FALSE,
   invisible(list(dist = dist, CI = CI))
 }
 #' Calculate median recruitment with CI for the next 52 weeks
-#' @inheritParams time2Nsubjects
+#' @inheritParams Time2Nsubjects
 #' @return An 52x3 matrix with the 2.5%, 50% and 97.5% percentiles for each week
 #' @export
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' getWeekPredCI()
-#' getWeekPredCI(fillGaps = TRUE)
-#' getWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-getWeekPredCI <- \(nSim = 1e4L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1) {
+#' GetWeekPredCI()
+#' GetWeekPredCI(fillGaps = TRUE)
+#' GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
+GetWeekPredCI <- \(nSim = 1e4L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
