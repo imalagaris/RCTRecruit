@@ -1,5 +1,5 @@
 # Error messages collect in a named list
-msgL <- list(
+msg <- list(
   Load = 'Please, use "%s" function to load your data',
   boolean = "%s must be TRUE or FALSE",
   len = "%s must have length = 1",
@@ -7,59 +7,51 @@ msgL <- list(
   num = "%s must be a numeric or integer",
   enrollWeeks = "Enrolling %s subjects requires %s weeks\n\n",
   success = "Variables %s and %s were successfully loaded from data %s\n\n",
-  notFound = '"%s" not found in data "%s"\n'
+  notFound = '"%s" not found in data "%s"\n',
+  idx = "%s[[%sL]]: %s"
 )
 # Simple function to check for user input validity
 notScalar <- \(x) length(x) != 1
-isNotBool <- \(x) !is.logical(x)
+NoBool <- \(x, y = utils::type.convert(x, as.is = T)) is.na(y) || !is.logical(y)
 isNotNum <- \(x) !(typeof(x) %in% c("integer", "double"))
 
 # List of functions to check user input
 argsTests <- list(
   "nSim" = \(nam, x) {
-    if (isNotNum(x)) err(msgL$num, nam)
-    else if (notScalar(x)) err(msgL$len, nam)
-    else if (x < 1 || x > 1e4) {
-      low <- bold(1, 160)
-      high <-  bold(1e4, 160)
-      err(msgL$range, nam, low, high)
-    }
+    if (isNotNum(x)) err(msg$num, em(nam))
+    else if (notScalar(x)) err(msg$len, em(nam))
+    else if (x < 1 || x > 1e4) err(msg$range, em(nam), em(1), em(1e4))
   },
   "fillGaps" = \(nam, x) {
-    if (isNotBool(x)) err(msgL$boolean, nam)
-    else if (notScalar(x)) err(msgL$len, nam)
+    if (NoBool(x)) err(msg$boolean, em(nam))
+    else if (notScalar(x)) err(msg$len, em(nam))
   },
   "cauchyWt" = \(nam, x) {
-    if (isNotBool(x)) err(msgL$boolean, nam)
-    else if (notScalar(x)) err(msgL$len, nam)
+    if (NoBool(x)) err(msg$boolean, em(nam))
+    else if (notScalar(x)) err(msg$len, em(nam))
   },
   "nSub" = \(nam, x) {
     maxN <- sum(the$TrainVector) * 10L
-    if (isNotNum(x)) err(msgL$num, nam)
-    else if (notScalar(x)) err(msgL$len, nam)
-    else if (x < 1 || x > maxN) {
-      low <- bold(1, 160)
-      high <-  bold(maxN, 160)
-      err(msgL$range, nam, low, high)
-    }
+    if (isNotNum(x)) err(msg$num, em(nam))
+    else if (notScalar(x)) err(msg$len, em(nam))
+    else if (x < 1 || x > maxN) err(msg$range, em(nam), em(1), em(maxN))
   },
   "coeff" = \(nam, x) {
-    if (x < 0.1 || x > 2) err("coeff must be between 0.1 and 2")
+    if (x < 0.1 || x > 2) err(msg$range, em(nam), em(.1), em(2))
   },
   "target" = \(nam, x) {
-    if (isNotNum(x)) err(msgL$num, nam)
-    else if (length(x) < 1) err(msgL$len, nam)
+    if (isNotNum(x)) err(msg$num, em(nam))
+    else if (length(x) < 1) err(msg$len, em(nam))
   }
 )
 
 #A function to be run first within exported functions to check for user input
 checkExportedFunctionsArgs <- \() {
-  if (is.null(the$TrainVector)) err(msgL$Load, fmt("LoadData", 160))
+  if (is.null(the$TrainVector)) err(msg$Load, fmt("LoadData", 160))
   fArgs <- getCall(1L)
   for (nam in names(fArgs)) {
     nn <- bold(nam, 160)
     val <- eval(fArgs[[nam]])
-    print(typeof(val))
     argsTests[[nam]](nn, val)
   }
 }
@@ -83,23 +75,24 @@ getCall <- \(n = 0L) {
 }
 
 # Check the validity of user input `Date` and 'Enrolled' columns
-checkArgs <- function(name) {
+checkArgs <- function() {
   cargs <- getCall(1L)
-  dat <- get(cargs$data, parent.frame())
-  dataStr <- cargs$data
-  varStr <- eval(substitute(cargs$name))
-  if (!utils::hasName(dat, varStr)) {
-    err(msgL$notFound, bold(varStr, 160), bold(dataStr, 160))
+  datN <- cargs$data
+  dtN <- cargs$date
+  enrN <- cargs$enrolled
+  dat <- get(datN, parent.frame())
+  for (x in c(dtN, enrN)) {
+    if (!utils::hasName(dat, x)) err(msg$notFound, em(x), em(datN))
   }
-  out <- dat[[varStr]]
-  if (deparse(substitute(name)) == "enrolled") fixEnrolled(out)
-  else fixDate(out)
+  date <- fixDate(dat[[dtN]])
+  enrolled <- fixEnrolled(dat[[enrN]])
+  data.frame(date, enrolled)
 }
 
 # Print success message after loading data
 LoadSuccess <- \(x) {
   y <- lapply(x, bold, 28)
-  log(msgL$success, y$enrolled, y$date, y$data)
+  log(msg$success, y$enrolled, y$date, y$data)
 }
 
 # Check input is of correct type
@@ -116,5 +109,3 @@ checkInvalidValues <- function(x) {
   if (any(is.na(x))) stop("x has NAs")
   if (any(x < 0L)) stop("x has negative values")
 }
-
-

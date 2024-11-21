@@ -74,9 +74,8 @@ fixDate <- function(dateVar) {
     ids <- which(NAs)
     len <- length(ids)
     ids <- ids[seq_len(min(10L, len))]
-    msg <- "%s[[%sL]]: %s"
     for (i in ids) {
-      vals <- c(msg, lapply(c(the$dtStr, i, dateVar[[i]]), fmt, 208))
+      vals <- c(msg$idx, lapply(c("strDate", i, dateVar[[i]]), fmt, 208))
       do.call(wrn, vals)
     }
     if (len > 10) warning("...")

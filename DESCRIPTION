@@ -1,7 +1,7 @@
 Type: Package
 Package: RCTRecruit
 Title: Non-Parametric Recruitment Prediction for Randomized Clinical Trials
-Version: 0.1.7
+Version: 0.1.9
 Authors@R: c(
     person("Ioannis", "Malagaris", , "iomalaga@utmb.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5126-2068")),
@@ -20,8 +20,7 @@ Imports:
     knitr,
     lubridate,
     methods,
-    Rcpp,
-    tis
+    Rcpp
 LinkingTo: 
     Rcpp
 Encoding: UTF-8

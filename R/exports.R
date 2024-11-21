@@ -10,10 +10,8 @@ LoadData <- \(data, date, enrolled) {
   if (is.null(data)) stop("data is NULL")
   if (!("data.frame" %in% class(data))) stop("data must be a dataframe")
   cargs <- getCall()
-  date <- checkArgs(date)
-  enrolled <- checkArgs(enrolled)
-  the$raw <- data.frame(date, enrolled)
-  the$datWeeks <- days2weeks(date, enrolled)
+  the$raw <- checkArgs()
+  the$datWeeks <- days2weeks(the$raw$date, the$raw$enrolled)
   the$train <- the$datWeeks$enrolled
   the$TrainVector <- the$train
   the$Trainfilled <- fillEmptyWeeks()
@@ -50,7 +48,7 @@ Time2Nsubjects <- \(
   the$useCauchy(cauchyWt)
   applyCoeff(coeff)
   out <- the$weeks2Nsubjects(nSim, nSub)
-  log(msgL$enrollWeeks, bold(nSub, 28), bold(out$CI[[2L]], 28))
+  log(msg$enrollWeeks, bold(nSub, 28), bold(out$CI[[2L]], 28))
   print(round(out$CI))
   invisible(out)
 }

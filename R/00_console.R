@@ -30,3 +30,4 @@ fmt <- \(str, fg = 0, bk = 0, fx = NULL) {
 }
 # Colorize text
 bold <- \(str, foreground) fmt(str, fg = foreground, fx = 1)
+em <- \(str) fmt(str, 196, fx = "1;4")

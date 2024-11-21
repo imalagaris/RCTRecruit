@@ -16,7 +16,7 @@
 
 #' Data: Recruitment data for the GRIPS study `r dat <- gripsYR2;`
 #'
-#' Modified recruitment data from the GRIPS study for the first year the study
+#' Modified recruitment data from the GRIPS study for the second year the study
 #' was conducted. The data includes the number of participants recruited each
 #' for each calendar date the recruitment was active.
 #'

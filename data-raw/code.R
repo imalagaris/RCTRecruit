@@ -229,27 +229,3 @@ a$plot(y)
 
 
 
-newFill <- \(n = 1, repl. = FALSE) {
-  indxWt <- \(t) ((0L:51L + 26L - t) %% 52L) + 1L
-  bn <- the$binomWt[[26]]
-  id0 = which(the$datWeeks$activeDays == 0)
-  p <- lapply(1L:52L, \(t) bn[indxWt(t)] |> (\(x) {x[id0] <- 0; x / sum(x)})())
-  out = train = the$TrainVector
-  for (wk in id0) out[wk] <- mean(sample(train, n, repl., p[[wk]]))
-  out
-}
-
-
-newFill1 <- \(x) {
-  out <- the$TrainVector;
-  out <- setNames(numeric(length(id0)), paste0("w", id0))
-  for (i in seq_len(length(id0))) {
-    wk <- id0[i]
-    out[i] <- mean(sample(the$TrainVector, 8, replace = FALSE, prob = p[[wk]]))
-  }
-  out
-}
-
-
-
-
