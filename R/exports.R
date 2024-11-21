@@ -30,7 +30,7 @@ LoadData <- \(data, date, enrolled) {
 #' @param coeff A coefficient to apply to the recruitment rate (default = 1)
 #' @return A list with two elements. The first element `weeks` is an integer
 #'     vector with length equal to `nSim` containing the results of the
-#'     simulation. The second `CI` shows the median and the 95%CI.
+#'     simulation. The second `CI` shows the median and the 95% CI.
 #' @export
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
@@ -54,7 +54,7 @@ Time2Nsubjects <- \(
 }
 
 # GetDistance ------------------------------------------------------------
-#' Calculate CI of Euclidean distance of predicted recruitment with actual
+#' Calculate CI of Euclidean distance between predicted recruitment and actual
 #'     recruitment
 #' @param target A vector with the actual recruitment by week
 #' @inheritParams Time2Nsubjects

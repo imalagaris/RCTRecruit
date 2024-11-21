@@ -15,7 +15,7 @@ NULL
 #' | Version: | `r read.dcf("DESCRIPTION")[1L, "Version"][[1L]]`  |
 #' | Date:    | `r Sys.Date()`                                    |
 #' | License: | `r read.dcf("DESCRIPTION")[1L, "License"][[1L]]`  |
-#' | Exported functions: | `r e$getExportedFunctions()`  |
+#' | Exported functions: | `r e$docExportedFunctions()`  |
 #' @references
 #' 1. `r e$addRef("Villasante2024")`
 #' 1. `r e$addRef("Gajewski2008")`

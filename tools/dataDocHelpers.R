@@ -69,8 +69,37 @@ e <- (\() {
     reg <- "^export\\((\\w+)\\)$"
     readLines("NAMESPACE") |>
       grep(reg, x = _, value = TRUE) |>
-      gsub(reg, "\\1", x = _) |>
-      paste0("[", ... = _, "]", collapse = ", ")
+      gsub(reg, "\\1", x = _)
+  }
+
+  docExportedFunctions <- \() {
+    getExportedFunctions() |> paste0("[", ... = _, "]", collapse = ", ")
+  }
+
+  getRdTitle <- \(RdFile) {
+    RdContent <- tools::parse_Rd(RdFile)
+    for (item in RdContent) {
+      if (attr(item, "Rd_tag") == "\\title") {
+        out <- paste0(item, collapse = "") |> gsub("\n", " ", x = _)
+        return(out)
+      }
+    }
+  }
+
+  getExportedItems <- \() {
+    out <- list()
+    man <-
+      list.files("man", full.names = TRUE) |>
+      grep("(?<!-package)\\.Rd$", x = _, perl = TRUE, value = TRUE)
+    for (Rd in man) {
+      nn <- gsub("^man/(\\w+)\\.Rd", "\\1", Rd)
+      out[[nn]] <- list(type = "data", name = nn, desc = getRdTitle(Rd))
+    }
+    for (fn in getExportedFunctions()) {
+      out[[fn]]$type <- "function"
+    }
+    names(out) <- NULL
+    do.call(rbind, out) |> as.data.frame()
   }
 
   return(environment())

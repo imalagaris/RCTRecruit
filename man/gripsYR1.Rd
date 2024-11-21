@@ -3,7 +3,7 @@
 \docType{data}
 \name{gripsYR1}
 \alias{gripsYR1}
-\title{Data: Recruitment data for the GRIPS study}
+\title{Daily recruitment data for 1st year of the GRIPS study}
 \format{
 A data frame with
 \strong{159} observations of
@@ -24,6 +24,9 @@ medical research methodology}, \emph{24}, 189. ISSN 1471-2288,
 gripsYR1
 }
 \description{
+
+}
+\details{
 Modified recruitment data from the GRIPS study for the first year the study
 was conducted. The data includes the number of participants recruited each
 for each calendar date the recruitment was active.

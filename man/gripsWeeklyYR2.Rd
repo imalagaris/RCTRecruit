@@ -3,7 +3,7 @@
 \docType{data}
 \name{gripsWeeklyYR2}
 \alias{gripsWeeklyYR2}
-\title{Data: Recruitment data for the GRIPS study}
+\title{Weekly recruitment data for the 2nd year of the GRIPS study}
 \format{
 A data frame with
 \strong{52} observations of
@@ -26,6 +26,9 @@ medical research methodology}, \emph{24}, 189. ISSN 1471-2288,
 gripsWeeklyYR2
 }
 \description{
+
+}
+\details{
 Modified recruitment data aggregated by week from the second year of the
 GRIPS study
 }

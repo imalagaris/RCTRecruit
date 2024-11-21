@@ -27,7 +27,7 @@ If FALSE, binomial weights are used.}
 \value{
 A list with two elements. The first element \code{weeks} is an integer
 vector with length equal to \code{nSim} containing the results of the
-simulation. The second \code{CI} shows the median and the 95\%CI.
+simulation. The second \code{CI} shows the median and the 95\% CI.
 }
 \description{
 Simulate number of weeks needed to recruit a given number of subjects
