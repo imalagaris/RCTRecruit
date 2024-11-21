@@ -74,6 +74,7 @@ GetDistance <- \(
   cauchyWt = FALSE,
   coeff = 1
 ) {
+  checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
   applyCoeff(coeff)
