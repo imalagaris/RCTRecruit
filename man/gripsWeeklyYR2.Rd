@@ -26,10 +26,8 @@ medical research methodology}, \emph{24}, 189. ISSN 1471-2288,
 gripsWeeklyYR2
 }
 \description{
-
-}
-\details{
 Modified recruitment data aggregated by week from the second year of the
-GRIPS study
+GRIPS study.
 }
 \keyword{datasets}
+% d2

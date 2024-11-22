@@ -25,7 +25,7 @@ If FALSE, binomial weights are used.}
 \item{coeff}{A coefficient to apply to the recruitment rate (default = 1)}
 }
 \value{
-A list with two elements. The first element \code{weeks} is an integer
+A \code{list} with two elements. The first element \code{weeks} is an integer
 vector with length equal to \code{nSim} containing the results of the
 simulation. The second \code{CI} shows the median and the 95\% CI.
 }
@@ -37,3 +37,11 @@ LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- Time2Nsubjects()
 str(res)
 }
+\seealso{
+Other RCTRecruit functions: 
+\code{\link{GetDistance}()},
+\code{\link{GetWeekPredCI}()},
+\code{\link{LoadData}()}
+}
+\concept{RCTRecruit functions}
+% f2

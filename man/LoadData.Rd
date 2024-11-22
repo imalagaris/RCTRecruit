@@ -19,3 +19,11 @@ Load recruitment data
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
 }
+\seealso{
+Other RCTRecruit functions: 
+\code{\link{GetDistance}()},
+\code{\link{GetWeekPredCI}()},
+\code{\link{Time2Nsubjects}()}
+}
+\concept{RCTRecruit functions}
+% f1

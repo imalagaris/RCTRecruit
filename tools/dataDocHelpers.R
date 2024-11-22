@@ -76,8 +76,10 @@ e <- (\() {
     getExportedFunctions() |> paste0("[", ... = _, "]", collapse = ", ")
   }
 
-  getRdTitle <- \(RdFile) {
-    RdContent <- tools::parse_Rd(RdFile)
+  getRdTitle <- \(RdContent) {
+    if (class(RdContent) == "character") {
+      RdContent <- tools::parse_Rd(RdContent)
+    }
     for (item in RdContent) {
       if (attr(item, "Rd_tag") == "\\title") {
         out <- paste0(item, collapse = "") |> gsub("\n", " ", x = _)
@@ -93,14 +95,50 @@ e <- (\() {
       grep("(?<!-package)\\.Rd$", x = _, perl = TRUE, value = TRUE)
     for (Rd in man) {
       nn <- gsub("^man/(\\w+)\\.Rd", "\\1", Rd)
-      out[[nn]] <- list(type = "data", name = nn, desc = getRdTitle(Rd))
-    }
-    for (fn in getExportedFunctions()) {
-      out[[fn]]$type <- "function"
+      out[[nn]] <- data.frame(name = nn, path = Rd, desc = getRdTitle(Rd))
     }
     names(out) <- NULL
-    do.call(rbind, out) |> as.data.frame()
+    do.call(rbind, out)
+  }
+
+  getRd <- tools::parse_Rd
+
+  extractTagsUnit <- \(Rd, arguments = FALSE) {
+    keep <- c("name", "docType", "title")
+    if (arguments) {
+      keep <- c(keep, "arguments")
+    }
+    item <- setNames(vector("list", length(keep)), keep)
+
+    for (x in Rd) {
+      tag <- attr(x, "Rd_tag") |> gsub("\\\\", "", x = _)
+      if (utils::hasName(item, tag)) {
+        item[[tag]] <- unlist(x) |> paste0(collapse = " ")
+      }
+    }
+    if (is.null(item$docType)) {
+      item$docType <- "function"
+      if (arguments) {
+        item$arguments <- gsub("^\n | \n$", "", item$arguments)
+        item$arguments <-
+          strsplit(item$arguments, "\n \n ") |>
+          unlist() |>
+          gsub("\\s+$", "", x = _)
+      }
+    }
+    if (!is.null(item$description)) {
+      item$description <- gsub("^\n\\s*|\\s*\n$", "", item$description)
+    }
+    item
+  }
+
+  extractTags <- \(arguments = FALSE) {
+    list.files("man", full.names = TRUE) |>
+      lapply(getRd) |>
+      lapply(extractTagsUnit, arguments)
   }
 
   return(environment())
+
 })()
+# e$extractTags() |> lapply(data.frame) |> do.call(rbind, args = _)

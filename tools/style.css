@@ -52,10 +52,6 @@ pre.sourceCode {
   margin: .5em 2em;
 }
 
-pre.sourceCode.numberSource {
-  padding: 6px 0px;
-}
-
 pre.sourceCode.r {
   max-width: 95ch;
   width: max-content;
@@ -81,15 +77,6 @@ code span.ot {
   margin: 1cm;
 }
 
-pre.numberSource code > span > a:first-child::before {
-  left: -.8em;
-  width: 3ch;
-}
-
-pre.numberSource code > span {
-  left: 0;
-  left: -2em;
-}
 
 pre > code.sourceCode > span {
   line-height: 1;

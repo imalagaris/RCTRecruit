@@ -13,7 +13,7 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
    Package: \tab RCTRecruit \cr
    Type: \tab Package \cr
    Version: \tab 0.1.10 \cr
-   Date: \tab 2024-11-20 \cr
+   Date: \tab 2024-11-21 \cr
    License: \tab MIT + file LICENSE \cr
    Exported functions: \tab \link{GetDistance}, \link{GetWeekPredCI}, \link{LoadData}, \link{Time2Nsubjects} \cr
 }

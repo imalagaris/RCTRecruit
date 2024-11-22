@@ -24,11 +24,9 @@ medical research methodology}, \emph{24}, 189. ISSN 1471-2288,
 gripsYR2
 }
 \description{
-
-}
-\details{
 Modified recruitment data from the GRIPS study for the second year the study
 was conducted. The data includes the number of participants recruited each
 for each calendar date the recruitment was active.
 }
 \keyword{datasets}
+% d2

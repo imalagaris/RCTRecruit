@@ -40,3 +40,11 @@ LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- GetDistance(gripsWeeklyYR2$enrolled)
 str(res)
 }
+\seealso{
+Other RCTRecruit functions: 
+\code{\link{GetWeekPredCI}()},
+\code{\link{LoadData}()},
+\code{\link{Time2Nsubjects}()}
+}
+\concept{RCTRecruit functions}
+% f3

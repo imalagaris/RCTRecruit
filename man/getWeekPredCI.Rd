@@ -27,3 +27,11 @@ LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
 str(res)
 }
+\seealso{
+Other RCTRecruit functions: 
+\code{\link{GetDistance}()},
+\code{\link{LoadData}()},
+\code{\link{Time2Nsubjects}()}
+}
+\concept{RCTRecruit functions}
+% f4
