@@ -5,9 +5,7 @@
 \alias{gripsYR2}
 \title{Daily recruitment data for the 2nd year of the GRIPS study}
 \format{
-A data frame with
-\strong{292} observations of
-\strong{2} variables:\tabular{llll}{
+A data frame with \strong{292} observations of \strong{2} variables\tabular{llll}{
     \tab  \tab  \tab  \cr
    [,1] \tab ScreenDt \tab \code{character} \tab Calendar date of the screening process for recruitment in the study \cr
    [,2] \tab Enrolled \tab \code{integer} \tab Number of new subjects enrolled in the study on that date \cr

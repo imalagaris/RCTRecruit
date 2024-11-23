@@ -5,9 +5,7 @@
 \alias{gripsWeeklyYR2}
 \title{Weekly recruitment data for the 2nd year of the GRIPS study}
 \format{
-A data frame with
-\strong{52} observations of
-\strong{4} variables:\tabular{llll}{
+A data frame with \strong{52} observations of \strong{4} variables\tabular{llll}{
     \tab  \tab  \tab  \cr
    [,1] \tab week \tab \code{double} \tab Calendar week \cr
    [,2] \tab year \tab \code{double} \tab Calendar year \cr

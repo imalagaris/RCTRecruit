@@ -2,8 +2,7 @@
 % Please edit documentation in R/exports.R
 \name{GetDistance}
 \alias{GetDistance}
-\title{Calculate CI of Euclidean distance between predicted recruitment and actual
-recruitment}
+\title{Euclidean distance between prediction and actual recruitment}
 \usage{
 GetDistance(
   target,
@@ -32,8 +31,7 @@ distance. The second \code{CI} shows the median and the 95\%CI Euclidean
 distance.
 }
 \description{
-Calculate CI of Euclidean distance between predicted recruitment and actual
-recruitment
+Euclidean distance between prediction and actual recruitment
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)

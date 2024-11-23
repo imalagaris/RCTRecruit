@@ -55,8 +55,7 @@ Time2Nsubjects <- \(
   invisible(out)
 }
 
-#' Calculate CI of Euclidean distance between predicted recruitment and actual
-#'     recruitment
+#' Euclidean distance between prediction and actual recruitment
 #' @param target A vector with the actual recruitment by week
 #' @inheritParams Time2Nsubjects
 #' @return A list with two elements. The first element `dist` is a numeric

@@ -9,14 +9,7 @@
 NULL
 #' @name RCTRecruit-package
 #' @details
-#' | Package: | RCTRecruit                                        |      |
-#' | -------  | :---------                                        | :--- |
-#' | Type:    | Package                                           |      |
-#' | Version: | `r read.dcf("DESCRIPTION")[1L, "Version"][[1L]]`  |      |
-#' | Date:    | `r Sys.Date()`                                    |      |
-#' | License: | `r read.dcf("DESCRIPTION")[1L, "License"][[1L]]`  |      |
-#' `r e$exportedTab()`
-#'
+#' `r e$getPackageDetails()`
 #' @references
 #' 1. `r e$addRef("Villasante2024")`
 #' 1. `r e$addRef("Gajewski2008")`
