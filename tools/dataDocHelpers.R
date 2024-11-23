@@ -1,4 +1,5 @@
 e <- (\() {
+  self <- environment()
   citationPath <- "tools/citations/"
 
   # modified from http://r-pkgs.had.co.nz/man.html
@@ -35,6 +36,39 @@ e <- (\() {
       paste(... = _, collapse = "\\cr\n")
     paste("\\tabular{llll}{\n", contents, "\n}\n", sep = "")
   }
+
+
+
+  getDatColsProps <- \(df) {
+    rows <- nrow(df)
+    cols <- length(df)
+    nn <- names(df)
+    vars <- vector("list", cols)
+    for (i in seq_len(cols)) {
+      vars[[i]] <- list(
+        i = as.character(i),
+        name = nn[[i]],
+        type = typeof(df[[i]]),
+        desc = attr(df[[i]], "Description")
+      )
+    }
+    list(rows = rows, cols = cols, vars = vars)
+  }
+
+
+  genDataDoc1 <- \(df) {
+    hdr = c("  ",
+      "|      |      |      |      |",
+      "| :--- | :--- | :--- | :--- |"
+    )
+    fmt <- "| \\[,%s\\] | %s | `%s` | %s |"
+    l <- getDatColsProps(df)
+    c(hdr, lapply(l$vars, \(x) do.call(sprintf, c(fmt, x))) |> unlist()) |>
+      paste0(collapse = "\n")
+  }
+
+
+
 
   bibname <- \(x) paste0(citationPath, x, ".bib")
 
@@ -108,7 +142,7 @@ e <- (\() {
     if (arguments) {
       keep <- c(keep, "arguments")
     }
-    item <- setNames(vector("list", length(keep)), keep)
+    item <- stats::setNames(vector("list", length(keep)), keep)
 
     for (x in Rd) {
       tag <- attr(x, "Rd_tag") |> gsub("\\\\", "", x = _)
@@ -132,13 +166,112 @@ e <- (\() {
     item
   }
 
+  getRdNameTitle <- \(Rd) {
+    y = list(docType = NULL, name = NULL, title = NULL)
+    for (x in Rd) {
+      tag <- attr(x, "Rd_tag") |> gsub("\\\\", "", x = _)
+      if (utils::hasName(y, tag)) {
+        y[[tag]] <- unlist(x, use.names = FALSE) |> paste0(collapse = " ")
+        if (tag == "title") break;
+      }
+    }
+    if (is.null(y$docType)) y$docType <- "func"
+    y$title <- gsub("\n", "", y$title)
+    val <- sprintf("| | [%s] | %s |", y$name, y$title)
+    out <- list(name = y$name, type = y$docType, val = val)
+    class(out) <- "data.frame"
+    attr(out, "row.names") <- 1L
+    out
+  }
+
+  exportedTab <- \() {
+    l <- list(
+      func = list(func = "| Functions: | | |"),
+      data = list(data = "| Datasets:  | | |")
+    )
+    for (Rd in list.files("man", full.names = TRUE)) {
+      x <- getRd(Rd) |> getRdNameTitle()
+      if (x$type == "package") next;
+      l[[x$type]][[x$name]] <- x$val
+    }
+    unlist(l, use.names = F) |> paste0(collapse = "\n")
+  }
+
   extractTags <- \(arguments = FALSE) {
     list.files("man", full.names = TRUE) |>
       lapply(getRd) |>
       lapply(extractTagsUnit, arguments)
   }
 
-  return(environment())
+  fmtExports <- \() {
+    self$exports <- extractTags() |>
+      (\(x) x[vapply(x, \(y) y$docType != "package", T)])() |>
+      lapply(\(x) {
+        sprintf("| [%s] | %s |", x$name, x$title) |>
+          data.frame(type = x$docType, val = _)
+      }) |> do.call(rbind, args = _)  |>
+      (\(x) split(x$val, x$type))() |>
+      lapply(paste0, collapse = "\n")
+  }
 
+
+  # fmtExports();
+
+  return(self)
 })()
-# e$extractTags() |> lapply(data.frame) |> do.call(rbind, args = _)
+
+#
+# writeRMD()
+#
+# writeRMD <- \() {
+#   man <- list.files("man", full.names = TRUE)
+#   hFun  <- c("<br>  \n", "| **Functions** | |", "| --- | :--- |")
+#   hData <- c("<br>  \n", "| **Datasets**  | |", "| --- | :--- |")
+#   flist <- list(
+#     "function" = file("tools/function.Rmd", "w"),
+#     "data" = file("tools/data.Rmd", "w")
+#   )
+#   cat(hFun, file = flist[["function"]], sep = "\n")
+#   cat(hData, file = flist[["data"]], sep = "\n")
+#
+#   for (RdPath in man) {
+#     x <- getRd(RdPath) |> extractNameTitle()
+#     if (x$type == "package") next;
+#     cat(x$val, file = flist[[x$type]], sep = "\n", append = TRUE)
+#   }
+#   for (x in flist) close(x)
+# }
+#
+
+
+# extractNameTitle <- \(Rd) {
+#   y = list(docType = NULL, name = NULL, title = NULL)
+#   for (x in Rd) {
+#     tag <- attr(x, "Rd_tag") |> gsub("\\\\", "", x = _)
+#     if (utils::hasName(y, tag)) {
+#       y[[tag]] <- unlist(x, use.names = FALSE) |> paste0(collapse = " ")
+#       if (tag == "title") break;
+#     }
+#   }
+#   if (is.null(y$docType)) y$docType <- "function"
+#   y$title <- gsub("\n", "", y$title)
+#   list(type = y$docType, val = sprintf("| [%s] | - %s |", y$name, y$title))
+# }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

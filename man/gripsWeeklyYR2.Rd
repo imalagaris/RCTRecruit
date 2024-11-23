@@ -7,12 +7,12 @@
 \format{
 A data frame with
 \strong{52} observations of
-\strong{4} variables:
-\tabular{llll}{
-[,1] \tab week \tab \code{double} \tab Calendar week\cr
-[,2] \tab year \tab \code{double} \tab Calendar year\cr
-[,3] \tab enrolled \tab \code{integer} \tab Number of people enrolled that week\cr
-[,4] \tab activeDays \tab \code{integer} \tab Number of days in that week when recruitment was active
+\strong{4} variables:\tabular{llll}{
+    \tab  \tab  \tab  \cr
+   [,1] \tab week \tab \code{double} \tab Calendar week \cr
+   [,2] \tab year \tab \code{double} \tab Calendar year \cr
+   [,3] \tab enrolled \tab \code{integer} \tab Number of people enrolled that week \cr
+   [,4] \tab activeDays \tab \code{integer} \tab Number of days in that week when recruitment was active \cr
 }
 }
 \source{
@@ -30,4 +30,4 @@ Modified recruitment data aggregated by week from the second year of the
 GRIPS study.
 }
 \keyword{datasets}
-% d2
+% d3

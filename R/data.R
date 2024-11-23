@@ -1,4 +1,4 @@
-#' Daily recruitment data for 1st year of the GRIPS study
+#' Daily recruitment data for the 1st year of the GRIPS study
 #' `r dat <- gripsYR1;`
 #'
 #' Modified recruitment data from the GRIPS study for the first year the study
@@ -9,11 +9,11 @@
 #' A data frame with
 #'     **`r nrow(dat)`** observations of
 #'     **`r length(dat)`** variables:
-#' `r e$genDataDoc(dat)`
+#' `r e$genDataDoc1(gripsYR1)`
 #' @source `r e$addRef("Villasante2024")`
 "gripsYR1"
 
-#' Daily recruitment data for 2nd year of the GRIPS study
+#' Daily recruitment data for the 2nd year of the GRIPS study
 #' `r dat <- gripsYR2;`
 #'
 #' Modified recruitment data from the GRIPS study for the second year the study
@@ -24,7 +24,7 @@
 #' A data frame with
 #'     **`r nrow(dat)`** observations of
 #'     **`r length(dat)`** variables:
-#' `r e$genDataDoc(dat)`
+#' `r e$genDataDoc1(gripsYR2)`
 #' @source `r e$addRef("Villasante2024")`
 "gripsYR2"
 
@@ -33,11 +33,11 @@
 #'
 #' Modified recruitment data aggregated by week from the second year of the
 #' GRIPS study.
-#' @rawRd % d2
+#' @rawRd % d3
 #' @format
 #' A data frame with
 #'     **`r nrow(dat)`** observations of
 #'     **`r length(dat)`** variables:
-#' `r e$genDataDoc(dat)`
+#' `r e$genDataDoc1(gripsWeeklyYR2)`
 #' @source `r e$addRef("Villasante2024")`
 "gripsWeeklyYR2"

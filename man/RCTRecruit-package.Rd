@@ -9,13 +9,21 @@
 Accurate prediction of subject recruitment for randomized clinical trials (RCT) remains an ongoing challenge. Previous prediction models rely on parametric assumptions. We present functions for non-parametric RCT recruitment prediction under several scenarios.
 }
 \details{
-\tabular{ll}{
-   Package: \tab RCTRecruit \cr
-   Type: \tab Package \cr
-   Version: \tab 0.1.10 \cr
-   Date: \tab 2024-11-21 \cr
-   License: \tab MIT + file LICENSE \cr
-   Exported functions: \tab \link{GetDistance}, \link{GetWeekPredCI}, \link{LoadData}, \link{Time2Nsubjects} \cr
+\tabular{lll}{
+   Package: \tab RCTRecruit \tab  \cr
+   Type: \tab Package \tab  \cr
+   Version: \tab 0.1.11 \tab  \cr
+   Date: \tab 2024-11-22 \tab  \cr
+   License: \tab MIT + file LICENSE \tab  \cr
+   Functions: \tab  \tab  \cr
+    \tab \link{GetDistance} \tab Calculate CI of Euclidean distance between predicted recruitment and actual recruitment \cr
+    \tab \link{GetWeekPredCI} \tab Calculate median recruitment with CI for the next 52 weeks \cr
+    \tab \link{LoadData} \tab Load recruitment data \cr
+    \tab \link{Time2Nsubjects} \tab Simulate number of weeks needed to recruit a given number of subjects \cr
+   Datasets: \tab  \tab  \cr
+    \tab \link{gripsWeeklyYR2} \tab Weekly recruitment data for the 2nd year of the GRIPS study \cr
+    \tab \link{gripsYR1} \tab Daily recruitment data for the 1st year of the GRIPS study \cr
+    \tab \link{gripsYR2} \tab Daily recruitment data for the 2nd year of the GRIPS study \cr
 }
 }
 \references{

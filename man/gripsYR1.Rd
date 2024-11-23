@@ -3,14 +3,14 @@
 \docType{data}
 \name{gripsYR1}
 \alias{gripsYR1}
-\title{Daily recruitment data for 1st year of the GRIPS study}
+\title{Daily recruitment data for the 1st year of the GRIPS study}
 \format{
 A data frame with
 \strong{159} observations of
-\strong{2} variables:
-\tabular{llll}{
-[,1] \tab ScreenDt \tab \code{character} \tab Calendar date of the screening process for recruitment in the study\cr
-[,2] \tab Enrolled \tab \code{integer} \tab Number of new subjects enrolled in the study on that date
+\strong{2} variables:\tabular{llll}{
+    \tab  \tab  \tab  \cr
+   [,1] \tab ScreenDt \tab \code{character} \tab Calendar date of the screening process for recruitment in the study \cr
+   [,2] \tab Enrolled \tab \code{integer} \tab Number of new subjects enrolled in the study on that date \cr
 }
 }
 \source{
