@@ -1,5 +1,16 @@
 e <- (\() {
   self <- environment()
+  exportDoc <- \(path = "tools/doc") {
+    Rds <- list.files("man", full.names = TRUE)
+    o <- gsub("Rd$", "txt", basename(Rds)) |> file.path(path, ... = _)
+    for (i in seq_along(Rds)) {
+      tools::Rd2txt(Rds[[i]], package = "RCTRecruit") |>
+        capture.output() |>
+        gsub("_\b", "", x = _) |>
+        paste0(collapse = "\n") |>
+        writeLines(o[[i]])
+    }
+  }
 
 # Datasets ---------------------------------------------------------------------
   getDatasetInfo <- \(df) {
@@ -19,40 +30,32 @@ e <- (\() {
 
   genDataDoc <- \(df) {
     dataSizeFmt <- "A data frame with **%d** observations of **%d** variables  "
-    varfmt <- "| \\[,%s\\] | %s | `%s` | %s |"
-    dataHeader <- c(
+    varfmt <- \(x) do.call(sprintf, c("| \\[,%s\\] | %s | `%s` | %s |", x))
+    datHeader <- c(
       "  ",
       "|      |      |      |      |",
       "| :--- | :--- | :--- | :--- |"
     )
     l <- getDatasetInfo(df)
-    size <- sprintf(dataSizeFmt, l$rows, l$cols )
-    vars <- lapply(l$vars, \(x) do.call(sprintf, c(varfmt, x)))
-    c(size, dataHeader, vars) |> unlist() |> paste0(collapse = "\n")
+    size <- sprintf(dataSizeFmt, l$rows, l$cols)
+    vars <- lapply(l$vars, varfmt)
+    c(size, datHeader, vars) |> unlist(use.names = F) |> paste0(collapse = "\n")
   }
 
 # Rd Tags ----------------------------------------------------------------------
-  readDesc <- read.dcf
-  formals(readDesc) <- c(
-    formals(readDesc)[2:3],
-    file = "DESCRIPTION",
-    keep.white = "Date"
-    )
-  fields <- c("Package", "Type", "Version", "Date", "License")
-  getRd <- tools::parse_Rd
-  fmtDetails <- \(nam, val) sprintf("| %s: | %s | |", nam, val)
+  readDesc <- \(x = NULL) base::read.dcf("DESCRIPTION", x, keep.white = "Date")
 
   getRdNameTitle <- \(Rd) {
     y = list(docType = NULL, name = NULL, title = NULL)
     for (x in Rd) {
       tag <- attr(x, "Rd_tag") |> gsub("\\\\", "", x = _)
       if (utils::hasName(y, tag)) {
-        y[[tag]] <- unlist(x, use.names = FALSE) |> paste0(collapse = " ")
+        y[[tag]] <- unlist(x, use.names = F) |> paste0(collapse = "\n")
         if (tag == "title") break;
       }
     }
     if (is.null(y$docType)) y$docType <- "func"
-    y$title <- gsub("\n", "", y$title)
+    y$title <- y$title |> gsub("\n", "", x = _)
     val <- sprintf("| | [%s] | %s |", y$name, y$title)
     out <- list(name = y$name, type = y$docType, val = val)
     class(out) <- "data.frame"
@@ -66,7 +69,7 @@ e <- (\() {
       data = list(data = "| Datasets:  | | |")
     )
     for (Rd in list.files("man", full.names = TRUE)) {
-      x <- getRd(Rd) |> getRdNameTitle()
+      x <- tools::parse_Rd(Rd) |> getRdNameTitle()
       if (x$type == "package") next;
       l[[x$type]][[x$name]] <- x$val
    }
@@ -74,6 +77,8 @@ e <- (\() {
   }
 
   getPackageDetails <- \() {
+    fmtDetails <- \(nam, val) sprintf("| %s: | %s | |", nam, val)
+    fields <- c("Package", "Type", "Version", "Date", "License")
     header <- c(
       "|      |      |      |",
       "| :--- | :--- | :--- |"
@@ -86,15 +91,14 @@ e <- (\() {
 
 # References -------------------------------------------------------------------
   citationPath <- "tools/citations/"
-  bibname <- \(x) paste0(citationPath, x, ".bib")
-  readBib <- \(x) bibtex::read.bib(x) |> utils:::format.bibentry()
-  addRef <- \(x) bibname(x) |> readBib()
+  fbib <- \(x) paste0(citationPath, x, ".bib")
+  addRef <- \(x) fbib(x) |> bibtex::read.bib() |> utils:::format.bibentry()
 
   mendeley2bib <- \(fname) {
     ref <- readClipboard()
     if (grepl("^@(article|Manual)", ref[[1L]])) {
       if (length(ref) > 4L) {
-        write(ref, file = bibname(fname))
+        write(ref, file = fbib(fname))
         bibs <- list.files(citationPath, "*\\.bib", full.names = TRUE)
         cat("\033[31m", bibs, "\033[0m\n", ref)
       } else {
@@ -105,24 +109,15 @@ e <- (\() {
     }
   }
 
+  for (x in names(self)) {
+    if (typeof(self[[x]]) == "closure") {
+      self[[x]] <- compiler::cmpfun(self[[x]], options = list(optimize = 3))
+    }
+  }
 # output the enclosing environment ---------------------------------------------
   return(self)
 })()
 
-# library(tools)
-# Rds <- list.files("man", full.names = TRUE)
-# outfiles <-
-#   basename(Rds) |>
-#   gsub("Rd$", "txt", x = _) |>
-#   paste0("tools/doc/", ... = _ )
-#
-# for (i in seq_along(Rds)) {
-#   Rd2txt(Rds[[i]], package = "RCTRecruit") |>
-#     capture.output() |>
-#     gsub("_\b", "", x = _) |>
-#     paste0(collapse = "\n") |>
-#     writeLines(outfiles[[i]])
-# }
 
 
 
@@ -141,7 +136,7 @@ e <- (\() {
 #   cat(hData, file = flist[["data"]], sep = "\n")
 #
 #   for (RdPath in man) {
-#     x <- getRd(RdPath) |> extractNameTitle()
+#     x <- tools::parse_Rd(RdPath) |> extractNameTitle()
 #     if (x$type == "package") next;
 #     cat(x$val, file = flist[[x$type]], sep = "\n", append = TRUE)
 #   }
@@ -215,9 +210,10 @@ e <- (\() {
 
 # extractTags <- \(arguments = FALSE) {
 #   list.files("man", full.names = TRUE) |>
-#     lapply(getRd) |>
+#     lapply(tools::parse_Rd) |>
 #     lapply(extractTagsUnit, arguments)
 # }
+
 
 
 
