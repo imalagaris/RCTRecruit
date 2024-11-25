@@ -1,0 +1,66 @@
+RCTRecruit-package         package:RCTRecruit          R Documentation
+
+RCTRecruit: Non-Parametric Recruitment Prediction for Randomized
+Clinical Trials
+
+Description:
+
+     Accurate prediction of subject recruitment for randomized clinical
+     trials (RCT) remains an ongoing challenge. Previous prediction
+     models rely on parametric assumptions. We present functions for
+     non-parametric RCT recruitment prediction under several scenarios.
+
+Details:
+
+       Package:    RCTRecruit                                                                                
+       Type:       Package                                                                                   
+       Version:    0.1.12                                                                                    
+       Date:       2024-11-24                                                                                
+       License:    MIT + file LICENSE                                                                        
+       Functions:                                                                                            
+                   GetDistance         Euclidean distance between prediction and actual recruitment          
+                   GetWeekPredCI       Calculate median recruitment with CI for the next 52 weeks            
+                   LoadData            Load recruitment data                                                 
+                   Time2Nsubjects      Simulate number of weeks needed to recruit a given number of subjects 
+       Datasets:                                                                                             
+                   gripsWeeklyYR2      Weekly recruitment data for the 2nd year of the GRIPS study           
+                   gripsYR1            Daily recruitment data for the 1st year of the GRIPS study            
+                   gripsYR2            Daily recruitment data for the 2nd year of the GRIPS study            
+      
+Author(s):
+
+     *Maintainer*: Ioannis Malagaris <mailto:iomalaga@utmb.edu> (ORCID)
+
+     Authors:
+
+        * Alejandro Villasante-Tezanos <mailto:alvillas@utmb.edu>
+
+        * Christopher Kurinec <mailto:chkurine@utmb.edu>
+
+        * Xiaoying Yu <mailto:xiyu@utmb.edu>
+
+References:
+
+       1. Villasante-Tezanos A, Kuo Y, Kurinec C, Li Y, Yu X (2024). "A
+          non-parametric approach to predict the recruitment for
+          randomized clinical trials: an example in elderly inpatient
+          settings." _BMC medical research methodology_, _24_, 189.
+          ISSN 1471-2288, <https://pubmed.ncbi.nlm.nih.gov/39210285/>.
+
+       2. Gajewski BJ, Simon SD, Carlson SE (2008). "Predicting accrual
+          in clinical trials with Bayesian posterior predictive
+          distributions." _Statistics in medicine_, _27_, 2328-40. ISSN
+          0277-6715, <https://pubmed.ncbi.nlm.nih.gov/17979152/>.
+
+       3. Jiang Y, Simon S, Mayo MS, Gajewski BJ (2015). "Modeling and
+          validating Bayesian accrual models on clinical data and
+          simulations using adaptive priors." _Statistics in medicine_,
+          _34_, 613-29. ISSN 1097-0258,
+          <https://pubmed.ncbi.nlm.nih.gov/25376910/>.
+
+See Also:
+
+     Liu J, Jiang Y, Wu C, Simon S, Mayo MS, Raghavan R, Gajewski BJ
+     (2023). _accrual: Bayesian Accrual Prediction_. R package version
+     1.4, <https://CRAN.R-project.org/package=accrual>.
+

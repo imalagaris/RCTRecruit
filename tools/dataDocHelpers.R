@@ -69,7 +69,7 @@ e <- (\() {
       x <- getRd(Rd) |> getRdNameTitle()
       if (x$type == "package") next;
       l[[x$type]][[x$name]] <- x$val
-    }
+   }
     unlist(l, use.names = F) |> paste0(collapse = "\n")
   }
 
@@ -80,9 +80,8 @@ e <- (\() {
     )
     pack <- readDesc(fields) |> as.data.frame()
     pack$Date <- Sys.Date()
-    details <- vapply(names(pack), \(x) fmtDetails(x, pack[[x]]), "a")
-    exported <- exportedTab()
-    c(header, details, exported) |> paste0(collapse = "\n")
+    details <- vapply(names(pack), \(x) fmtDetails(x, pack[[x]]), "")
+    c(header, details, exportedTab()) |> paste0(collapse = "\n")
   }
 
 # References -------------------------------------------------------------------
@@ -109,6 +108,22 @@ e <- (\() {
 # output the enclosing environment ---------------------------------------------
   return(self)
 })()
+
+# library(tools)
+# Rds <- list.files("man", full.names = TRUE)
+# outfiles <-
+#   basename(Rds) |>
+#   gsub("Rd$", "txt", x = _) |>
+#   paste0("tools/doc/", ... = _ )
+#
+# for (i in seq_along(Rds)) {
+#   Rd2txt(Rds[[i]], package = "RCTRecruit") |>
+#     capture.output() |>
+#     gsub("_\b", "", x = _) |>
+#     paste0(collapse = "\n") |>
+#     writeLines(outfiles[[i]])
+# }
+
 
 
 # Archive ----------------------------------------------------------------------
@@ -150,34 +165,6 @@ e <- (\() {
 # }
 
 
-# extractTagsUnit <- \(Rd, arguments = FALSE) {
-#   keep <- c("name", "docType", "title")
-#   if (arguments) {
-#     keep <- c(keep, "arguments")
-#   }
-#   item <- stats::setNames(vector("list", length(keep)), keep)
-#
-#   for (x in Rd) {
-#     tag <- attr(x, "Rd_tag") |> gsub("\\\\", "", x = _)
-#     if (utils::hasName(item, tag)) {
-#       item[[tag]] <- unlist(x) |> paste0(collapse = " ")
-#     }
-#   }
-#   if (is.null(item$docType)) {
-#     item$docType <- "function"
-#     if (arguments) {
-#       item$arguments <- gsub("^\n | \n$", "", item$arguments)
-#       item$arguments <-
-#         strsplit(item$arguments, "\n \n ") |>
-#         unlist() |>
-#         gsub("\\s+$", "", x = _)
-#     }
-#   }
-#   if (!is.null(item$description)) {
-#     item$description <- gsub("^\n\\s*|\\s*\n$", "", item$description)
-#   }
-#   item
-# }
 #
 # fmtExports <- \() {
 #   self$exports <- extractTags() |>
@@ -231,15 +218,6 @@ e <- (\() {
 #     lapply(getRd) |>
 #     lapply(extractTagsUnit, arguments)
 # }
-
-
-
-
-
-
-
-
-
 
 
 

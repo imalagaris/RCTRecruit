@@ -221,8 +221,13 @@ y <- getWeeksPredCI(fillGaps = T)
 a$plot(y)
 
 
+a <- GetWeekPredCI();
+class(a) <- c("aek", class(a))
 
-
+print.aek <- function(x, ...) {
+  utils::head(x) |> logPrint()
+  utils::tail(x) |> logPrint()
+}
 
 
 

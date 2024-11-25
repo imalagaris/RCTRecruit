@@ -1,0 +1,50 @@
+Time2Nsubjects           package:RCTRecruit            R Documentation
+
+Simulate number of weeks needed to recruit a given number of subjects
+
+Description:
+
+     Simulate number of weeks needed to recruit a given number of
+     subjects
+
+Usage:
+
+     Time2Nsubjects(
+       nSub = 50L,
+       nSim = 10000L,
+       fillGaps = FALSE,
+       cauchyWt = FALSE,
+       coeff = 1
+     )
+     
+Arguments:
+
+    nSub: Number of subjects to recruit (default = 50)
+
+    nSim: Number of simulations to run (default = 1e4)
+
+fillGaps: Whether to fill gaps in the data (default = FALSE)
+
+cauchyWt: Whether to use Cauchy weights for sampling (default = FALSE).
+          If FALSE, binomial weights are used.
+
+   coeff: A coefficient to apply to the recruitment rate (default = 1)
+
+Value:
+
+     A ‘list’ with two elements. The first element ‘weeks’ is an
+     integer vector with length equal to ‘nSim’ containing the results
+     of the simulation. The second ‘CI’ shows the median and the 95%
+     CI.
+
+See Also:
+
+     Other RCTRecruit functions: ‘GetDistance()’, ‘GetWeekPredCI()’,
+     ‘LoadData()’
+
+Examples:
+
+     LoadData(gripsYR1, ScreenDt, Enrolled)
+     res <- Time2Nsubjects()
+     str(res)
+     

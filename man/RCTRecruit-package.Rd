@@ -13,8 +13,8 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
     \tab  \tab  \cr
    Package: \tab RCTRecruit \tab  \cr
    Type: \tab Package \tab  \cr
-   Version: \tab 0.1.11 \tab  \cr
-   Date: \tab 2024-11-23 \tab  \cr
+   Version: \tab 0.1.12 \tab  \cr
+   Date: \tab 2024-11-24 \tab  \cr
    License: \tab MIT + file LICENSE \tab  \cr
    Functions: \tab  \tab  \cr
     \tab \link{GetDistance} \tab Euclidean distance between prediction and actual recruitment \cr

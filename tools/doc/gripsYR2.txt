@@ -1,0 +1,30 @@
+gripsYR2              package:RCTRecruit               R Documentation
+
+Daily recruitment data for the 2nd year of the GRIPS study
+
+Description:
+
+     Modified recruitment data from the GRIPS study for the second year
+     the study was conducted. The data includes the number of
+     participants recruited each for each calendar date the recruitment
+     was active.
+
+Usage:
+
+     gripsYR2
+     
+Format:
+
+     A data frame with *292* observations of *2* variables
+
+       [,1]  ScreenDt  ‘character’  Calendar date of the screening process for recruitment in the study 
+       [,2]  Enrolled  ‘integer’    Number of new subjects enrolled in the study on that date           
+      
+Source:
+
+     Villasante-Tezanos A, Kuo Y, Kurinec C, Li Y, Yu X (2024). "A
+     non-parametric approach to predict the recruitment for randomized
+     clinical trials: an example in elderly inpatient settings." _BMC
+     medical research methodology_, _24_, 189. ISSN 1471-2288,
+     <https://pubmed.ncbi.nlm.nih.gov/39210285/>.
+

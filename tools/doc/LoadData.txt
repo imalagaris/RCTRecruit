@@ -1,0 +1,29 @@
+LoadData              package:RCTRecruit               R Documentation
+
+Load recruitment data
+
+Description:
+
+     Load recruitment data
+
+Usage:
+
+     LoadData(data, date, enrolled)
+     
+Arguments:
+
+    data: Main dataset
+
+    date: Date column
+
+enrolled: Enrolled column
+
+See Also:
+
+     Other RCTRecruit functions: ‘GetDistance()’, ‘GetWeekPredCI()’,
+     ‘Time2Nsubjects()’
+
+Examples:
+
+     LoadData(gripsYR1, ScreenDt, Enrolled)
+     

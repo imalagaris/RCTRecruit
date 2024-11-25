@@ -1,7 +1,0 @@
-<br>  
-
-| **Datasets**  | |
-| --- | :--- |
-| [gripsWeeklyYR2] | - Weekly recruitment data for the 2nd year of the GRIPS study |
-| [gripsYR1] | - Daily recruitment data for the 1st year of the GRIPS study |
-| [gripsYR2] | - Daily recruitment data for the 2nd year of the GRIPS study |

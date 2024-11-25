@@ -1,8 +1,0 @@
-<br>  
-
-| **Functions** | |
-| --- | :--- |
-| [GetDistance] | - Calculate CI of Euclidean distance between predicted recruitment and actual recruitment |
-| [GetWeekPredCI] | - Calculate median recruitment with CI for the next 52 weeks |
-| [LoadData] | - Load recruitment data |
-| [Time2Nsubjects] | - Simulate number of weeks needed to recruit a given number of subjects |
