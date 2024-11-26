@@ -29,6 +29,10 @@ div.section > pre, div.kable-table {
 
 }
 
+.red {
+  color: red;
+}
+
 div.sourceCode {
   margin: 1em 0;
   page-break-inside: avoid;

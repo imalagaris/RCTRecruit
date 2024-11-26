@@ -165,15 +165,112 @@ sel <- function(trained, drop = FALSE) {
 }
 
 
-target <- days2weeks(gripsYR2$ScreenDt, gripsYR2$Enrolled)$enrolled |> cumsum()
+target <- days2weeks(
+  gripsYR2$ScreenDt |> fixDate(),
+  gripsYR2$Enrolled) |>
+  _$enrolled
+
+the$setTarget(target)
 
 
-y <- PredCI(nSim = 1e4, fillGaps = F, cauchyWt = T)
+y <- GetWeekPredCI()
+
+
+CreatePredCIplotObj <- \(y) {
+  dat <- data.frame(cbind(0:52, y)) |> setNames(c("x", "low", "pred", "high"))
+  dat$train <- c(0, cumsum(the$TrainVector))
+  if (length(the$cppModule$target)) {
+    dat$target <- c(0, cumsum(the$cppModule$target))
+  }
+  len <- nrow(dat)
+  maxY <- dat[len, -c(1:2)] |> max()
+  parArgs <- list(
+    las = 1,
+    cex.axis = 1.2,
+    cex.lab = 1.2
+  )
+  mainPlotObj <- list(
+    largs = list(
+      x = dat$x,
+      y = dat$pred,
+      type = "n",
+      xlab = "Weeks",
+      ylab = "Subjects",
+      xlim = c(0, 52),
+      ylim = c(0, maxY + 1)
+    ),
+    plot = \() do.call(plot, mainPlotObj$largs)
+  )
+  CIRegionObj <- list(
+    largs = list(
+      x = with(dat, c(x,      x[len], rev(  x[-len]))),
+      y = with(dat, c(high, low[len], rev(low[-len]))),
+      col = "gray90",
+      border = "gray90"
+    ),
+    add = \() do.call(polygon, CIRegionObj$largs)
+  )
+  gridObj <- list(
+    largs = list(
+      v = seq(0, 50, by = 5),
+      h = seq(0, maxY, by = 10),
+      col = "gray70"
+    ),
+    add = \() do.call(abline, gridObj$largs)
+  )
+
+  linesObj <- list(
+    vec = c("train", "pred"),
+    largs = list(
+      train = list(lwd = 2, col = "blue", lab = "Training data"),
+      pred = list(lwd = 2, col = "black", lab = "Predicted"),
+      target = list(lwd = 2, col = "red", lab = "Target data")
+    ),
+    add = \() {
+      largs <- linesObj$largs
+      if (!is.null(target)) vec <- c(vec, "target")
+      colVec <- NULL
+      labVec <- NULL
+      for (ln in vec) {
+        vecArgs <- largs[[ln]]
+        colVec <- c(colVec, vecArgs$col)
+        labVec <- c(labVec, vecArgs$lab)
+        vecArgs$lab <- NULL
+        list(dat$x, dat[[ln]]) |> c(vecArgs) |> do.call(lines, args = _)
+      }
+      legend("topleft", legend = labVec, col = colVec, lwd = 2)
+    }
+  )
+  plotPred <- \() {
+    oldPar <- par(no.readonly = TRUE)
+    on.exit(do.call(par, oldPar), add = TRUE)
+    do.call(par, parArgs)
+    mainPlotObj$plot()
+    CIRegionObj$add()
+    gridObj$add()
+    linesObj$add()
+  }
+
+  rm(y)
+  as.list(environment())
+}
+
+
+
+dev.off()
+par(fig = c(3, 3))
+y <- GetWeekPredCI(fillGaps = T, coeff = 1.2)
+a <- CreatePredCIplotObj(y)
+a$plotPred()
+
+
+
 x <- 0:52;
 len <- length(x)
 xs <- c(x, x[len], rev(x[-len]))
 ys <- c(y[, 3], y[len, 1], rev(y[-len, 1]))
 
+oldPar <- par(no.readonly = TRUE)
 par(fin = c(6, 6), las = 1, cex.axis = 1.2, cex.lab = 1.2);
 plot(x, c(0, target), type = "n", asp = 1, xlab = "Weeks", ylab = "Subjects")
 polygon(xs, ys, col = "gray90", border = "gray90")
@@ -181,6 +278,7 @@ abline(v = seq(0, 50, by = 5), h = seq(0, 40, by = 10), col = "gray70")
 lines(x, y[, 2], lwd = 2)
 lines(x, c(0, cumsum(the$TrainVector)), col = "blue", lwd = 2)
 lines(x, c(0, target), col = "red", lwd = 2)
+do.call(par, oldPar)
 
 
 

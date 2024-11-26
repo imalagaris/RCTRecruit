@@ -84,7 +84,7 @@ code span.va { color: #000000; }
 code span.vs { color: #4e9a06; } 
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } 
 </style>
-  <style type="text/css">html {--ui-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5),0 4px 5px 0 rgba(0, 0, 0, 0.1),0 1px 10px 0 rgba(0, 0, 0, 1);--ui-shadow-border: 2px solid rgba(0, 0, 0, 0.8);}body {font-family: "system-ui", "Segoe UI", "Helvetica Neue", sans-serif;font-size: 14px;}p {margin-block-start: .5em;margin-block-end: .5em;}h1, h2 {margin-block-start: 0;margin-block-end: .5em;}div.section > pre, div.kable-table {width: max-content;border: inset lightgrey;margin-left: 1.9em;position: relative;top: -0.3em;}div.sourceCode {margin: 1em 0;page-break-inside: avoid;background-color: white;}pre {page-break-inside: avoid;}pre > code.sourceCode {font-family: "Cascadia Mono";font-size: 14px;}pre.sourceCode {border-radius: 6px;box-shadow: var(--ui-shadow);padding: 6px;margin: .5em 2em;}pre.sourceCode.r {max-width: 95ch;width: max-content;}code span.dv, code span.dt {color: green;}code span.at {color: purple;}code span.st {color: red;}code span.ot {font-weight: bold;}@page {margin: 1cm;}pre > code.sourceCode > span {line-height: 1;}.author {display: none;}.kable-table {page-break-inside: avoid;}.kable-table table {margin: 2px;border-collapse: collapse;}.kable-table table th {background: lightgrey;border-bottom: 1px solid black;}.kable-table table th, .kable-table table td {padding: 0 6px;text-align: right;}.kable-table > table > colgroup > col {width: auto!important;}</style>
+  <style type="text/css">html {--ui-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5),0 4px 5px 0 rgba(0, 0, 0, 0.1),0 1px 10px 0 rgba(0, 0, 0, 1);--ui-shadow-border: 2px solid rgba(0, 0, 0, 0.8);}body {font-family: "system-ui", "Segoe UI", "Helvetica Neue", sans-serif;font-size: 14px;}p {margin-block-start: .5em;margin-block-end: .5em;}h1, h2 {margin-block-start: 0;margin-block-end: .5em;}div.section > pre, div.kable-table {width: max-content;border: inset lightgrey;margin-left: 1.9em;position: relative;top: -0.3em;}.red {color: red;}div.sourceCode {margin: 1em 0;page-break-inside: avoid;background-color: white;}pre {page-break-inside: avoid;}pre > code.sourceCode {font-family: "Cascadia Mono";font-size: 14px;}pre.sourceCode {border-radius: 6px;box-shadow: var(--ui-shadow);padding: 6px;margin: .5em 2em;}pre.sourceCode.r {max-width: 95ch;width: max-content;}code span.dv, code span.dt {color: green;}code span.at {color: purple;}code span.st {color: red;}code span.ot {font-weight: bold;}@page {margin: 1cm;}pre > code.sourceCode > span {line-height: 1;}.author {display: none;}.kable-table {page-break-inside: avoid;}.kable-table table {margin: 2px;border-collapse: collapse;}.kable-table table th {background: lightgrey;border-bottom: 1px solid black;}.kable-table table th, .kable-table table td {padding: 0 6px;text-align: right;}.kable-table > table > colgroup > col {width: auto!important;}</style>
   <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
 document.addEventListener('DOMContentLoaded', function(e) {
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
 <h1 class="title">Filling Gap Weeks</h1>
 <h2 class="author">Ioannis Malagaris</h2>
 </div>
-<p>Purpose: Proper implementation of
+<p><span class="red">Purpose</span>: Proper implementation of
 <strong><code>Filling Gaps</code></strong> functionality (Code can be
 executed in project’s dir).</p>
 <div id="setup" class="section level2">
@@ -266,9 +266,12 @@ of active recruitment days in each week.</li>
 </table>
 </div>
 <p>We see there are 17 gap weeks. I will refer to each gap week by its
-order in the dataset (or rowname) and I wont’ use the variable
-<strong><code>week</code></strong>. i.e. I will use
-<strong><code>Week 14</code></strong> insted of
+order in<br />
+the dataset (or rowname) and I wont’ use the variable
+<strong><code>week</code></strong>. i.e. I will<br />
+<br />
+</p>
+<p>use <strong><code>Week 14</code></strong> insted of
 <strong><code>Week 38</code></strong>.</p>
 <div id="calculating-sampling-weights" class="section level3">
 <h3>Calculating Sampling Weights</h3>
@@ -399,24 +402,24 @@ last row is resulting total enrollment as [Total (SD of Total)]
 <td align="left">Week 14</td>
 <td align="left">0.14</td>
 <td align="left">0.51 (1.5)</td>
-<td align="left">0.14 (2.6)</td>
-<td align="left">0.15 (1.2)</td>
+<td align="left">0.13 (2.6)</td>
+<td align="left">0.15 (1.3)</td>
 <td align="left">0.17 (0.6)</td>
 <td align="left">0.21 (0.4)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 15</td>
 <td align="left">0.21</td>
-<td align="left">0.52 (1.5)</td>
-<td align="left">0.22 (1.9)</td>
+<td align="left">0.51 (1.5)</td>
+<td align="left">0.21 (2.0)</td>
 <td align="left">0.21 (0.9)</td>
 <td align="left">0.19 (0.5)</td>
-<td align="left">0.24 (0.4)</td>
+<td align="left">0.23 (0.4)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 16</td>
 <td align="left">0.33</td>
-<td align="left">0.51 (1.5)</td>
+<td align="left">0.50 (1.5)</td>
 <td align="left">0.32 (1.5)</td>
 <td align="left">0.28 (0.7)</td>
 <td align="left">0.24 (0.6)</td>
@@ -425,7 +428,7 @@ last row is resulting total enrollment as [Total (SD of Total)]
 <tr class="even">
 <td align="left">Week 17</td>
 <td align="left">0.47</td>
-<td align="left">0.50 (1.5)</td>
+<td align="left">0.52 (1.5)</td>
 <td align="left">0.47 (1.2)</td>
 <td align="left">0.37 (0.6)</td>
 <td align="left">0.32 (0.5)</td>
@@ -434,26 +437,26 @@ last row is resulting total enrollment as [Total (SD of Total)]
 <tr class="odd">
 <td align="left">Week 18</td>
 <td align="left">0.64</td>
-<td align="left">0.53 (1.5)</td>
+<td align="left">0.51 (1.5)</td>
 <td align="left">0.64 (0.9)</td>
 <td align="left">0.49 (0.6)</td>
-<td align="left">0.41 (0.4)</td>
+<td align="left">0.42 (0.4)</td>
 <td align="left">0.34 (0.1)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 20</td>
 <td align="left">0.88</td>
-<td align="left">0.51 (1.5)</td>
+<td align="left">0.52 (1.5)</td>
 <td align="left">0.88 (0.8)</td>
-<td align="left">0.76 (0.4)</td>
-<td align="left">0.50 (0.2)</td>
-<td align="left">0.35 (0.2)</td>
+<td align="left">0.75 (0.4)</td>
+<td align="left">0.50 (0.1)</td>
+<td align="left">0.36 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 21</td>
 <td align="left">0.91</td>
 <td align="left">0.52 (1.5)</td>
-<td align="left">0.94 (0.8)</td>
+<td align="left">0.90 (0.8)</td>
 <td align="left">0.80 (0.4)</td>
 <td align="left">0.52 (0.2)</td>
 <td align="left">0.39 (0.3)</td>
@@ -461,9 +464,9 @@ last row is resulting total enrollment as [Total (SD of Total)]
 <tr class="even">
 <td align="left">Week 22</td>
 <td align="left">0.88</td>
-<td align="left">0.51 (1.5)</td>
-<td align="left">0.87 (1.0)</td>
-<td align="left">0.77 (0.4)</td>
+<td align="left">0.50 (1.5)</td>
+<td align="left">0.88 (0.9)</td>
+<td align="left">0.78 (0.4)</td>
 <td align="left">0.55 (0.2)</td>
 <td align="left">0.46 (0.3)</td>
 </tr>
@@ -471,26 +474,26 @@ last row is resulting total enrollment as [Total (SD of Total)]
 <td align="left">Week 23</td>
 <td align="left">0.81</td>
 <td align="left">0.51 (1.5)</td>
-<td align="left">0.80 (1.1)</td>
-<td align="left">0.72 (0.5)</td>
-<td align="left">0.57 (0.3)</td>
+<td align="left">0.81 (1.1)</td>
+<td align="left">0.71 (0.5)</td>
+<td align="left">0.56 (0.3)</td>
 <td align="left">0.55 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 24</td>
 <td align="left">0.72</td>
 <td align="left">0.51 (1.5)</td>
-<td align="left">0.71 (1.3)</td>
+<td align="left">0.73 (1.2)</td>
 <td align="left">0.65 (0.5)</td>
 <td align="left">0.57 (0.3)</td>
-<td align="left">0.61 (0.2)</td>
+<td align="left">0.62 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 25</td>
 <td align="left">0.64</td>
-<td align="left">0.50 (1.5)</td>
-<td align="left">0.66 (1.4)</td>
-<td align="left">0.60 (0.6)</td>
+<td align="left">0.52 (1.5)</td>
+<td align="left">0.64 (1.4)</td>
+<td align="left">0.59 (0.6)</td>
 <td align="left">0.56 (0.3)</td>
 <td align="left">0.64 (0.2)</td>
 </tr>
@@ -498,25 +501,25 @@ last row is resulting total enrollment as [Total (SD of Total)]
 <td align="left">Week 28</td>
 <td align="left">0.52</td>
 <td align="left">0.50 (1.5)</td>
-<td align="left">0.52 (1.7)</td>
-<td align="left">0.54 (0.8)</td>
+<td align="left">0.51 (1.7)</td>
+<td align="left">0.53 (0.8)</td>
 <td align="left">0.59 (0.4)</td>
 <td align="left">0.69 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 41</td>
 <td align="left">0.63</td>
-<td align="left">0.51 (1.5)</td>
-<td align="left">0.62 (1.2)</td>
-<td align="left">0.66 (0.6)</td>
-<td align="left">0.71 (0.3)</td>
+<td align="left">0.52 (1.5)</td>
+<td align="left">0.64 (1.2)</td>
+<td align="left">0.65 (0.6)</td>
+<td align="left">0.72 (0.3)</td>
 <td align="left">0.77 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 42</td>
 <td align="left">0.58</td>
-<td align="left">0.52 (1.5)</td>
-<td align="left">0.58 (1.3)</td>
+<td align="left">0.50 (1.5)</td>
+<td align="left">0.59 (1.3)</td>
 <td align="left">0.61 (0.7)</td>
 <td align="left">0.65 (0.4)</td>
 <td align="left">0.70 (0.2)</td>
@@ -524,38 +527,38 @@ last row is resulting total enrollment as [Total (SD of Total)]
 <tr class="odd">
 <td align="left">Week 43</td>
 <td align="left">0.56</td>
-<td align="left">0.52 (1.5)</td>
+<td align="left">0.51 (1.5)</td>
 <td align="left">0.56 (1.4)</td>
-<td align="left">0.57 (0.7)</td>
+<td align="left">0.58 (0.7)</td>
 <td align="left">0.59 (0.4)</td>
-<td align="left">0.61 (0.2)</td>
+<td align="left">0.62 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">Week 44</td>
 <td align="left">0.56</td>
 <td align="left">0.50 (1.5)</td>
 <td align="left">0.55 (1.4)</td>
-<td align="left">0.55 (0.7)</td>
+<td align="left">0.56 (0.7)</td>
 <td align="left">0.54 (0.4)</td>
 <td align="left">0.54 (0.2)</td>
 </tr>
 <tr class="odd">
 <td align="left">Week 45</td>
 <td align="left">0.55</td>
-<td align="left">0.52 (1.5)</td>
-<td align="left">0.53 (1.5)</td>
+<td align="left">0.50 (1.5)</td>
+<td align="left">0.55 (1.4)</td>
 <td align="left">0.54 (0.7)</td>
-<td align="left">0.51 (0.4)</td>
+<td align="left">0.52 (0.4)</td>
 <td align="left">0.50 (0.2)</td>
 </tr>
 <tr class="even">
 <td align="left">N</td>
 <td align="left">28.01</td>
-<td align="left">26.70 (3.2)</td>
-<td align="left">27.99 (3.1)</td>
-<td align="left">27.27 (1.4)</td>
+<td align="left">26.67 (3.2)</td>
+<td align="left">28.02 (3.0)</td>
+<td align="left">27.24 (1.4)</td>
 <td align="left">26.19 (0.7)</td>
-<td align="left">26.23 (0.5)</td>
+<td align="left">26.22 (0.5)</td>
 </tr>
 </tbody>
 </table>

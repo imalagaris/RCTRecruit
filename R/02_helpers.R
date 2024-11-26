@@ -123,3 +123,90 @@ days2weeks <- function(date, enrolled) {
   rownames(datw) <- NULL
   return(datw[1L:52L, ])
 }
+
+#
+CreatePredCIplotObj <- \(y) {
+  self <- environment()
+  dat <-
+    data.frame(cbind(0:52, y)) |>
+    stats::setNames(c("x", "low", "pred", "high"))
+  dat$train <- c(0, cumsum(the$TrainVector))
+  if (length(the$cppModule$target)) {
+    dat$target <- c(0, cumsum(the$cppModule$target))
+  }
+  len <- nrow(dat)
+  maxY <- dat[len, -c(1:2)] |> max()
+  parArgs <- list(
+    las = 1,
+    cex.axis = 1.2,
+    cex.lab = 1.2
+  )
+  main <- list(
+    plot = \() do.call(plot, main[-1L]),
+    x = dat$x,
+    y = dat$pred,
+    type = "n",
+    xlab = "Weeks",
+    ylab = "Subjects",
+    xlim = c(0, 52),
+    ylim = c(0, maxY + 1)
+  )
+  CI95 <- list(
+    add = \() do.call(graphics::polygon, CI95[-1L]),
+    x = with(dat, c(x,      x[len], rev(  x[-len]))),
+    y = with(dat, c(high, low[len], rev(low[-len]))),
+    col = "gray90",
+    border = "gray90"
+  )
+  grid <- list(
+    add = \() do.call(graphics::abline, grid[-1L]),
+    v = seq(0, 50, by = 5),
+    h = seq(0, maxY, by = 10),
+    col = "gray70"
+  )
+
+  lines_ <- list(
+    add = \() {
+      arg <- lines_[-1L]
+      vec <-  c("train", "pred")
+      if (!is.null(dat$target)) vec <- c(vec, "target")
+      colVec <- NULL
+      labVec <- NULL
+      for (ln in vec) {
+        vArgs <- arg[[ln]]
+        colVec <- c(colVec, vArgs$col)
+        labVec <- c(labVec, vArgs$lab)
+        vArgs$lab <- NULL
+        list(dat$x, dat[[ln]]) |> c(vArgs) |> do.call(graphics::lines, args = _)
+      }
+      graphics::legend("topleft", legend = labVec, col = colVec, lwd = 2)
+    },
+    train = list(lwd = 2, col = "blue", lab = "Training data"),
+    pred = list(lwd = 2, col = "black", lab = "Predicted"),
+    target = list(lwd = 2, col = "red", lab = "Target data")
+  )
+  predPlot <- \() {
+    oldPar <- graphics::par(no.readonly = TRUE)
+    on.exit(do.call(graphics::par, oldPar), add = TRUE)
+    do.call(graphics::par, parArgs)
+    main$plot()
+    CI95$add()
+    grid$add()
+    lines_$add()
+  }
+  rm(y)
+  initState <- as.list(self)
+  reset <- \() {
+    for (nm in names(initState)) {
+      self[[nm]] <- initState[[nm]]
+    }
+  }
+  self
+}
+
+#' @export
+print.RCTRecruitPredCI <- function(x, ...) {
+  print(x$predCI)
+  invisible(x)
+}
+

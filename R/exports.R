@@ -114,7 +114,7 @@ GetWeekPredCI <- \(
   applyCoeff(coeff)
   out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _) |> round()
   rownames(out) <- 0:(nrow(out) - 1)
-  utils::head(out) |> logPrint()
-  utils::tail(out) |> logPrint()
-  invisible(out)
+  obj <- CreatePredCIplotObj(out)
+  out <- list(predCI = out, predPlot = obj$predPlot, plot_ = obj)
+  structure(out, class = "RCTRecruitPredCI")
 }

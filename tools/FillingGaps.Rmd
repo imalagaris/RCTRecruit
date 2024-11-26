@@ -27,7 +27,7 @@ library(devtools)
 
 
 
-Purpose: Proper implementation of **`Filling Gaps`** functionality (Code can be
+[Purpose]{.red}: Proper implementation of **`Filling Gaps`** functionality (Code can be
 executed in project's dir).
 
 ## Setup
