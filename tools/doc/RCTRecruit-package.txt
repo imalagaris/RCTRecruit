@@ -14,8 +14,8 @@ Details:
 
        Package:    RCTRecruit                                                                                
        Type:       Package                                                                                   
-       Version:    0.1.12                                                                                    
-       Date:       2024-11-25                                                                                
+       Version:    0.1.13                                                                                    
+       Date:       2024-11-26                                                                                
        License:    MIT + file LICENSE                                                                        
        Functions:                                                                                            
                    GetDistance         Euclidean distance between prediction and actual recruitment          

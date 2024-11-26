@@ -49,10 +49,8 @@ Time2Nsubjects <- \(
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
   applyCoeff(coeff)
-  out <- the$weeks2Nsubjects(nSim, nSub)
-  log(msg$enrollWeeks, bold(nSub, 28), bold(out$CI[[2L]], 28))
-  print(round(out$CI))
-  invisible(out)
+  out <- c(cargs = list(getCall()), the$weeks2Nsubjects(nSim, nSub))
+  structure(out, class = "RCTRecruitNWeeks")
 }
 
 #' Euclidean distance between prediction and actual recruitment
@@ -87,8 +85,8 @@ GetDistance <- \(
   the$setTarget(target)
   dist <- the$getDistance(nSim)
   CI <- stats::quantile(x = dist, probs = c(.025, .5, .975))
-  print(round(CI))
-  invisible(list(dist = dist, CI = CI))
+  out <- list(dist = dist, CI = CI, cargs = getCall())
+  structure(out, class = "RCTRecruitDist")
 }
 
 # GetWeekPredCI ----------------------------------------------------------
@@ -96,9 +94,18 @@ GetDistance <- \(
 #' @inheritParams Time2Nsubjects
 #' @return An 52x3 matrix with the 2.5%, 50% and 97.5% percentiles for each week
 #' @examples
+#' oldPar <- graphics::par(no.readonly = TRUE)
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-#' str(res)
+#' print(res)
+#' graphics::par(fin = c(5, 5));
+#' res$predPlot()
+#' res$plot_$lines_$pred$col <- "yellow"
+#' graphics::par(fin = c(5, 5));
+#' res$predPlot()
+#' graphics::par(fin = c(5, 5));
+#' res$plot_$reset()
+#' do.call(graphics::par, oldPar)
 #' @family RCTRecruit functions
 #' @export
 #' @rawRd % f4
@@ -116,5 +123,5 @@ GetWeekPredCI <- \(
   rownames(out) <- 0:(nrow(out) - 1)
   obj <- CreatePredCIplotObj(out)
   out <- list(predCI = out, predPlot = obj$predPlot, plot_ = obj)
-  structure(out, class = "RCTRecruitPredCI")
+  structure(c(cargs = list(getCall()), out), class = "RCTRecruitPredCI")
 }

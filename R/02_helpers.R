@@ -200,6 +200,7 @@ CreatePredCIplotObj <- \(y) {
     for (nm in names(initState)) {
       self[[nm]] <- initState[[nm]]
     }
+    predPlot()
   }
   self
 }
@@ -209,4 +210,19 @@ print.RCTRecruitPredCI <- function(x, ...) {
   print(x$predCI)
   invisible(x)
 }
+
+#' @export
+print.RCTRecruitNWeeks <- function(x, ...) {
+  log(msg$enrollWeeks, bold(x$cargs$nSub, 28), bold(x$CI[[2L]], 28))
+  print(round(x$CI))
+  invisible(x)
+}
+#' @export
+print.RCTRecruitDist <- function(x, ...) {
+  print(round(x$CI))
+  invisible(x)
+}
+
+
+
 

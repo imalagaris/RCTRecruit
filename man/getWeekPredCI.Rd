@@ -23,9 +23,18 @@ An 52x3 matrix with the 2.5\%, 50\% and 97.5\% percentiles for each week
 Calculate median recruitment with CI for the next 52 weeks
 }
 \examples{
+oldPar <- graphics::par(no.readonly = TRUE)
 LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-str(res)
+print(res)
+graphics::par(fin = c(5, 5));
+res$predPlot()
+res$plot_$lines_$pred$col <- "yellow"
+graphics::par(fin = c(5, 5));
+res$predPlot()
+graphics::par(fin = c(5, 5));
+res$plot_$reset()
+do.call(graphics::par, oldPar)
 }
 \seealso{
 Other RCTRecruit functions: 
