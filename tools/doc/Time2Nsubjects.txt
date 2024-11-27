@@ -45,6 +45,6 @@ See Also:
 Examples:
 
      LoadData(gripsYR1, ScreenDt, Enrolled)
-     res <- Time2Nsubjects()
+     (res <- Time2Nsubjects())
      str(res)
      

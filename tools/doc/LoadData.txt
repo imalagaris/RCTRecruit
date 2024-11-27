@@ -26,4 +26,6 @@ See Also:
 Examples:
 
      LoadData(gripsYR1, ScreenDt, Enrolled)
+     LoadData(gripsYR1, "ScreenDt", "Enrolled")
+     gripsYR1 |> LoadData(ScreenDt, Enrolled)
      

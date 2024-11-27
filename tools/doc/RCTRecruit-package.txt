@@ -14,7 +14,7 @@ Details:
 
        Package:    RCTRecruit                                                                                
        Type:       Package                                                                                   
-       Version:    0.1.13                                                                                    
+       Version:    0.1.15                                                                                    
        Date:       2024-11-26                                                                                
        License:    MIT + file LICENSE                                                                        
        Functions:                                                                                            
