@@ -18,6 +18,8 @@ Load recruitment data
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
+LoadData(gripsYR1, "ScreenDt", "Enrolled")
+gripsYR1 |> LoadData(ScreenDt, Enrolled)
 }
 \seealso{
 Other RCTRecruit functions: 

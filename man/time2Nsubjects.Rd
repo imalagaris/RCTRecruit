@@ -34,7 +34,7 @@ Simulate number of weeks needed to recruit a given number of subjects
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
-res <- Time2Nsubjects()
+(res <- Time2Nsubjects())
 str(res)
 }
 \seealso{

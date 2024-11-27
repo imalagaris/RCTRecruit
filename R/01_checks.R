@@ -6,7 +6,7 @@ msg <- list(
   range = "%s must be between %s and %s",
   num = "%s must be a numeric or integer",
   enrollWeeks = "Enrolling %s subjects requires %s weeks\n\n",
-  success = "Variables %s and %s were successfully loaded from data %s\n\n",
+  success = "Variables %s and %s were successfully loaded\n\n",
   notFound = '"%s" not found in data "%s"\n',
   idx = "%s[[%sL]]: %s"
 )
@@ -57,22 +57,67 @@ checkExportedFunctionsArgs <- \() {
 }
 
 #Gets the arguments of the calling function
+# getCall <- \(n = 0L) {
+#   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
+#   dArgs <- formals(sys.function(sys.parent(1L + n)))
+#   defNams <- names(dArgs)
+#   cArgs <- as.list(sys.call(-1L - n))[-1L]
+#   out <- list()
+#   for (nn in defNams) {
+#     if (utils::hasName(cArgs, nn)) {
+#       out[[nn]] <- deparseSymbol(cArgs[[nn]])
+#       cArgs[[nn]] <- NULL
+#       dArgs[[nn]] <- NULL
+#     }
+#   }
+#   for (i in seq_along(cArgs)) dArgs[[i]] <- deparseSymbol(cArgs[[i]])
+#   c(out, dArgs)[defNams]
+# }
+
+# deparseSymbol <- \(y) {
+#   symbolNames <- c("data", "date", "enrolled")
+#   for (i in seq_along(y)) {
+#     if (is.symbol(y[[i]])) {
+#       if (names(y[i]) %in% symbolNames) y[[i]] <- deparse(y[[i]])
+#       else y[[i]] <- eval(y[[i]])
+#     }
+#   }
+#   y
+# }
+
+deparseSymbol <- \(y, n = 0L) {
+  symbolNames <- c("data", "date", "enrolled")
+  for (i in seq_along(y)) {
+    if (is.symbol(y[[i]])) {
+      str <- deparse(y[[i]])
+      if (str == ".") y[[i]] <- eval(y[[i]], parent.frame(3L + n))
+      else if (names(y[i]) %in% symbolNames) y[[i]] <- str
+      else y[[i]] <- eval(y[[i]])
+    }
+  }
+  y
+}
+
 getCall <- \(n = 0L) {
-  deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
   dArgs <- formals(sys.function(sys.parent(1L + n)))
   defNams <- names(dArgs)
   cArgs <- as.list(sys.call(-1L - n))[-1L]
   out <- list()
   for (nn in defNams) {
     if (utils::hasName(cArgs, nn)) {
-      out[[nn]] <- deparseSymbol(cArgs[[nn]])
+      out[[nn]] <- cArgs[[nn]]
       cArgs[[nn]] <- NULL
       dArgs[[nn]] <- NULL
     }
   }
-  for (i in seq_along(cArgs)) dArgs[[i]] <- deparseSymbol(cArgs[[i]])
-  c(out, dArgs)[defNams]
+  for (i in seq_along(cArgs)) dArgs[[i]] <- cArgs[[i]]
+  res <- c(out, dArgs)[defNams]
+  deparseSymbol(res, n)
 }
+
+
+
+
 
 # Check the validity of user input `Date` and 'Enrolled' columns
 checkArgs <- function() {
@@ -80,7 +125,7 @@ checkArgs <- function() {
   datN <- cargs$data
   dtN <- cargs$date
   enrN <- cargs$enrolled
-  dat <- get(datN, parent.frame())
+  dat <- if (is.data.frame(datN)) datN else get(datN, parent.frame())
   for (x in c(dtN, enrN)) {
     if (!utils::hasName(dat, x)) err(msg$notFound, em(x), em(datN))
   }
@@ -92,7 +137,7 @@ checkArgs <- function() {
 # Print success message after loading data
 LoadSuccess <- \(x) {
   y <- lapply(x, bold, 28)
-  log(msg$success, y$enrolled, y$date, y$data)
+  log(msg$success, y$enrolled, y$date)
 }
 
 # Check input is of correct type

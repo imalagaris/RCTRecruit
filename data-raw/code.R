@@ -329,6 +329,85 @@ print.aek <- function(x, ...) {
 
 
 
+#A function to be run first within exported functions to check for user input
+checkExportedFunctionsArgs <- \() {
+  if (is.null(the$TrainVector)) err(msg$Load, fmt("LoadData", 160))
+  fArgs <- getCall(1L)
+  for (nam in names(fArgs)) {
+    nn <- bold(nam, 160)
+    val <- eval(fArgs[[nam]])
+    argsTests[[nam]](nn, val)
+  }
+}
+
+
+deparseSymbol <- \(y, n = 0L) {
+  symbolNames <- c("data", "date", "enrolled")
+  for (i in seq_along(y)) {
+    if (is.symbol(y[[i]])) {
+      str <- deparse(y[[i]])
+      if (str == ".") y[[i]] <- eval(y[[i]], parent.frame(3L + n))
+      else if (names(y[i]) %in% symbolNames) y[[i]] <- str
+      else y[[i]] <- eval(y[[i]])
+    }
+  }
+  y
+}
+
+getCall <- \(n = 0L) {
+  dArgs <- formals(sys.function(sys.parent(1L + n)))
+  defNams <- names(dArgs)
+  cArgs <- as.list(sys.call(-1L - n))[-1L]
+  out <- list()
+  for (nn in defNams) {
+    if (utils::hasName(cArgs, nn)) {
+      out[[nn]] <- cArgs[[nn]]
+      cArgs[[nn]] <- NULL
+      dArgs[[nn]] <- NULL
+    }
+  }
+  for (i in seq_along(cArgs)) dArgs[[i]] <- cArgs[[i]]
+  res <- c(out, dArgs)[defNams]
+  deparseSymbol(res, n)
+}
 
 
 
+
+library(dplyr)
+data <- gripsYR1 %>%
+  rename(date = ScreenDt,
+    enrolled = Enrolled)
+
+test <- \(dat, date, enrolled) {
+  getCall()
+}
+data %>% test(date, enrolled)
+
+target = sample(seq(0, 3), 100, replace = T)
+
+
+data_ymd <- data %>%
+  mutate(date = ymd(date))
+
+data_dym <- data_ymd %>%
+  mutate(date = format(date, '%d-%Y-%m'))
+
+
+set.seed(123)
+random_dates <- sample(seq(as.Date("2024-01-01"),
+                           as.Date("2024-12-31"),
+                           by = "day"),
+                        size = 100)
+
+dates_numeric <- as.numeric(format(random_dates, "%Y%m%d"))
+
+set.seed(123)
+ random_enrollment <- sample(seq(0, 5), size = 100, replace = T)
+
+data2 <- tibble(
+date = dates_numeric,
+enrolled = random_enrollment
+)
+
+ data2

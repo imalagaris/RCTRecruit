@@ -4,12 +4,14 @@
 #' @param enrolled Enrolled column
 #' @return NULL
 #' @examples LoadData(gripsYR1, ScreenDt, Enrolled)
+#' LoadData(gripsYR1, "ScreenDt", "Enrolled")
+#' gripsYR1 |> LoadData(ScreenDt, Enrolled)
 #' @family RCTRecruit functions
 #' @export
 #' @rawRd % f1
 LoadData <- \(data, date, enrolled) {
   if (is.null(data)) stop("data is NULL")
-  if (!("data.frame" %in% class(data))) stop("data must be a dataframe")
+  if (!is.data.frame(data)) stop("data must be a dataframe")
   cargs <- getCall()
   the$raw <- checkArgs()
   the$datWeeks <- days2weeks(the$raw$date, the$raw$enrolled)
@@ -33,7 +35,7 @@ LoadData <- \(data, date, enrolled) {
 #'     simulation. The second `CI` shows the median and the 95% CI.
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' res <- Time2Nsubjects()
+#' (res <- Time2Nsubjects())
 #' str(res)
 #' @family RCTRecruit functions
 #' @export
@@ -62,7 +64,7 @@ Time2Nsubjects <- \(
 #'     distance.
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' res <- GetDistance(gripsWeeklyYR2$enrolled)
+#' (res <- GetDistance(gripsWeeklyYR2$enrolled))
 #' str(res)
 #' @family RCTRecruit functions
 #' @export
@@ -97,7 +99,7 @@ GetDistance <- \(
 #' oldPar <- graphics::par(no.readonly = TRUE)
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-#' print(res)
+#' res
 #' graphics::par(fin = c(5, 5));
 #' res$predPlot()
 #' res$plot_$lines_$pred$col <- "yellow"

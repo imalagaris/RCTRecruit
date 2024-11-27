@@ -207,7 +207,9 @@ CreatePredCIplotObj <- \(y) {
 
 #' @export
 print.RCTRecruitPredCI <- function(x, ...) {
-  print(x$predCI)
+  print(x$predCI |> utils::head())
+  cat("\t", "...", "\n")
+  print(x$predCI |> utils::tail())
   invisible(x)
 }
 

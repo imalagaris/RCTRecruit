@@ -26,7 +26,7 @@ Calculate median recruitment with CI for the next 52 weeks
 oldPar <- graphics::par(no.readonly = TRUE)
 LoadData(gripsYR1, ScreenDt, Enrolled)
 res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-print(res)
+res
 graphics::par(fin = c(5, 5));
 res$predPlot()
 res$plot_$lines_$pred$col <- "yellow"

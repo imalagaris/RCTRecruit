@@ -35,7 +35,7 @@ Euclidean distance between prediction and actual recruitment
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
-res <- GetDistance(gripsWeeklyYR2$enrolled)
+(res <- GetDistance(gripsWeeklyYR2$enrolled))
 str(res)
 }
 \seealso{
