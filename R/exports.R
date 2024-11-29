@@ -52,7 +52,7 @@ Time2Nsubjects <- \(
   the$useCauchy(cauchyWt)
   applyCoeff(coeff)
   out <- c(cargs = list(getCall()), the$weeks2Nsubjects(nSim, nSub))
-  structure(out, class = "RCTRecruitNWeeks")
+  structure(out, class = "RCTNWeeks")
 }
 
 #' Euclidean distance between prediction and actual recruitment
@@ -88,26 +88,26 @@ GetDistance <- \(
   dist <- the$getDistance(nSim)
   CI <- stats::quantile(x = dist, probs = c(.025, .5, .975))
   out <- list(dist = dist, CI = CI, cargs = getCall())
-  structure(out, class = "RCTRecruitDist")
+  structure(out, class = "RCTDist")
 }
 
 # GetWeekPredCI ----------------------------------------------------------
-#' Calculate median recruitment with CI for the next 52 weeks
+#' Calculate median recruitment with 95% CI for the next 52 weeks
 #' @inheritParams Time2Nsubjects
 #' @return An 52x3 matrix with the 2.5%, 50% and 97.5% percentiles for each week
 #' @examples
-#' oldPar <- graphics::par(no.readonly = TRUE)
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-#' res
-#' graphics::par(fin = c(5, 5));
-#' res$predPlot()
-#' res$plot_$lines_$pred$col <- "yellow"
-#' graphics::par(fin = c(5, 5));
-#' res$predPlot()
-#' graphics::par(fin = c(5, 5));
-#' res$plot_$reset()
-#' do.call(graphics::par, oldPar)
+#' (res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
+#' scenarios <- list(
+#'   sc1 = GetWeekPredCI(),
+#'   sc2 = GetWeekPredCI(cauchyWt = TRUE),
+#'   sc3 = GetWeekPredCI(fillGaps = TRUE),
+#'   sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
+#' )
+#' maxY <- sapply(scenarios, \(x) x$plot_$maxY) |> max()
+#'
+#' graphics::par(mfrow = c(2, 2))
+#' for (x in scenarios) x$predPlot(yMax = maxY, Title = x$call.)
 #' @family RCTRecruit functions
 #' @export
 #' @rawRd % f4
@@ -125,5 +125,7 @@ GetWeekPredCI <- \(
   rownames(out) <- 0:(nrow(out) - 1)
   obj <- CreatePredCIplotObj(out)
   out <- list(predCI = out, predPlot = obj$predPlot, plot_ = obj)
-  structure(c(cargs = list(getCall()), out), class = "RCTRecruitPredCI")
+  out[["cargs"]] <- getCall()
+  out[["call."]] <- deparse(sys.call())
+  structure(out, class = "RCTPredCI")
 }

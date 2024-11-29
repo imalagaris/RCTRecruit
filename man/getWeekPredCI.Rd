@@ -2,7 +2,7 @@
 % Please edit documentation in R/exports.R
 \name{GetWeekPredCI}
 \alias{GetWeekPredCI}
-\title{Calculate median recruitment with CI for the next 52 weeks}
+\title{Calculate median recruitment with 95\% CI for the next 52 weeks}
 \usage{
 GetWeekPredCI(nSim = 10000L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1)
 }
@@ -20,21 +20,21 @@ If FALSE, binomial weights are used.}
 An 52x3 matrix with the 2.5\%, 50\% and 97.5\% percentiles for each week
 }
 \description{
-Calculate median recruitment with CI for the next 52 weeks
+Calculate median recruitment with 95\% CI for the next 52 weeks
 }
 \examples{
-oldPar <- graphics::par(no.readonly = TRUE)
 LoadData(gripsYR1, ScreenDt, Enrolled)
-res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-res
-graphics::par(fin = c(5, 5));
-res$predPlot()
-res$plot_$lines_$pred$col <- "yellow"
-graphics::par(fin = c(5, 5));
-res$predPlot()
-graphics::par(fin = c(5, 5));
-res$plot_$reset()
-do.call(graphics::par, oldPar)
+(res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
+scenarios <- list(
+  sc1 = GetWeekPredCI(),
+  sc2 = GetWeekPredCI(cauchyWt = TRUE),
+  sc3 = GetWeekPredCI(fillGaps = TRUE),
+  sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
+)
+maxY <- sapply(scenarios, \(x) x$plot_$maxY) |> max()
+
+graphics::par(mfrow = c(2, 2))
+for (x in scenarios) x$predPlot(yMax = maxY, Title = x$call.)
 }
 \seealso{
 Other RCTRecruit functions: 

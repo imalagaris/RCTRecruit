@@ -7,6 +7,9 @@ the$probs <- the$binomWt
 the$cauchyWt <- wts[["cauchy"]]
 the$color <- .Platform$GUI %in% c("RStudio", "RTerm")
 
+the$initPar <- graphics::par(no.readonly = TRUE)
+the$resetPar <- \() do.call(graphics::par, the$initPar)
+
 # On data load, export the methods of the C++ module to the `the`
 # internal environment
 exportModuleMethods <- \(instance) {
@@ -131,8 +134,8 @@ CreatePredCIplotObj <- \(y) {
     data.frame(cbind(0:52, y)) |>
     stats::setNames(c("x", "low", "pred", "high"))
   dat$train <- c(0, cumsum(the$TrainVector))
-  if (length(the$cppModule$target)) {
-    dat$target <- c(0, cumsum(the$cppModule$target))
+  if (utils::hasName(the, "target")) {
+    dat$target <- c(0, cumsum(the$target))
   }
   len <- nrow(dat)
   maxY <- dat[len, -c(1:2)] |> max()
@@ -185,28 +188,48 @@ CreatePredCIplotObj <- \(y) {
     pred = list(lwd = 2, col = "black", lab = "Predicted"),
     target = list(lwd = 2, col = "red", lab = "Target data")
   )
-  predPlot <- \() {
-    oldPar <- graphics::par(no.readonly = TRUE)
-    on.exit(do.call(graphics::par, oldPar), add = TRUE)
+  rm(y)
+
+  RCTcall <- deparse(sys.call(-1L))
+
+  initArgs <-
+    as.list(sys.call(-1L))[-1L] |>
+    (\(x) names(x) |> lapply(\(y) paste0(y, " = ", x[[y]])) )() |>
+    unlist() |>
+    paste0(collapse = ", ") |>
+    paste0("(", ... = _, ")") |>
+    (\(x) if (x == "()") "Default" else x)()
+
+  initState <- as.list(self)
+
+  predPlot <- \(yMax = NULL, Title = NULL)  {
+    if (!is.null(yMax)) self$main$ylim[[2]] <-  yMax
+    if (!is.null(Title)) self$main[["main"]] <- Title
     do.call(graphics::par, parArgs)
     main$plot()
     CI95$add()
     grid$add()
     lines_$add()
   }
-  rm(y)
-  initState <- as.list(self)
-  reset <- \() {
+
+  reset <- \(yMax = NULL, Title = NULL) {
     for (nm in names(initState)) {
       self[[nm]] <- initState[[nm]]
     }
-    predPlot()
+    predPlot(yMax, Title)
   }
+  gpar <- \(main = NULL, lines_ = NULL) {
+    getCall()
+  }
+
   self
 }
 
+
+
+
 #' @export
-print.RCTRecruitPredCI <- function(x, ...) {
+print.RCTPredCI <- function(x, ...) {
   print(x$predCI |> utils::head())
   cat("\t", "...", "\n")
   print(x$predCI |> utils::tail())
@@ -214,13 +237,13 @@ print.RCTRecruitPredCI <- function(x, ...) {
 }
 
 #' @export
-print.RCTRecruitNWeeks <- function(x, ...) {
+print.RCTNWeeks <- function(x, ...) {
   log(msg$enrollWeeks, bold(x$cargs$nSub, 28), bold(x$CI[[2L]], 28))
   print(round(x$CI))
   invisible(x)
 }
 #' @export
-print.RCTRecruitDist <- function(x, ...) {
+print.RCTDist <- function(x, ...) {
   print(round(x$CI))
   invisible(x)
 }

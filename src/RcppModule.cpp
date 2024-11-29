@@ -20,17 +20,18 @@ class rct {
     NumericVector cumTarget;
     Environment e;
     const static NumericVector pq;
-    
+
     void useCauchy(bool val) { probs = val ? cauchyWt : binomWt; }
-    
+
     void setTarget(NumericVector _target) {
       this->target = as<NumericVector>(_target);
+      e["target"] = target;
       NumericVector _cumTarget = cumsum(_target);
       this->cumTarget = as<NumericVector>(_cumTarget);
     }
-    
+
     rct() { }
-    
+
     rct(Environment _e) {
       this->e = _e;
       train = e["train"];
@@ -44,12 +45,12 @@ class rct {
       this->cauchyWt = cauchy;
       useCauchy(false);
     }
-    
+
     List weeks2Nsubjects(int nSim, int nSubjects) {
       NumericVector y(nSim);
       NumericVector p(52);
       for (int i = 0; i < nSim; i++) {
-        double n = 0; 
+        double n = 0;
         int k = 0;
         while (n <= nSubjects) {
           p = clone(probs(k % 52).get());
@@ -61,7 +62,7 @@ class rct {
       List L = List::create(_["weeks"] = y, _["CI"] = quantile(y, pq));
       return L;
     }
-    
+
     NumericMatrix PredCIbyWk(int nSim) {
       NumericVector y(nSim);
       NumericMatrix out(52, 3);
@@ -73,7 +74,7 @@ class rct {
       }
       return out;
     }
-    
+
     NumericVector getDistance(int nSim) {
       NumericVector out(nSim);
       for (int k = 0; k < nSim; k++) {
