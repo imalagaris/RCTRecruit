@@ -400,24 +400,44 @@ b <- \(y) {
 }
 
 
+unQ <- \(x) substitute(bquote(y), list(y = x)) |> eval()
+
 mySwitch <- \(x) {
   switch(
     typeof(x),
     character = x,
     symbol = deparse(x),
-    language = (\(y) substitute(bquote(x), list(x = y)) |> eval())(x)
+    language = unQ(x)
   )
 }
 
+fn <- \(...) {
+  cargs <- as.list(substitute(...()))
+  lapply(cargs, mySwitch)
+}
+
+
+x <- "aek .(paok)"
+pattern <- "\\s(\\.\\(\\w+\\))"
+
+ss <- \(x) {
+  m <- gregexpr("(\\.\\(\\w+\\))", x)
+  if (m[[1L]][1L] == -1) return(x)
+  regmatches(x, m) <- Map(unQ, regmatches(x, m) |> lapply(str2lang))
+  x
+}
+
+
+m <- gregexpr(pattern, x)
+
+Map(unQ, regmatches(x, m) |> lapply(str2lang))
+
+lapply(reg)
 
 a <- quote(I(aek,  .(b)))
 substitute(bquote(x), list(x = a)) |> eval()
 
-fn <- \(...) {
-cargs <- as.list(substitute(...()))
-lapply(cargs, mySwitch)
 
-}
 # substitute(bquote(x), list(x = y[[2]])) |> eval()
 
 
@@ -458,6 +478,33 @@ enrolled = random_enrollment
 )
 
  data2
+
+
+
+
+
+
+
+set.seed(123)
+random_dates <- sample(
+  seq(as.Date("2024-01-01"), as.Date("2024-12-31"), by = "day"),
+  size = 100
+)
+dates_numeric <- as.numeric(format(random_dates, "%Y%m%d"))
+
+set.seed(123)
+random_enrollment <- sample(seq(0, 5), size = 100, replace = T)
+
+data2 <- tibble(
+  date = dates_numeric,
+  enrolled = random_enrollment
+)
+
+
+
+
+
+
 
 
 

@@ -14,12 +14,12 @@ Details:
 
        Package:    RCTRecruit                                                                                
        Type:       Package                                                                                   
-       Version:    0.1.15                                                                                    
-       Date:       2024-11-26                                                                                
+       Version:    0.1.16                                                                                    
+       Date:       2024-12-03                                                                                
        License:    MIT + file LICENSE                                                                        
        Functions:                                                                                            
                    GetDistance         Euclidean distance between prediction and actual recruitment          
-                   GetWeekPredCI       Calculate median recruitment with CI for the next 52 weeks            
+                   GetWeekPredCI       Calculate median recruitment with 95% CI for the next 52 weeks        
                    LoadData            Load recruitment data                                                 
                    Time2Nsubjects      Simulate number of weeks needed to recruit a given number of subjects 
        Datasets:                                                                                             

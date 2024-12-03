@@ -1,10 +1,10 @@
 GetWeekPredCI            package:RCTRecruit            R Documentation
 
-Calculate median recruitment with CI for the next 52 weeks
+Calculate median recruitment with 95% CI for the next 52 weeks
 
 Description:
 
-     Calculate median recruitment with CI for the next 52 weeks
+     Calculate median recruitment with 95% CI for the next 52 weeks
 
 Usage:
 
@@ -33,16 +33,16 @@ See Also:
 
 Examples:
 
-     oldPar <- graphics::par(no.readonly = TRUE)
      LoadData(gripsYR1, ScreenDt, Enrolled)
-     res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
-     res
-     graphics::par(fin = c(5, 5));
-     res$predPlot()
-     res$plot_$lines_$pred$col <- "yellow"
-     graphics::par(fin = c(5, 5));
-     res$predPlot()
-     graphics::par(fin = c(5, 5));
-     res$plot_$reset()
-     do.call(graphics::par, oldPar)
+     (res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
+     scenarios <- list(
+       sc1 = GetWeekPredCI(),
+       sc2 = GetWeekPredCI(cauchyWt = TRUE),
+       sc3 = GetWeekPredCI(fillGaps = TRUE),
+       sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
+     )
+     maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
+     
+     graphics::par(mfrow = c(2, 2))
+     for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
      
