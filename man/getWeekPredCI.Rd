@@ -31,10 +31,10 @@ scenarios <- list(
   sc3 = GetWeekPredCI(fillGaps = TRUE),
   sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
 )
-maxY <- sapply(scenarios, \(x) x$plot_$maxY) |> max()
+maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 
 graphics::par(mfrow = c(2, 2))
-for (x in scenarios) x$predPlot(yMax = maxY, Title = x$call.)
+for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
 }
 \seealso{
 Other RCTRecruit functions: 

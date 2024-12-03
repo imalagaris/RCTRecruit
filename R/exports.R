@@ -104,10 +104,10 @@ GetDistance <- \(
 #'   sc3 = GetWeekPredCI(fillGaps = TRUE),
 #'   sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
 #' )
-#' maxY <- sapply(scenarios, \(x) x$plot_$maxY) |> max()
+#' maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 #'
 #' graphics::par(mfrow = c(2, 2))
-#' for (x in scenarios) x$predPlot(yMax = maxY, Title = x$call.)
+#' for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
 #' @family RCTRecruit functions
 #' @export
 #' @rawRd % f4
@@ -124,7 +124,7 @@ GetWeekPredCI <- \(
   out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _) |> round()
   rownames(out) <- 0:(nrow(out) - 1)
   obj <- CreatePredCIplotObj(out)
-  out <- list(predCI = out, predPlot = obj$predPlot, plot_ = obj)
+  out <- list(predCI = out, plot = obj$predPlot, pargs = obj)
   out[["cargs"]] <- getCall()
   out[["call."]] <- deparse(sys.call())
   structure(out, class = "RCTPredCI")

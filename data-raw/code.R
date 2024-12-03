@@ -373,6 +373,53 @@ getCall <- \(n = 0L) {
 
 
 
+LoadData(gripsYR1, ScreenDt, Enrolled)
+(res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
+scenarios <- list(
+  sc1 = GetWeekPredCI(),
+  sc2 = GetWeekPredCI(cauchyWt = TRUE),
+  sc3 = GetWeekPredCI(fillGaps = TRUE),
+  sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
+)
+maxY <- sapply(scenarios, \(x) x$plot_$maxY) |> max()
+
+graphics::par(mfrow = c(2, 2))
+for (x in scenarios) x$predPlot(yMax = maxY, Title = x$call.)
+
+.l <- \(lst, el) {
+    paste("\\(x) x$", deparse(substitute(el))) |>
+    parse(text = _) |>
+    eval() |>
+    (\(f) lst |> lapply(f))(f = _)
+
+}
+
+
+b <- \(y) {
+  substitute(x$y)
+}
+
+
+mySwitch <- \(x) {
+  switch(
+    typeof(x),
+    character = x,
+    symbol = deparse(x),
+    language = (\(y) substitute(bquote(x), list(x = y)) |> eval())(x)
+  )
+}
+
+
+a <- quote(I(aek,  .(b)))
+substitute(bquote(x), list(x = a)) |> eval()
+
+fn <- \(...) {
+cargs <- as.list(substitute(...()))
+lapply(cargs, mySwitch)
+
+}
+# substitute(bquote(x), list(x = y[[2]])) |> eval()
+
 
 library(dplyr)
 data <- gripsYR1 %>%
@@ -411,3 +458,6 @@ enrolled = random_enrollment
 )
 
  data2
+
+
+
