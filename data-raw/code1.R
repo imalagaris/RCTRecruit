@@ -1,19 +1,16 @@
 LoadData(gripsYR1, ScreenDt, Enrolled)
-res <- GetWeekPredCI()
-res$predPlot()
-res$plot_$lines_
-
+(res <- GetWeekPredCI())
+res$pargs$addTarget(gripsWeeklyYR2$enrolled)
 scenarios <- list(
   sc1 = GetWeekPredCI(),
-  sc2 = GetWeekPredCI(fillGaps = TRUE),
-  sc3 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
+  sc2 = GetWeekPredCI(cauchyWt = TRUE),
+  sc3 = GetWeekPredCI(fillGaps = TRUE),
+  sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.5)
 )
+maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 
-maxY <- sapply(scenarios, \(x) x$plot_$maxY) |> max()
-
-graphics::par(mfrow = c(1, 3))
-for (x in scenarios) x$predPlot(yMax = maxY, Title = x$call.)
-
+graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
+for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
 
 .l <- \(x, el) {
     a <- sys.call(0)

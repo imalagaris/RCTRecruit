@@ -57,8 +57,6 @@ fillEmptyWeeks <- \() {
   out
 }
 
-
-
 str2Date <- \(x) {
   fmtDate <- c(
     "Ymd", "Ymd HM", "Ymd HMS", "mdY", "mdY IMp",
@@ -131,14 +129,19 @@ days2weeks <- function(date, enrolled) {
 CreatePredCIplotObj <- \(y) {
   self <- environment()
   dat <-
-    data.frame(cbind(0:52, y)) |>
-    stats::setNames(c("x", "low", "pred", "high"))
+    data.frame(cbind(0:104, y)) |>
+    stats::setNames(c("x", "low", "pred", "high")) |>
+    as.list()
   dat$train <- c(0, cumsum(the$TrainVector))
   if (utils::hasName(the, "target")) {
     dat$target <- c(0, cumsum(the$target))
   }
-  len <- nrow(dat)
-  maxY <- dat[len, -c(1:2)] |> max()
+  addTarget <- \(x) {
+    the$setTarget(x)
+    self$dat$target <- c(0, cumsum(the$target))
+  }
+  len <- length(dat$pred)
+  maxY <- dat$high[[len]]
   parArgs <- list(
     las = 1,
     cex.axis = 1.2,
@@ -151,7 +154,7 @@ CreatePredCIplotObj <- \(y) {
     type = "n",
     xlab = "Weeks",
     ylab = "Subjects",
-    xlim = c(0, 52),
+    xlim = c(0, 104),
     ylim = c(0, maxY + 1)
   )
   CI95 <- list(
@@ -163,10 +166,11 @@ CreatePredCIplotObj <- \(y) {
   )
   grid <- list(
     add = \() do.call(graphics::abline, grid[-1L]),
-    v = seq(0, 50, by = 5),
+    v = seq(0, 100, by = 10),
     h = seq(0, maxY, by = 10),
     col = "gray70"
   )
+  Xs <- \(y) 0L:(length(dat[[y]]) - 1L)
 
   lines_ <- list(
     add = \() {
@@ -180,13 +184,14 @@ CreatePredCIplotObj <- \(y) {
         colVec <- c(colVec, vArgs$col)
         labVec <- c(labVec, vArgs$lab)
         vArgs$lab <- NULL
-        list(dat$x, dat[[ln]]) |> c(vArgs) |> do.call(graphics::lines, args = _)
+        list(x = Xs(ln), y = dat[[ln]], lwd = 3) |> c(vArgs) |>
+          do.call(graphics::lines, args = _)
       }
-      graphics::legend("topleft", legend = labVec, col = colVec, lwd = 2)
+      graphics::legend("topleft", legend = labVec, col = colVec, lwd = 3)
     },
-    train = list(lwd = 2, col = "blue", lab = "Training data"),
-    pred = list(lwd = 2, col = "black", lab = "Predicted"),
-    target = list(lwd = 2, col = "red", lab = "Target data")
+    train  = list(col = "blue",  lab = "Training data"),
+    pred   = list(col = "black", lab = "Predicted"),
+    target = list(col = "red",   lab = "Target data")
   )
   rm(y)
 
@@ -202,8 +207,13 @@ CreatePredCIplotObj <- \(y) {
 
   initState <- as.list(self)
 
+  setNewMaxYplot <- \(y) {
+    self$main$ylim[[2]] <-  y
+    self$grid$h <- seq(0, y, by = 10)
+  }
+
   predPlot <- \(yMax = NULL, Title = NULL)  {
-    if (!is.null(yMax)) self$main$ylim[[2]] <-  yMax
+    if (!is.null(yMax)) setNewMaxYplot(yMax)
     if (!is.null(Title)) self$main[["main"]] <- Title
     do.call(graphics::par, parArgs)
     main$plot()

@@ -65,10 +65,10 @@ class rct {
 
     NumericMatrix PredCIbyWk(int nSim) {
       NumericVector y(nSim);
-      NumericMatrix out(52, 3);
+      NumericMatrix out(104, 3);
       colnames(out) = as<CharacterVector>(quantile(y, pq).names());
-      for (int i = 0; i < 52; i++) {
-        NumericVector p = clone(probs(i).get());
+      for (int i = 0; i < 104; i++) {
+        NumericVector p = clone(probs(i % 52).get());
         y = y + sugar::SampleReplace(p, nSim, train);
         out.row(i) = quantile(y, pq);
       }

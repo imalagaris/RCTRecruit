@@ -92,9 +92,9 @@ GetDistance <- \(
 }
 
 # GetWeekPredCI ----------------------------------------------------------
-#' Calculate median recruitment with 95% CI for the next 52 weeks
+#' Calculate median recruitment with 95% CI for the next 104 weeks
 #' @inheritParams Time2Nsubjects
-#' @return An 52x3 matrix with the 2.5%, 50% and 97.5% percentiles for each week
+#' @return An 104x3 matrix with the 2.5%, 50% and 97.5% weekly percentiles
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' (res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
@@ -106,7 +106,7 @@ GetDistance <- \(
 #' )
 #' maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 #'
-#' graphics::par(mfrow = c(2, 2))
+#' graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
 #' for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
 #' @family RCTRecruit functions
 #' @export
