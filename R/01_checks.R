@@ -45,46 +45,6 @@ argsTests <- list(
   }
 )
 
-#A function to be run first within exported functions to check for user input
-checkExportedFunctionsArgs <- \() {
-  if (is.null(the$TrainVector)) err(msg$Load, fmt("LoadData", 160))
-  fArgs <- getCall(1L)
-  for (nam in names(fArgs)) {
-    nn <- bold(nam, 160)
-    val <- eval(fArgs[[nam]])
-    argsTests[[nam]](nn, val)
-  }
-}
-
-#Gets the arguments of the calling function
-# getCall <- \(n = 0L) {
-#   deparseSymbol <- \(y) if (is.symbol(y)) deparse(y) else y
-#   dArgs <- formals(sys.function(sys.parent(1L + n)))
-#   defNams <- names(dArgs)
-#   cArgs <- as.list(sys.call(-1L - n))[-1L]
-#   out <- list()
-#   for (nn in defNams) {
-#     if (utils::hasName(cArgs, nn)) {
-#       out[[nn]] <- deparseSymbol(cArgs[[nn]])
-#       cArgs[[nn]] <- NULL
-#       dArgs[[nn]] <- NULL
-#     }
-#   }
-#   for (i in seq_along(cArgs)) dArgs[[i]] <- deparseSymbol(cArgs[[i]])
-#   c(out, dArgs)[defNams]
-# }
-
-# deparseSymbol <- \(y) {
-#   symbolNames <- c("data", "date", "enrolled")
-#   for (i in seq_along(y)) {
-#     if (is.symbol(y[[i]])) {
-#       if (names(y[i]) %in% symbolNames) y[[i]] <- deparse(y[[i]])
-#       else y[[i]] <- eval(y[[i]])
-#     }
-#   }
-#   y
-# }
-
 deparseSymbol <- \(y, n = 0L) {
   symbolNames <- c("data", "date", "enrolled")
   for (i in seq_along(y)) {
@@ -115,9 +75,16 @@ getCall <- \(n = 0L) {
   deparseSymbol(res, n)
 }
 
-
-
-
+#A function to be run first within exported functions to check for user input
+checkExportedFunctionsArgs <- \() {
+  if (is.null(the$TrainVector)) err(msg$Load, fmt("LoadData", 160))
+  fArgs <- getCall(1L)
+  for (nam in names(fArgs)) {
+    nn <- bold(nam, 160)
+    val <- eval(fArgs[[nam]])
+    argsTests[[nam]](nn, val)
+  }
+}
 
 # Check the validity of user input `Date` and 'Enrolled' columns
 checkArgs <- function() {
@@ -138,6 +105,12 @@ checkArgs <- function() {
 LoadSuccess <- \(x) {
   y <- lapply(x, bold, 28)
   log(msg$success, y$enrolled, y$date)
+}
+
+checkDate <- function(x) {
+  if (is.null(x)) err("%s argument is required", em("date"))
+  check <- typeof(x) %in% c("character", "integer", "numeric", "double")
+  if (!check) err("%s must be a character or numeric vector", em("date"))
 }
 
 # Check input is of correct type

@@ -57,28 +57,28 @@ fillEmptyWeeks <- \() {
   out
 }
 
+
+
+str2Date <- \(x) {
+  fmtDate <- c(
+    "Ymd", "Ymd HM", "Ymd HMS", "mdY", "mdY IMp",
+    "mdY IMSp", "dmY", "dmY HM", "dmY HMS"
+  )
+  x <- if (is.character(x)) x else as.character(x)
+  lubridate::parse_date_time(x, fmtDate) |> as.Date()
+}
+
 # Try parse string to date format
-fixDate <- function(dateVar) {
-  if (is.null(dateVar)) stop("strDate is NULL")
-  type <- typeof(dateVar)
-  if (type == "character") {
-    fmtDate <- c(
-      "Ymd", "Ymd HM", "Ymd HMS", "mdY", "mdY IMp",
-      "mdY IMSp", "dmY", "dmY HM", "dmY HMS"
-    )
-    out <- dateVar |> lubridate::parse_date_time(fmtDate) |> as.Date()
-  } else if (type %in% c("integer", "numeric", "double")) {
-    out <- as.Date(dateVar, origin = "1970-01-01")
-  } else {
-    stop("strDate must be a character or numeric vector")
-  }
+fixDate <- function(x) {
+  checkDate(x)
+  out <- str2Date(x)
   NAs <- is.na(out)
   if (any(NAs)) {
     ids <- which(NAs)
     len <- length(ids)
     ids <- ids[seq_len(min(10L, len))]
     for (i in ids) {
-      vals <- c(msg$idx, lapply(c("strDate", i, dateVar[[i]]), fmt, 208))
+      vals <- c(msg$idx, lapply(c("strDate", i, x[[i]]), fmt, 208))
       do.call(wrn, vals)
     }
     if (len > 10) warning("...")
