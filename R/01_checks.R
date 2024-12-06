@@ -61,7 +61,8 @@ deparseSymbol <- \(y, n = 0L) {
 getCall <- \(n = 0L) {
   dArgs <- formals(sys.function(sys.parent(1L + n)))
   defNams <- names(dArgs)
-  cArgs <- as.list(sys.call(-1L - n))[-1L]
+  call. = sys.call(-(n + 1L));
+  cArgs <- as.list(call.)[-1L]
   out <- list()
   for (nn in defNams) {
     if (utils::hasName(cArgs, nn)) {
@@ -72,13 +73,13 @@ getCall <- \(n = 0L) {
   }
   for (i in seq_along(cArgs)) dArgs[[i]] <- cArgs[[i]]
   res <- c(out, dArgs)[defNams]
-  deparseSymbol(res, n)
+  list(call. = deparse(call.), cargs = deparseSymbol(res, n))
 }
 
 #A function to be run first within exported functions to check for user input
 checkExportedFunctionsArgs <- \() {
   if (is.null(the$TrainVector)) err(msg$Load, fmt("LoadData", 160))
-  fArgs <- getCall(1L)
+  fArgs <- getCall(1L)$cargs
   for (nam in names(fArgs)) {
     nn <- bold(nam, 160)
     val <- eval(fArgs[[nam]])
@@ -88,7 +89,7 @@ checkExportedFunctionsArgs <- \() {
 
 # Check the validity of user input `Date` and 'Enrolled' columns
 checkArgs <- function() {
-  cargs <- getCall(1L)
+  cargs <- getCall(1L)$cargs
   datN <- cargs$data
   dtN <- cargs$date
   enrN <- cargs$enrolled

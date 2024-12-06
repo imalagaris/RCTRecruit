@@ -15,20 +15,27 @@ GetDistance(
 \arguments{
 \item{target}{A vector with the actual recruitment by week}
 
-\item{nSim}{Number of simulations to run (default = 1e4)}
+\item{nSim}{Number of simulations to run (default = 1e4L)}
 
 \item{fillGaps}{Whether to fill gaps in the data (default = FALSE)}
 
-\item{cauchyWt}{Whether to use Cauchy weights for sampling (default = FALSE).
-If FALSE, binomial weights are used.}
+\item{cauchyWt}{Whether to use Cauchy weights for sampling.
+If FALSE (default),\if{html}{\out{<br>}}
+binomial weights are used.}
 
 \item{coeff}{A coefficient to apply to the recruitment rate (default = 1)}
 }
 \value{
-A list with two elements. The first element \code{dist} is a numeric
-vector with length equal to \code{nSim} containing the simulated Euclidean
-distance. The second \code{CI} shows the median and the 95\%CI Euclidean
-distance.
+An object of \code{RCTDist} class with four elements.
+\enumerate{
+\item \code{dist}:
+A numeric vector with length equal to \code{nSim} containing the simulated\if{html}{\out{<br>}}
+Euclidean distance.
+\item \code{CI}: A numeric vector with the median and the 95\% CI Euclidean distance.
+\item \code{call.}: The call (deparsed) that created the object
+\item \code{cargs}: A list with the arguments of the call that created the object\if{html}{\out{<br>}}
+including the default arguments
+}
 }
 \description{
 Euclidean distance between prediction and actual recruitment

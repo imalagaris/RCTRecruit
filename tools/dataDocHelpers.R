@@ -114,12 +114,26 @@ e <- (\() {
       self[[x]] <- compiler::cmpfun(self[[x]], options = list(optimize = 3))
     }
   }
+# exported functions common output
+  fixStr <- \(x) {
+    gsub("^\\s*|\\s*$", "", x) |> 
+      gsub("\\s{2,}|\n", " ", x = _) |>
+      gsub("<br>\\s*", "<br>\n", x = _)
+  }
+
+  getCommonOutput <- \() {
+    call. = "`call.`: The call (deparsed) that created the object" |> fixStr()
+    cargs = "
+    `cargs`: A list with the arguments of the call that created the object<br>
+    including the default arguments" |> fixStr()
+    paste(call., cargs, sep = "\n 1. ")
+  }
+  commonOutput = getCommonOutput()
+  aek <- "<br>\n @param aek paok"
+
 # output the enclosing environment ---------------------------------------------
   return(self)
 })()
-
-
-
 
 # Archive ----------------------------------------------------------------------
 # writeRMD()
@@ -213,8 +227,3 @@ e <- (\() {
 #     lapply(tools::parse_Rd) |>
 #     lapply(extractTagsUnit, arguments)
 # }
-
-
-
-
-

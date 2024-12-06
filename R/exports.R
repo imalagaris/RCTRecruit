@@ -12,7 +12,7 @@
 LoadData <- \(data, date, enrolled) {
   if (is.null(data)) stop("data is NULL")
   if (!is.data.frame(data)) stop("data must be a dataframe")
-  cargs <- getCall()
+  cargs <- getCall()$cargs
   the$raw <- checkArgs()
   the$datWeeks <- days2weeks(the$raw$date, the$raw$enrolled)
   the$train <- the$datWeeks$enrolled
@@ -24,15 +24,19 @@ LoadData <- \(data, date, enrolled) {
 }
 
 #' Simulate number of weeks needed to recruit a given number of subjects
-#' @param nSub Number of subjects to recruit (default = 50)
-#' @param nSim Number of simulations to run (default = 1e4)
+#' @param nSub Number of subjects to recruit (default = 50L)
+#' @param nSim Number of simulations to run (default = 1e4L)
 #' @param fillGaps Whether to fill gaps in the data (default = FALSE)
-#' @param cauchyWt Whether to use Cauchy weights for sampling (default = FALSE).
-#'    If FALSE, binomial weights are used.
+#' @param cauchyWt Whether to use Cauchy weights for sampling. 
+#'     If FALSE (default),<br>
+#'     binomial weights are used.
 #' @param coeff A coefficient to apply to the recruitment rate (default = 1)
-#' @return A `list` with two elements. The first element `weeks` is an integer
-#'     vector with length equal to `nSim` containing the results of the
-#'     simulation. The second `CI` shows the median and the 95% CI.
+#' @return
+#' An object of `RCTNWeeks` class with four elements.
+#' 1. `weeks` is an integer vector with length equal to `nSim` containing the
+#'     simulation results.
+#' 1. `CI` shows the median and the 95% CI.
+#' 1. `r e$commonOutput`
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' (res <- Time2Nsubjects())
@@ -51,17 +55,20 @@ Time2Nsubjects <- \(
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
   applyCoeff(coeff)
-  out <- c(cargs = list(getCall()), the$weeks2Nsubjects(nSim, nSub))
+  out <- c(the$weeks2Nsubjects(nSim, nSub), getCall())
   structure(out, class = "RCTNWeeks")
 }
 
 #' Euclidean distance between prediction and actual recruitment
 #' @param target A vector with the actual recruitment by week
 #' @inheritParams Time2Nsubjects
-#' @return A list with two elements. The first element `dist` is a numeric
-#'     vector with length equal to `nSim` containing the simulated Euclidean
-#'     distance. The second `CI` shows the median and the 95%CI Euclidean
-#'     distance.
+#' @return
+#' An object of `RCTDist` class with four elements.
+#' 1. `dist`: 
+#'     A numeric vector with length equal to `nSim` containing the simulated<br>
+#'     Euclidean distance.
+#' 1. `CI`: A numeric vector with the median and the 95% CI Euclidean distance.
+#' 1. `r e$commonOutput`
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' (res <- GetDistance(gripsWeeklyYR2$enrolled))
@@ -87,14 +94,25 @@ GetDistance <- \(
   the$setTarget(target)
   dist <- the$getDistance(nSim)
   CI <- stats::quantile(x = dist, probs = c(.025, .5, .975))
-  out <- list(dist = dist, CI = CI, cargs = getCall())
+  out <- c(list(dist = dist, CI = CI), getCall())
   structure(out, class = "RCTDist")
 }
 
 # GetWeekPredCI ----------------------------------------------------------
-#' Calculate median recruitment with 95% CI for the next 104 weeks
+#' Calculate median recruitment with 95% CI for the next 104 weeks (two years)
 #' @inheritParams Time2Nsubjects
-#' @return An 104x3 matrix with the 2.5%, 50% and 97.5% weekly percentiles
+#' @return
+#' An object of `RCTPredCI` class with 5 elements.
+#' 1. `predCI`: An 104x3 matrix with the 2.5%, 50% and 97.5% weekly percentiles
+#' 1. `plot(yMax = NULL, Title = NULL)`:<br>
+#'     Function which plots the results. It accepts the following arguments:
+#'    - `yMax` sets the high limit of the y-axis
+#'    - `Title` sets the main title for the plot
+#' 1. `pargs`:<br> 
+#'     An environment which contains objects and functions used to construct<br>
+#'     the plot. Additional plot configuration to what the `plot()` function<br>
+#'     currently supports, can be achieved by modifying those objects
+#' 1. `r e$commonOutput`
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' (res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
@@ -116,7 +134,7 @@ GetWeekPredCI <- \(
   fillGaps = FALSE,
   cauchyWt = FALSE,
   coeff = 1
-  ) {
+) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
@@ -124,8 +142,6 @@ GetWeekPredCI <- \(
   out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _) |> round()
   rownames(out) <- 0:(nrow(out) - 1)
   obj <- CreatePredCIplotObj(out)
-  out <- list(predCI = out, plot = obj$predPlot, pargs = obj)
-  out[["cargs"]] <- getCall()
-  out[["call."]] <- deparse(sys.call())
+  out <- c(getCall(), list(predCI = out, plot = obj$predPlot, pargs = obj))
   structure(out, class = "RCTPredCI")
 }

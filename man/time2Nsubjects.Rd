@@ -13,21 +13,28 @@ Time2Nsubjects(
 )
 }
 \arguments{
-\item{nSub}{Number of subjects to recruit (default = 50)}
+\item{nSub}{Number of subjects to recruit (default = 50L)}
 
-\item{nSim}{Number of simulations to run (default = 1e4)}
+\item{nSim}{Number of simulations to run (default = 1e4L)}
 
 \item{fillGaps}{Whether to fill gaps in the data (default = FALSE)}
 
-\item{cauchyWt}{Whether to use Cauchy weights for sampling (default = FALSE).
-If FALSE, binomial weights are used.}
+\item{cauchyWt}{Whether to use Cauchy weights for sampling.
+If FALSE (default),\if{html}{\out{<br>}}
+binomial weights are used.}
 
 \item{coeff}{A coefficient to apply to the recruitment rate (default = 1)}
 }
 \value{
-A \code{list} with two elements. The first element \code{weeks} is an integer
-vector with length equal to \code{nSim} containing the results of the
-simulation. The second \code{CI} shows the median and the 95\% CI.
+An object of \code{RCTNWeeks} class with four elements.
+\enumerate{
+\item \code{weeks} is an integer vector with length equal to \code{nSim} containing the
+simulation results.
+\item \code{CI} shows the median and the 95\% CI.
+\item \code{call.}: The call (deparsed) that created the object
+\item \code{cargs}: A list with the arguments of the call that created the object\if{html}{\out{<br>}}
+including the default arguments
+}
 }
 \description{
 Simulate number of weeks needed to recruit a given number of subjects

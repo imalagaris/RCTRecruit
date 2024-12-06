@@ -2,25 +2,42 @@
 % Please edit documentation in R/exports.R
 \name{GetWeekPredCI}
 \alias{GetWeekPredCI}
-\title{Calculate median recruitment with 95\% CI for the next 104 weeks}
+\title{Calculate median recruitment with 95\% CI for the next 104 weeks (two years)}
 \usage{
 GetWeekPredCI(nSim = 10000L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1)
 }
 \arguments{
-\item{nSim}{Number of simulations to run (default = 1e4)}
+\item{nSim}{Number of simulations to run (default = 1e4L)}
 
 \item{fillGaps}{Whether to fill gaps in the data (default = FALSE)}
 
-\item{cauchyWt}{Whether to use Cauchy weights for sampling (default = FALSE).
-If FALSE, binomial weights are used.}
+\item{cauchyWt}{Whether to use Cauchy weights for sampling.
+If FALSE (default),\if{html}{\out{<br>}}
+binomial weights are used.}
 
 \item{coeff}{A coefficient to apply to the recruitment rate (default = 1)}
 }
 \value{
-An 104x3 matrix with the 2.5\%, 50\% and 97.5\% weekly percentiles
+An object of \code{RCTPredCI} class with 5 elements.
+\enumerate{
+\item \code{predCI}: An 104x3 matrix with the 2.5\%, 50\% and 97.5\% weekly percentiles
+\item \code{plot(yMax = NULL, Title = NULL)}:\if{html}{\out{<br>}}
+Function which plots the results. It accepts the following arguments:
+\itemize{
+\item \code{yMax} sets the high limit of the y-axis
+\item \code{Title} sets the main title for the plot
+}
+\item \code{pargs}:\if{html}{\out{<br>}}
+An environment which contains objects and functions used to construct\if{html}{\out{<br>}}
+the plot. Additional plot configuration to what the \code{plot()} function\if{html}{\out{<br>}}
+currently supports, can be achieved by modifying those objects
+\item \code{call.}: The call (deparsed) that created the object
+\item \code{cargs}: A list with the arguments of the call that created the object\if{html}{\out{<br>}}
+including the default arguments
+}
 }
 \description{
-Calculate median recruitment with 95\% CI for the next 104 weeks
+Calculate median recruitment with 95\% CI for the next 104 weeks (two years)
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
