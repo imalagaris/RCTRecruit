@@ -195,8 +195,6 @@ CreatePredCIplotObj <- \(y) {
   )
   rm(y)
 
-  RCTcall <- deparse(sys.call(-1L))
-
   initArgs <-
     as.list(sys.call(-1L))[-1L] |>
     (\(x) names(x) |> lapply(\(y) paste0(y, " = ", x[[y]])) )() |>
@@ -228,37 +226,5 @@ CreatePredCIplotObj <- \(y) {
     }
     predPlot(yMax, Title)
   }
-  gpar <- \(main = NULL, lines_ = NULL) {
-    getCall()
-  }
-
   self
 }
-
-# callArg <- \(n = )
-
-
-
-#' @export
-print.RCTPredCI <- function(x, ...) {
-  print(x$predCI |> utils::head())
-  cat("\t", "...", "\n")
-  print(x$predCI |> utils::tail())
-  invisible(x)
-}
-
-#' @export
-print.RCTNWeeks <- function(x, ...) {
-  log(msg$enrollWeeks, bold(x$cargs$nSub, 28), bold(x$CI[[2L]], 28))
-  print(round(x$CI))
-  invisible(x)
-}
-#' @export
-print.RCTDist <- function(x, ...) {
-  print(round(x$CI))
-  invisible(x)
-}
-
-
-
-

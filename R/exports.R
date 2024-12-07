@@ -57,6 +57,13 @@ Time2Nsubjects <- \(
   structure(out, class = "RCTNWeeks")
 }
 
+#' @export
+print.RCTNWeeks <- function(x, ...) {
+  log(msg$enrollWeeks, bold(x$cargs$nSub, 28), bold(x$CI[[2L]], 28))
+  print(round(x$CI))
+  invisible(x)
+}
+
 #' Euclidean distance between prediction and actual recruitment
 #' @param target A vector with the actual recruitment by week
 #' @inheritParams Time2Nsubjects
@@ -93,6 +100,12 @@ GetDistance <- \(
   CI <- stats::quantile(x = dist, probs = c(.025, .5, .975))
   out <- c(list(dist = dist, CI = CI), getCall())
   structure(out, class = "RCTDist")
+}
+
+#' @export
+print.RCTDist <- function(x, ...) {
+  print(round(x$CI))
+  invisible(x)
 }
 
 # GetWeekPredCI ----------------------------------------------------------
@@ -141,4 +154,12 @@ GetWeekPredCI <- \(
   obj <- CreatePredCIplotObj(out)
   out <- c(getCall(), list(predCI = out, plot = obj$predPlot, pargs = obj))
   structure(out, class = "RCTPredCI")
+}
+
+#' @export
+print.RCTPredCI <- function(x, ...) {
+  print(x$predCI |> utils::head())
+  cat("\t", "...", "\n")
+  print(x$predCI |> utils::tail())
+  invisible(x)
 }
