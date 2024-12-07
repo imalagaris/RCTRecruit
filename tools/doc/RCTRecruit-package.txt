@@ -12,24 +12,25 @@ Description:
 
 Details:
 
-       Package:    RCTRecruit                                                                                
-       Type:       Package                                                                                   
-       Version:    0.1.16                                                                                    
-       Date:       2024-12-03                                                                                
-       License:    MIT + file LICENSE                                                                        
-       Functions:                                                                                            
-                   GetDistance         Euclidean distance between prediction and actual recruitment          
-                   GetWeekPredCI       Calculate median recruitment with 95% CI for the next 52 weeks        
-                   LoadData            Load recruitment data                                                 
-                   Time2Nsubjects      Simulate number of weeks needed to recruit a given number of subjects 
-       Datasets:                                                                                             
-                   gripsWeeklyYR2      Weekly recruitment data for the 2nd year of the GRIPS study           
-                   gripsYR1            Daily recruitment data for the 1st year of the GRIPS study            
-                   gripsYR2            Daily recruitment data for the 2nd year of the GRIPS study            
+       Package:    RCTRecruit                                                                                      
+       Type:       Package                                                                                         
+       Version:    0.1.21                                                                                          
+       Date:       2024-12-07                                                                                      
+       License:    MIT + file LICENSE                                                                              
+       Functions:                                                                                                  
+                   GetDistance         Euclidean distance between prediction and actual recruitment                
+                   GetWeekPredCI       Calculate median recruitment with 95% CI for the next 104 weeks (two years) 
+                   LoadData            Load recruitment data                                                       
+                   Time2Nsubjects      Simulate number of weeks needed to recruit a given number of subjects       
+       Datasets:                                                                                                   
+                   gripsWeeklyYR2      Weekly recruitment data for the 2nd year of the GRIPS study                 
+                   gripsYR1            Daily recruitment data for the 1st year of the GRIPS study                  
+                   gripsYR2            Daily recruitment data for the 2nd year of the GRIPS study                  
       
 Author(s):
 
      *Maintainer*: Ioannis Malagaris <mailto:iomalaga@utmb.edu> (ORCID)
+     [copyright holder]
 
      Authors:
 
@@ -60,7 +61,19 @@ References:
 
 See Also:
 
-     Liu J, Jiang Y, Wu C, Simon S, Mayo MS, Raghavan R, Gajewski BJ
-     (2023). _accrual: Bayesian Accrual Prediction_. R package version
-     1.4, <https://CRAN.R-project.org/package=accrual>.
+     Useful links:
+
+        * <https://github.com/imalagaris/RCTRecruit>
+
+        * Report bugs at
+          <https://github.com/imalagaris/RCTRecruit/issues>
+
+     Packages:
+
+        * Liu J, Jiang Y, Wu C, Simon S, Mayo MS, Raghavan R, Gajewski
+          BJ (2023). _accrual: Bayesian Accrual Prediction_. R package
+          version 1.4, <https://CRAN.R-project.org/package=accrual>.
+
+     Other Links: ‘GetDistance()’, ‘GetWeekPredCI()’, ‘LoadData()’,
+     ‘Time2Nsubjects()’, ‘gripsWeeklyYR2’, ‘gripsYR1’, ‘gripsYR2’
 

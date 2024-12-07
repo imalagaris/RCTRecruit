@@ -28,3 +28,8 @@ Source:
      medical research methodology_, _24_, 189. ISSN 1471-2288,
      <https://pubmed.ncbi.nlm.nih.gov/39210285/>.
 
+See Also:
+
+     Other Links: ‘GetDistance()’, ‘GetWeekPredCI()’, ‘LoadData()’,
+     ‘RCTRecruit-package’, ‘Time2Nsubjects()’, ‘gripsYR1’, ‘gripsYR2’
+

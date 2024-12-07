@@ -1,10 +1,12 @@
 GetWeekPredCI            package:RCTRecruit            R Documentation
 
-Calculate median recruitment with 95% CI for the next 52 weeks
+Calculate median recruitment with 95% CI for the next 104 weeks (two
+years)
 
 Description:
 
-     Calculate median recruitment with 95% CI for the next 52 weeks
+     Calculate median recruitment with 95% CI for the next 104 weeks
+     (two years)
 
 Usage:
 
@@ -12,24 +14,43 @@ Usage:
      
 Arguments:
 
-    nSim: Number of simulations to run (default = 1e4)
+    nSim: Number of simulations to run (default = 1e4L)
 
 fillGaps: Whether to fill gaps in the data (default = FALSE)
 
-cauchyWt: Whether to use Cauchy weights for sampling (default = FALSE).
-          If FALSE, binomial weights are used.
+cauchyWt: Whether to use Cauchy weights for sampling. If FALSE
+          (default), binomial weights are used.
 
    coeff: A coefficient to apply to the recruitment rate (default = 1)
 
 Value:
 
-     An 52x3 matrix with the 2.5%, 50% and 97.5% percentiles for each
-     week
+     An object of ‘RCTPredCI’ class with 5 elements.
+
+       1. ‘predCI’: An 104x3 matrix with the 2.5%, 50% and 97.5% weekly
+          percentiles
+
+       2. ‘plot(yMax = NULL, Title = NULL)’: Function which plots the
+          results. It accepts the following arguments:
+
+            * ‘yMax’ sets the high limit of the y-axis
+
+            * ‘Title’ sets the main title for the plot
+
+       3. ‘pargs’: An environment which contains objects and functions
+          used to construct the plot. Additional plot configuration to
+          what the ‘plot()’ function currently supports, can be
+          achieved by modifying those objects
+
+       4. ‘call.’: The call (deparsed) that created the object
+
+       5. ‘cargs’: A list with the arguments of the call that created
+          the object including the default arguments
 
 See Also:
 
-     Other RCTRecruit functions: ‘GetDistance()’, ‘LoadData()’,
-     ‘Time2Nsubjects()’
+     Other Links: ‘GetDistance()’, ‘LoadData()’, ‘RCTRecruit-package’,
+     ‘Time2Nsubjects()’, ‘gripsWeeklyYR2’, ‘gripsYR1’, ‘gripsYR2’
 
 Examples:
 
@@ -42,7 +63,8 @@ Examples:
        sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
      )
      maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
-     
-     graphics::par(mfrow = c(2, 2))
+     defaultGraphicParams <- par(no.readonly = TRUE)
+     graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
      for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
+     do.call(par, defaultGraphicParams)
      

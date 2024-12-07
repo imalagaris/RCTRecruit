@@ -20,26 +20,35 @@ Arguments:
 
   target: A vector with the actual recruitment by week
 
-    nSim: Number of simulations to run (default = 1e4)
+    nSim: Number of simulations to run (default = 1e4L)
 
 fillGaps: Whether to fill gaps in the data (default = FALSE)
 
-cauchyWt: Whether to use Cauchy weights for sampling (default = FALSE).
-          If FALSE, binomial weights are used.
+cauchyWt: Whether to use Cauchy weights for sampling. If FALSE
+          (default), binomial weights are used.
 
    coeff: A coefficient to apply to the recruitment rate (default = 1)
 
 Value:
 
-     A list with two elements. The first element ‘dist’ is a numeric
-     vector with length equal to ‘nSim’ containing the simulated
-     Euclidean distance. The second ‘CI’ shows the median and the 95%CI
-     Euclidean distance.
+     An object of ‘RCTDist’ class with four elements.
+
+       1. ‘dist’: A numeric vector with length equal to ‘nSim’
+          containing the simulated Euclidean distance.
+
+       2. ‘CI’: A numeric vector with the median and the 95% CI
+          Euclidean distance.
+
+       3. ‘call.’: The call (deparsed) that created the object
+
+       4. ‘cargs’: A list with the arguments of the call that created
+          the object including the default arguments
 
 See Also:
 
-     Other RCTRecruit functions: ‘GetWeekPredCI()’, ‘LoadData()’,
-     ‘Time2Nsubjects()’
+     Other Links: ‘GetWeekPredCI()’, ‘LoadData()’,
+     ‘RCTRecruit-package’, ‘Time2Nsubjects()’, ‘gripsWeeklyYR2’,
+     ‘gripsYR1’, ‘gripsYR2’
 
 Examples:
 

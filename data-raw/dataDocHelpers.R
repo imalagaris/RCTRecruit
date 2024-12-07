@@ -90,8 +90,6 @@ e <- (\() {
     c(header, details, exportedTab()) |> paste0(collapse = "\n")
   }
   
-  packageDetails <- getPackageDetails()
-
 # References -------------------------------------------------------------------
   citationPath <- "tools/citations/"
   
@@ -102,9 +100,7 @@ e <- (\() {
   })
   
   addRef <- \(x) RefList[[x]] |> utils:::format.bibentry()
-  
   fbib <- \(x) paste0(citationPath, x, ".bib")
-  # addRef <- \(x) fbib(x) |> bibtex::read.bib() |> utils:::format.bibentry()
 
   mendeley2bib <- \(fname) {
     ref <- readClipboard()
@@ -121,11 +117,6 @@ e <- (\() {
     }
   }
 
-  # for (x in names(self)) {
-  #   if (typeof(self[[x]]) == "closure") {
-  #     self[[x]] <- compiler::cmpfun(self[[x]], options = list(optimize = 3))
-  #   }
-  # }
 # exported functions common output
   fixStr <- \(x) {
     gsub("^\\s*|\\s*$", "", x) |> 
@@ -140,8 +131,15 @@ e <- (\() {
     including the default arguments" |> fixStr()
     paste(call., cargs, sep = "\n 1. ")
   }
+  
+
+  for (x in names(self)) {
+    if (typeof(self[[x]]) == "closure") {
+      self[[x]] <- compiler::cmpfun(self[[x]], options = list(optimize = 3))
+    }
+  }
+  packageDetails <- getPackageDetails()
   commonOutput = getCommonOutput()
-  aek <- "<br>\n @param aek paok"
 
 # output the enclosing environment ---------------------------------------------
   return(self)
