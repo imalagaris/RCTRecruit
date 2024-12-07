@@ -88,11 +88,22 @@ e <- (\() {
     details <- vapply(names(pack), \(x) fmtDetails(x, pack[[x]]), "")
     c(header, details, exportedTab()) |> paste0(collapse = "\n")
   }
+  
+  packageDetails <- getPackageDetails()
 
 # References -------------------------------------------------------------------
   citationPath <- "tools/citations/"
+  
+  RefList <- local({
+    refPaths <- list.files(citationPath, full.names = TRUE)
+    nn <- basename(refPaths) |> tools::file_path_sans_ext()
+    lapply(refPaths, bibtex::read.bib) |> stats::setNames(nn)
+  })
+  
+  addRef <- \(x) RefList[[x]] |> utils:::format.bibentry()
+  
   fbib <- \(x) paste0(citationPath, x, ".bib")
-  addRef <- \(x) fbib(x) |> bibtex::read.bib() |> utils:::format.bibentry()
+  # addRef <- \(x) fbib(x) |> bibtex::read.bib() |> utils:::format.bibentry()
 
   mendeley2bib <- \(fname) {
     ref <- readClipboard()
@@ -109,11 +120,11 @@ e <- (\() {
     }
   }
 
-  for (x in names(self)) {
-    if (typeof(self[[x]]) == "closure") {
-      self[[x]] <- compiler::cmpfun(self[[x]], options = list(optimize = 3))
-    }
-  }
+  # for (x in names(self)) {
+  #   if (typeof(self[[x]]) == "closure") {
+  #     self[[x]] <- compiler::cmpfun(self[[x]], options = list(optimize = 3))
+  #   }
+  # }
 # exported functions common output
   fixStr <- \(x) {
     gsub("^\\s*|\\s*$", "", x) |> 

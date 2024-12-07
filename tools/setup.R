@@ -1,5 +1,6 @@
 local({
   rp <- "https://cran.rstudio.com/"
+  # tinytex::tlmgr_install("makeindex")
   pckgs <- c("Rcpp", "devtools", "usethis", "knitr", "lubridate", "tis", "bibtex")
   chckpg <- \(x) !base::requireNamespace(x, quietly = TRUE)
   pckgs[pckgs |> sapply(chckpg)] |> 

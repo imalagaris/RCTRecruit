@@ -1,7 +1,7 @@
 Type: Package
 Package: RCTRecruit
 Title: Non-Parametric Recruitment Prediction for Randomized Clinical Trials
-Version: 0.1.19
+Version: 0.1.20
 Authors@R: c(
     person("Ioannis", "Malagaris", , "iomalaga@utmb.edu", 
            role = c("aut", "cre", "cph"),
@@ -16,7 +16,7 @@ Description: Accurate prediction of subject recruitment for randomized clinical
     recruitment prediction under several scenarios.
 License: MIT + file LICENSE
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 Imports: 
     knitr,
     lubridate,

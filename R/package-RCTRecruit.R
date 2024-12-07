@@ -9,7 +9,7 @@
 NULL
 #' @name RCTRecruit-package
 #' @details
-#' `r e$getPackageDetails()`
+#' `r e$packageDetails`
 #' @references
 #' 1. `r e$addRef("Villasante2024")`
 #' 1. `r e$addRef("Gajewski2008")`

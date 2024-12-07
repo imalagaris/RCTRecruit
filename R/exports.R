@@ -8,7 +8,6 @@
 #' gripsYR1 |> LoadData(ScreenDt, Enrolled)
 #' @family Links
 #' @export
-#' @rawRd % f1
 LoadData <- \(data, date, enrolled) {
   if (is.null(data)) stop("data is NULL")
   if (!is.data.frame(data)) stop("data must be a dataframe")
@@ -43,7 +42,6 @@ LoadData <- \(data, date, enrolled) {
 #' str(res)
 #' @family Links
 #' @export
-#' @rawRd % f2
 Time2Nsubjects <- \(
   nSub = 50L,
   nSim = 1e4L,
@@ -75,7 +73,6 @@ Time2Nsubjects <- \(
 #' str(res)
 #' @family Links
 #' @export
-#' @rawRd % f3
 GetDistance <- \(
   target,
   nSim = 1e4L,
@@ -123,12 +120,12 @@ GetDistance <- \(
 #'   sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
 #' )
 #' maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
-#'
+#' defaultGraphicParams <- par(no.readonly = TRUE)
 #' graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
 #' for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
+#' do.call(par, defaultGraphicParams)
 #' @family Links
 #' @export
-#' @rawRd % f4
 GetWeekPredCI <- \(
   nSim = 1e4L,
   fillGaps = FALSE,
