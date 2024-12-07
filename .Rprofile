@@ -13,7 +13,5 @@ if (base::requireNamespace("devtools", quietly = TRUE)) {
   if (interactive()) {
     suppressMessages(require(devtools))
   }
-  # source("tools/dataDocHelpers.R");
   options(usethis.overwrite = TRUE )
-  # options(repos = "https://cran.rstudio.com/")
 }

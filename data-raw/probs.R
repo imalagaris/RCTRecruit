@@ -5,8 +5,3 @@ cauchyWt <- seq(-3L, 3L, 6 / 51) |> stats::dcauchy() |> (\(x) x / sum(x))()
 wts <- list()
 wts[["binomial"]] <- lapply(1L:52L, \(t) binomWt[indxWt(t)])
 wts[["cauchy"]] <- lapply(1L:52L, \(t) cauchyWt[indxWt(t)])
-source("tools/dataDocHelpers.R")
-
-usethis::use_data(probs, wts, e, overwrite = TRUE, internal = TRUE)
-
-

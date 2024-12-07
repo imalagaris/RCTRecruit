@@ -1,5 +1,6 @@
 e <- (\() {
   self <- environment()
+  update <- \() source("data-raw/saveInternalData.R")
   exportDoc <- \(path = "tools/doc") {
     Rds <- list.files("man", full.names = TRUE)
     o <- gsub("Rd$", "txt", basename(Rds)) |> file.path(path, ... = _)

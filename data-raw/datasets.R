@@ -1,5 +1,5 @@
 load_all()
-grips <- read.csv("data-raw/GRIPS_log_by_day_with_gaps.csv")
+grips <- read.csv("tools/data/GRIPS_log_by_day_with_gaps.csv")
 grips$N.Rows <- NULL
 names(grips) <- c("ScreenDt", "Screened", "MetCriteria", "Enrolled")
 grips <- grips[grips$Screened > 0, ]
@@ -40,5 +40,4 @@ for (x in names(gripsYR1)) {
 for (x in names(gripsWeeklyYR2)) {
   attr(gripsWeeklyYR2[[x]], "Description") <- desc[[x]]
 }
-
 usethis::use_data(gripsYR1, gripsYR2, gripsWeeklyYR2, overwrite = TRUE)
