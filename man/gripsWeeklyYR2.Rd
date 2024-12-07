@@ -27,5 +27,16 @@ gripsWeeklyYR2
 Modified recruitment data aggregated by week from the second year of the
 GRIPS study.
 }
+\seealso{
+Other Links: 
+\code{\link{GetDistance}()},
+\code{\link{GetWeekPredCI}()},
+\code{\link{LoadData}()},
+\code{\link{RCTRecruit-package}},
+\code{\link{Time2Nsubjects}()},
+\code{\link{gripsYR1}},
+\code{\link{gripsYR2}}
+}
+\concept{Links}
 \keyword{datasets}
 % d3

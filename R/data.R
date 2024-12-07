@@ -7,6 +7,7 @@
 #' @format
 #' `r e$genDataDoc(gripsYR1)`
 #' @source `r e$addRef("Villasante2024")`
+#' @family Links
 "gripsYR1"
 
 #' Daily recruitment data for the 2nd year of the GRIPS study
@@ -18,6 +19,7 @@
 #' @format
 #' `r e$genDataDoc(gripsYR2)`
 #' @source `r e$addRef("Villasante2024")`
+#' @family Links
 "gripsYR2"
 
 #' Weekly recruitment data for the 2nd year of the GRIPS study
@@ -28,4 +30,5 @@
 #' @format
 #' `r e$genDataDoc(gripsWeeklyYR2)`
 #' @source `r e$addRef("Villasante2024")`
+#' @family Links
 "gripsWeeklyYR2"

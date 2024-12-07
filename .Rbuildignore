@@ -5,3 +5,6 @@
 ^dmultinc\.cpp$
 ^data-raw$
 ^tools$
+^cran-comments\.md$
+^\.github$
+^README\.Rmd$

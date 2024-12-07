@@ -14,6 +14,8 @@ NULL
 #' 1. `r e$addRef("Villasante2024")`
 #' 1. `r e$addRef("Gajewski2008")`
 #' 1. `r e$addRef("Jiang2015")`
-#' @seealso `r e$addRef("accrual-package")`
+#' @seealso Packages:<br>
+#' * `r e$addRef("accrual-package")`
+#' @family Links
 #' @md
 NULL

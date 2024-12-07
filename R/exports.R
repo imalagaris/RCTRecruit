@@ -6,7 +6,7 @@
 #' @examples LoadData(gripsYR1, ScreenDt, Enrolled)
 #' LoadData(gripsYR1, "ScreenDt", "Enrolled")
 #' gripsYR1 |> LoadData(ScreenDt, Enrolled)
-#' @family RCTRecruit functions
+#' @family Links
 #' @export
 #' @rawRd % f1
 LoadData <- \(data, date, enrolled) {
@@ -41,7 +41,7 @@ LoadData <- \(data, date, enrolled) {
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' (res <- Time2Nsubjects())
 #' str(res)
-#' @family RCTRecruit functions
+#' @family Links
 #' @export
 #' @rawRd % f2
 Time2Nsubjects <- \(
@@ -73,7 +73,7 @@ Time2Nsubjects <- \(
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
 #' (res <- GetDistance(gripsWeeklyYR2$enrolled))
 #' str(res)
-#' @family RCTRecruit functions
+#' @family Links
 #' @export
 #' @rawRd % f3
 GetDistance <- \(
@@ -126,7 +126,7 @@ GetDistance <- \(
 #'
 #' graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
 #' for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
-#' @family RCTRecruit functions
+#' @family Links
 #' @export
 #' @rawRd % f4
 GetWeekPredCI <- \(

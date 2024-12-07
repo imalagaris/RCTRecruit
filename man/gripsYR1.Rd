@@ -26,5 +26,16 @@ Modified recruitment data from the GRIPS study for the first year the study
 was conducted. The data includes the number of participants recruited each
 for each calendar date the recruitment was active.
 }
+\seealso{
+Other Links: 
+\code{\link{GetDistance}()},
+\code{\link{GetWeekPredCI}()},
+\code{\link{LoadData}()},
+\code{\link{RCTRecruit-package}},
+\code{\link{Time2Nsubjects}()},
+\code{\link{gripsWeeklyYR2}},
+\code{\link{gripsYR2}}
+}
+\concept{Links}
 \keyword{datasets}
 % d1

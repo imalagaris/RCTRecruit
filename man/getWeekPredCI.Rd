@@ -54,10 +54,14 @@ graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
 for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
 }
 \seealso{
-Other RCTRecruit functions: 
+Other Links: 
 \code{\link{GetDistance}()},
 \code{\link{LoadData}()},
-\code{\link{Time2Nsubjects}()}
+\code{\link{RCTRecruit-package}},
+\code{\link{Time2Nsubjects}()},
+\code{\link{gripsWeeklyYR2}},
+\code{\link{gripsYR1}},
+\code{\link{gripsYR2}}
 }
-\concept{RCTRecruit functions}
+\concept{Links}
 % f4

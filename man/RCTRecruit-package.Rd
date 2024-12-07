@@ -13,7 +13,7 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
     \tab  \tab  \cr
    Package: \tab RCTRecruit \tab  \cr
    Type: \tab Package \tab  \cr
-   Version: \tab 0.1.18 \tab  \cr
+   Version: \tab 0.1.19 \tab  \cr
    Date: \tab 2024-12-06 \tab  \cr
    License: \tab MIT + file LICENSE \tab  \cr
    Functions: \tab  \tab  \cr
@@ -45,12 +45,31 @@ priors." \emph{Statistics in medicine}, \emph{34}, 613-29. ISSN 1097-0258,
 }
 }
 \seealso{
-Liu J, Jiang Y, Wu C, Simon S, Mayo MS, Raghavan R, Gajewski BJ (2023).
+Useful links:
+\itemize{
+  \item \url{https://github.com/imalagaris/RCTRecruit}
+  \item Report bugs at \url{https://github.com/imalagaris/RCTRecruit/issues}
+}
+
+
+Packages:\if{html}{\out{<br>}}
+\itemize{
+\item Liu J, Jiang Y, Wu C, Simon S, Mayo MS, Raghavan R, Gajewski BJ (2023).
 \emph{accrual: Bayesian Accrual Prediction}. R package version 1.4,
 \url{https://CRAN.R-project.org/package=accrual}.
 }
+
+Other Links: 
+\code{\link{GetDistance}()},
+\code{\link{GetWeekPredCI}()},
+\code{\link{LoadData}()},
+\code{\link{Time2Nsubjects}()},
+\code{\link{gripsWeeklyYR2}},
+\code{\link{gripsYR1}},
+\code{\link{gripsYR2}}
+}
 \author{
-\strong{Maintainer}: Ioannis Malagaris \email{iomalaga@utmb.edu} (\href{https://orcid.org/0000-0001-5126-2068}{ORCID})
+\strong{Maintainer}: Ioannis Malagaris \email{iomalaga@utmb.edu} (\href{https://orcid.org/0000-0001-5126-2068}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
@@ -60,4 +79,5 @@ Authors:
 }
 
 }
+\concept{Links}
 \keyword{internal}

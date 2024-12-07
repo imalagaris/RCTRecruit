@@ -22,10 +22,14 @@ LoadData(gripsYR1, "ScreenDt", "Enrolled")
 gripsYR1 |> LoadData(ScreenDt, Enrolled)
 }
 \seealso{
-Other RCTRecruit functions: 
+Other Links: 
 \code{\link{GetDistance}()},
 \code{\link{GetWeekPredCI}()},
-\code{\link{Time2Nsubjects}()}
+\code{\link{RCTRecruit-package}},
+\code{\link{Time2Nsubjects}()},
+\code{\link{gripsWeeklyYR2}},
+\code{\link{gripsYR1}},
+\code{\link{gripsYR2}}
 }
-\concept{RCTRecruit functions}
+\concept{Links}
 % f1
