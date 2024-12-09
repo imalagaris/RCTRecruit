@@ -14,7 +14,6 @@ the$resetPar <- \() do.call(graphics::par, the$initPar)
 # internal environment
 exportModuleMethods <- \(instance) {
   cl <- substitute(instance)
-  if (!methods::is(instance, "Rcpp_rct")) stop("For internal use only")
   mn <- rct@methods |> names()
   mthds <- lapply(mn, as.name)
   fx <- \(x, y) {

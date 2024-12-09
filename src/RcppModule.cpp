@@ -30,8 +30,6 @@ class rct {
       this->cumTarget = as<NumericVector>(_cumTarget);
     }
 
-    rct() { }
-
     rct(Environment _e) {
       this->e = _e;
       train = e["train"];
@@ -95,7 +93,6 @@ const NumericVector rct::pq = {.025, .5, .975};
 
 RCPP_MODULE(mod) {
   class_<rct>("rct")
-  .default_constructor()
   .constructor<Environment>()
   .method("setTarget", &rct::setTarget)
   .method("useCauchy", &rct::useCauchy)
@@ -109,9 +106,3 @@ RCPP_MODULE(mod) {
   .field("cumTarget", &rct::cumTarget)
   ;
 }
-
-
-
-
-
-

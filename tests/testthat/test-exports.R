@@ -22,19 +22,24 @@ test_that("Load errors", {
 })
 
 test_that("Exported functions", {
+  the$TrainVector <- NULL
+  GetWeekPredCI(10L) |> expect_error()
   LoadData(gripsYR1, ScreenDt, Enrolled)
   nSimulations <- 10L
-  Time2Nsubjects(nSimulations, 10L) |> print() |> expect_no_error()
+  Time2Nsubjects(nSimulations, 10L, coeff = 2) |> print() |> expect_no_error()
   Time2Nsubjects(nSim = nSimulations, 10L) |> print() |> expect_no_error()
   GetWeekPredCI(10L) |> print() |> expect_no_error()
   c(gripsWeeklyYR2$enrolled, 0L) |>
     GetDistance(10L) |> 
     print() |> 
     expect_no_error()
+  GetDistance(rep(1L, 5), 10L) |> expect_error()
   res <- GetWeekPredCI(10L)
+  
   head(res$predCI) |> logPrint() |> expect_no_error()
   res$plot(yMax = 40, Title = "Hi") |> expect_no_error()
   res$pargs$reset() |> expect_no_error()
+  res$pargs$addTarget(gripsWeeklyYR2$enrolled) |> expect_no_error()
   gripsWeeklyYR2$enrolled[[-1L]] |> GetDistance(10L) |>  expect_error()
   
 })
@@ -45,5 +50,8 @@ test_that("date and enrolled", {
   fixEnrolled(Inf) |> expect_error()
   fixEnrolled(Inf - Inf) |> expect_error()
   fixEnrolled(NA_integer_) |> expect_error()
-  fixDate(NA_real_) |> suppressWarnings() |> expect_error()
+  fixEnrolled(c(-1, 2)) |> expect_error()
+  fixDate(rep(NA_real_, 11)) |> suppressWarnings() |> expect_error()
+  the$color <- FALSE
+  em("color") |> expect_no_error()
 })
