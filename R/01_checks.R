@@ -6,7 +6,7 @@ msg <- list(
   range = "%s must be between %s and %s",
   num = "%s must be a numeric or integer",
   enrollWeeks = "Enrolling %s subjects requires %s weeks\n\n",
-  success = "Variables %s and %s were successfully loaded\n\n",
+  success = "\nVariables %s and %s were successfully loaded\n\n",
   notFound = '"%s" not found in data "%s"\n',
   idx = "%s[[%sL]]: %s"
 )
@@ -46,13 +46,18 @@ argsTests <- list(
 )
 
 deparseSymbol <- \(y, n = 0L) {
-  symbolNames <- c("data", "date", "enrolled")
   for (i in seq_along(y)) {
+    nam <- names(y[i]) 
+    isLoadArg <- nam %in% c("data", "date", "enrolled")
     if (is.symbol(y[[i]])) {
       str <- deparse(y[[i]])
-      if (str == ".") y[[i]] <- eval(y[[i]], parent.frame(3L + n))
-      else if (names(y[i]) %in% symbolNames) y[[i]] <- str
-      else y[[i]] <- eval(y[[i]])
+      if (str == ".") y[[i]] <- substitute(., parent.frame(3L + n)) |> deparse()
+      else if (isLoadArg) y[[i]] <- str
+      else y[[i]] <- eval(y[[i]], parent.frame(3L + n))
+    }
+    if (isLoadArg & (length(y[[i]]) != 1 | !is.character(y[[i]]))) {
+      msg <- "%s must be a variable name (symbol/character) in the input df"
+      err(msg, em(nam))
     }
   }
   y
@@ -93,7 +98,7 @@ checkArgs <- function() {
   datN <- cargs$data
   dtN <- cargs$date
   enrN <- cargs$enrolled
-  dat <- if (is.data.frame(datN)) datN else get(datN, parent.frame())
+  dat <- get(datN, parent.frame())
   for (x in c(dtN, enrN)) {
     if (!utils::hasName(dat, x)) err(msg$notFound, em(x), em(datN))
   }
@@ -109,14 +114,12 @@ LoadSuccess <- \(x) {
 }
 
 checkDate <- function(x) {
-  if (is.null(x)) err("%s argument is required", em("date"))
   check <- typeof(x) %in% c("character", "integer", "numeric", "double")
   if (!check) err("%s must be a character or numeric vector", em("date"))
 }
 
 # Check input is of correct type
 checkIntNumType <- function(x) {
-  if (is.null(x)) stop("x is NULL")
   if (!(class(x) %in% c("integer", "numeric")))
     stop("x must be an integer/numeric vector")
 }

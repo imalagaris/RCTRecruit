@@ -88,9 +88,8 @@ fixDate <- function(x) {
 # Fix the input vector to be integer and without invalid values
 fixEnrolled <- function(enrolled) {
   checkIntNumType(enrolled)
-  enrolled <- as.integer(enrolled)
   checkInvalidValues(enrolled)
-  enrolled
+  as.integer(enrolled)
 }
 
 # Aggregate the data by week and year

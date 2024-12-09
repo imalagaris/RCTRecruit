@@ -9,8 +9,9 @@ logPrint <- \(x) print(x) |>
   cat(... = _, "", sep = "\n")
 
 # Utility to check if we are in a markdown document
+hasPack <- \(x) base::requireNamespace(x, quietly = TRUE)
 isMarkdown <- \() {
-  if (base::requireNamespace("knitr", quietly = TRUE)) {
+  if (hasPack("knitr")) {
     knitr::is_html_output() || knitr::is_latex_output()
   } else {
     FALSE
