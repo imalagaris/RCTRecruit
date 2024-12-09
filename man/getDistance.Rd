@@ -42,7 +42,7 @@ Euclidean distance between prediction and actual recruitment
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
-(res <- GetDistance(gripsWeeklyYR2$enrolled))
+(res <- GetDistance(gripsYR2Weekly$enrolled))
 str(res)
 }
 \seealso{
@@ -51,8 +51,8 @@ Other Links:
 \code{\link{LoadData}()},
 \code{\link{RCTRecruit-package}},
 \code{\link{Time2Nsubjects}()},
-\code{\link{gripsWeeklyYR2}},
 \code{\link{gripsYR1}},
-\code{\link{gripsYR2}}
+\code{\link{gripsYR2}},
+\code{\link{gripsYR2Weekly}}
 }
 \concept{Links}

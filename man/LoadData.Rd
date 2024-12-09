@@ -7,19 +7,52 @@
 LoadData(data, date, enrolled)
 }
 \arguments{
-\item{data}{Main dataset}
+\item{data}{Main dataset containing at least two columns:
+\itemize{
+\item A \code{date} column with the calendar date of the screening
+\item A \code{enrolled} column with the number of subjects enrolled
+}
 
-\item{date}{Date column}
+If the entries cover a period longer than 1 year, only the entries within \if{html}{\out{<br>}}
+one year prior to the latest date will be retained.\if{html}{\out{<br>}}
+\if{html}{\out{<br>}}}
 
-\item{enrolled}{Enrolled column}
+\item{date}{The name (symbol or string) of the column in the dataset with the calendar\if{html}{\out{<br>}}
+dates of active screening. The date column must be:
+\itemize{
+\item an object inheriting from class the \code{Date} class
+\item or a character vector with a valid date format.
+}}
+
+\item{enrolled}{The name (symbol or string) of the column in the dataset with the number of\if{html}{\out{<br>}}
+subjects recruited on the corresponding date. It must be a numeric vector.}
+}
+\value{
+This function does not return any value. It runs several tests and proccesses\if{html}{\out{<br>}}
+the data. It prints a message to the console if the data is successfully loaded\if{html}{\out{<br>}}
+or an error message if there is an issue with the input data. Once the dataset\if{html}{\out{<br>}}
+is loaded, the following functions can be used:
+\itemize{
+\item \code{\link[=Time2Nsubjects]{Time2Nsubjects()}}: simulates the number of weeks needed to recruit a\if{html}{\out{<br>}}
+given number of subjects
+\item \code{\link[=GetDistance]{GetDistance()}}:calculates the Euclidean distance between the\if{html}{\out{<br>}}
+prediction and the actual recruitment
+\item \code{\link[=GetWeekPredCI]{GetWeekPredCI()}}: calculates the median recruitment with 95\% CI for\if{html}{\out{<br>}}
+the next 104 weeks (two years)
+}
 }
 \description{
 Load recruitment data
 }
 \examples{
-LoadData(gripsYR1, ScreenDt, Enrolled)
-LoadData(gripsYR1, "ScreenDt", "Enrolled")
-gripsYR1 |> LoadData(ScreenDt, Enrolled)
+LoadData(gripsYR1, ScreenDt, Enrolled)     # Load using names as symbols
+LoadData(gripsYR1, "ScreenDt", "Enrolled") # Load using names as strings
+gripsYR1 |> LoadData(ScreenDt, Enrolled)   # Load using base pipe operator
+if (base::requireNamespace("magrittr", quietly = TRUE)) {
+  # Load using magrittr pipe operator
+  library(magrittr)
+  gripsYR1 \%>\% LoadData(ScreenDt, Enrolled) # Load using base pipe operator
+}
 }
 \seealso{
 Other Links: 
@@ -27,8 +60,8 @@ Other Links:
 \code{\link{GetWeekPredCI}()},
 \code{\link{RCTRecruit-package}},
 \code{\link{Time2Nsubjects}()},
-\code{\link{gripsWeeklyYR2}},
 \code{\link{gripsYR1}},
-\code{\link{gripsYR2}}
+\code{\link{gripsYR2}},
+\code{\link{gripsYR2Weekly}}
 }
 \concept{Links}

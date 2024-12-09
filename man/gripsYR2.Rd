@@ -33,8 +33,8 @@ Other Links:
 \code{\link{LoadData}()},
 \code{\link{RCTRecruit-package}},
 \code{\link{Time2Nsubjects}()},
-\code{\link{gripsWeeklyYR2}},
-\code{\link{gripsYR1}}
+\code{\link{gripsYR1}},
+\code{\link{gripsYR2Weekly}}
 }
 \concept{Links}
 \keyword{datasets}

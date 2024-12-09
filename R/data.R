@@ -1,3 +1,5 @@
+#' @include exports.R
+NULL
 #' Daily recruitment data for the 1st year of the GRIPS study
 #'
 #' Modified recruitment data from the GRIPS study for the first year the study
@@ -25,7 +27,7 @@
 #' Modified recruitment data aggregated by week from the second year of the
 #' GRIPS study.
 #' @format
-#' `r e$genDataDoc(gripsWeeklyYR2)`
+#' `r e$genDataDoc(gripsYR2Weekly)`
 #' @source `r e$addRef("Villasante2024")`
 #' @family Links
-"gripsWeeklyYR2"
+"gripsYR2Weekly"

@@ -1,11 +1,41 @@
 #' Load recruitment data
-#' @param data Main dataset
-#' @param date Date column
-#' @param enrolled Enrolled column
-#' @return NULL
-#' @examples LoadData(gripsYR1, ScreenDt, Enrolled)
-#' LoadData(gripsYR1, "ScreenDt", "Enrolled")
-#' gripsYR1 |> LoadData(ScreenDt, Enrolled)
+#' @param data 
+#'  Main dataset containing at least two columns:
+#' * A `date` column with the calendar date of the screening
+#' * A `enrolled` column with the number of subjects enrolled  
+#' 
+#' If the entries cover a period longer than 1 year, only the entries within <br>
+#' one year prior to the latest date will be retained.<br>
+#' <br>
+#' @param date 
+#' The name (symbol or string) of the column in the dataset with the calendar<br>
+#' dates of active screening. The date column must be:  
+#' * an object inheriting from class the `Date` class
+#' * or a character vector with a valid date format. 
+#' @param enrolled 
+#' The name (symbol or string) of the column in the dataset with the number of<br>
+#' subjects recruited on the corresponding date. It must be a numeric vector.
+#' @return 
+#' This function does not return any value. It runs several tests and proccesses<br>
+#' the data. It prints a message to the console if the data is successfully loaded<br>
+#' or an error message if there is an issue with the input data. Once the dataset<br>
+#' is loaded, the following functions can be used:
+#' * [Time2Nsubjects()]: simulates the number of weeks needed to recruit a<br>
+#'  given number of subjects
+#'  * [GetDistance()]:calculates the Euclidean distance between the<br>
+#'  prediction and the actual recruitment
+#'  * [GetWeekPredCI()]: calculates the median recruitment with 95% CI for<br>
+#'  the next 104 weeks (two years)
+#'  
+#' @examples 
+#' LoadData(gripsYR1, ScreenDt, Enrolled)     # Load using names as symbols
+#' LoadData(gripsYR1, "ScreenDt", "Enrolled") # Load using names as strings
+#' gripsYR1 |> LoadData(ScreenDt, Enrolled)   # Load using base pipe operator
+#' if (base::requireNamespace("magrittr", quietly = TRUE)) {
+#'   # Load using magrittr pipe operator
+#'   library(magrittr)
+#'   gripsYR1 %>% LoadData(ScreenDt, Enrolled) # Load using base pipe operator
+#' }
 #' @family Links
 #' @export
 LoadData <- \(data, date, enrolled) {
@@ -76,7 +106,7 @@ print.RCTNWeeks <- function(x, ...) {
 #' 1. `r e$commonOutput`
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' (res <- GetDistance(gripsWeeklyYR2$enrolled))
+#' (res <- GetDistance(gripsYR2Weekly$enrolled))
 #' str(res)
 #' @family Links
 #' @export

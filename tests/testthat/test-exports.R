@@ -29,7 +29,7 @@ test_that("Exported functions", {
   Time2Nsubjects(nSimulations, 10L, coeff = 2) |> print() |> expect_no_error()
   Time2Nsubjects(nSim = nSimulations, 10L) |> print() |> expect_no_error()
   GetWeekPredCI(10L) |> print() |> expect_no_error()
-  c(gripsWeeklyYR2$enrolled, 0L) |>
+  c(gripsYR2Weekly$enrolled, 0L) |>
     GetDistance(10L) |> 
     print() |> 
     expect_no_error()
@@ -39,8 +39,8 @@ test_that("Exported functions", {
   head(res$predCI) |> logPrint() |> expect_no_error()
   res$plot(yMax = 40, Title = "Hi") |> expect_no_error()
   res$pargs$reset() |> expect_no_error()
-  res$pargs$addTarget(gripsWeeklyYR2$enrolled) |> expect_no_error()
-  gripsWeeklyYR2$enrolled[[-1L]] |> GetDistance(10L) |>  expect_error()
+  res$pargs$addTarget(gripsYR2Weekly$enrolled) |> expect_no_error()
+  gripsYR2Weekly$enrolled[[-1L]] |> GetDistance(10L) |>  expect_error()
   
 })
 

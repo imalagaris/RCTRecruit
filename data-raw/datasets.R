@@ -18,7 +18,7 @@ rownames(gripsYR1) <- NULL
 gripsYR2 <- grips[with(grips, ScreenDt >= minYR2 & ScreenDt <= maxYR2), ]
 rownames(gripsYR2) <- NULL
 
-gripsWeeklyYR2 <- with(gripsYR2, days2weeks(ScreenDt, Enrolled))
+gripsYR2Weekly <- with(gripsYR2, days2weeks(ScreenDt, Enrolled))
 
 gripsYR1$ScreenDt <- as.character(gripsYR1$ScreenDt)
 gripsYR2$ScreenDt <- as.character(gripsYR2$ScreenDt)
@@ -37,7 +37,7 @@ for (x in names(gripsYR1)) {
   attr(gripsYR2[[x]], "Description") <- desc[[x]]
 }
 
-for (x in names(gripsWeeklyYR2)) {
-  attr(gripsWeeklyYR2[[x]], "Description") <- desc[[x]]
+for (x in names(gripsYR2Weekly)) {
+  attr(gripsYR2Weekly[[x]], "Description") <- desc[[x]]
 }
-usethis::use_data(gripsYR1, gripsYR2, gripsWeeklyYR2, overwrite = TRUE)
+usethis::use_data(gripsYR1, gripsYR2, gripsYR2Weekly, overwrite = TRUE)

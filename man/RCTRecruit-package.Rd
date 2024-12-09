@@ -14,7 +14,7 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
    Package: \tab RCTRecruit \tab  \cr
    Type: \tab Package \tab  \cr
    Version: \tab 0.1.22 \tab  \cr
-   Date: \tab 2024-12-07 \tab  \cr
+   Date: \tab 2024-12-09 \tab  \cr
    License: \tab MIT + file LICENSE \tab  \cr
    Functions: \tab  \tab  \cr
     \tab \link{GetDistance} \tab Euclidean distance between prediction and actual recruitment \cr
@@ -22,9 +22,9 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
     \tab \link{LoadData} \tab Load recruitment data \cr
     \tab \link{Time2Nsubjects} \tab Simulate number of weeks needed to recruit a given number of subjects \cr
    Datasets: \tab  \tab  \cr
-    \tab \link{gripsWeeklyYR2} \tab Weekly recruitment data for the 2nd year of the GRIPS study \cr
     \tab \link{gripsYR1} \tab Daily recruitment data for the 1st year of the GRIPS study \cr
     \tab \link{gripsYR2} \tab Daily recruitment data for the 2nd year of the GRIPS study \cr
+    \tab \link{gripsYR2Weekly} \tab Weekly recruitment data for the 2nd year of the GRIPS study \cr
 }
 }
 \references{
@@ -64,9 +64,9 @@ Other Links:
 \code{\link{GetWeekPredCI}()},
 \code{\link{LoadData}()},
 \code{\link{Time2Nsubjects}()},
-\code{\link{gripsWeeklyYR2}},
 \code{\link{gripsYR1}},
-\code{\link{gripsYR2}}
+\code{\link{gripsYR2}},
+\code{\link{gripsYR2Weekly}}
 }
 \author{
 \strong{Maintainer}: Ioannis Malagaris \email{iomalaga@utmb.edu} (\href{https://orcid.org/0000-0001-5126-2068}{ORCID}) [copyright holder]

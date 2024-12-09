@@ -50,8 +50,8 @@ Other Links:
 \code{\link{GetWeekPredCI}()},
 \code{\link{LoadData}()},
 \code{\link{RCTRecruit-package}},
-\code{\link{gripsWeeklyYR2}},
 \code{\link{gripsYR1}},
-\code{\link{gripsYR2}}
+\code{\link{gripsYR2}},
+\code{\link{gripsYR2Weekly}}
 }
 \concept{Links}
