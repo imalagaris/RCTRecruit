@@ -1,0 +1,35 @@
+gripsYR2Weekly           package:RCTRecruit            R Documentation
+
+Weekly recruitment data for the 2nd year of the GRIPS study
+
+Description:
+
+     Modified recruitment data aggregated by week from the second year
+     of the GRIPS study.
+
+Usage:
+
+     gripsYR2Weekly
+     
+Format:
+
+     A data frame with *52* observations of *4* variables
+
+       [,1]  week        ‘double’   Calendar week                                           
+       [,2]  year        ‘double’   Calendar year                                           
+       [,3]  enrolled    ‘integer’  Number of people enrolled that week                     
+       [,4]  activeDays  ‘integer’  Number of days in that week when recruitment was active 
+      
+Source:
+
+     Villasante-Tezanos A, Kuo Y, Kurinec C, Li Y, Yu X (2024). "A
+     non-parametric approach to predict the recruitment for randomized
+     clinical trials: an example in elderly inpatient settings." _BMC
+     medical research methodology_, _24_, 189. ISSN 1471-2288,
+     <https://pubmed.ncbi.nlm.nih.gov/39210285/>.
+
+See Also:
+
+     Other Links: ‘GetDistance()’, ‘GetWeekPredCI()’, ‘LoadData()’,
+     ‘RCTRecruit-package’, ‘Time2Nsubjects()’, ‘gripsYR1’, ‘gripsYR2’
+

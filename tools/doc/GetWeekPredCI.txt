@@ -50,7 +50,7 @@ Value:
 See Also:
 
      Other Links: ‘GetDistance()’, ‘LoadData()’, ‘RCTRecruit-package’,
-     ‘Time2Nsubjects()’, ‘gripsWeeklyYR2’, ‘gripsYR1’, ‘gripsYR2’
+     ‘Time2Nsubjects()’, ‘gripsYR1’, ‘gripsYR2’, ‘gripsYR2Weekly’
 
 Examples:
 

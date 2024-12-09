@@ -47,12 +47,12 @@ Value:
 See Also:
 
      Other Links: ‘GetWeekPredCI()’, ‘LoadData()’,
-     ‘RCTRecruit-package’, ‘Time2Nsubjects()’, ‘gripsWeeklyYR2’,
-     ‘gripsYR1’, ‘gripsYR2’
+     ‘RCTRecruit-package’, ‘Time2Nsubjects()’, ‘gripsYR1’, ‘gripsYR2’,
+     ‘gripsYR2Weekly’
 
 Examples:
 
      LoadData(gripsYR1, ScreenDt, Enrolled)
-     (res <- GetDistance(gripsWeeklyYR2$enrolled))
+     (res <- GetDistance(gripsYR2Weekly$enrolled))
      str(res)
      

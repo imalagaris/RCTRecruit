@@ -1,4 +1,9 @@
-#' Load recruitment data
+#' Load recruitment data. 
+#' 
+#' This function must be called before any other function in this package. It<br>
+#' checks the input data and stores the results internally for the session.<br>
+#' Calling this function more than once in the same session will overwrite the<br>
+#' previously created internal data.
 #' @param data 
 #'  Main dataset containing at least two columns:
 #' * A `date` column with the calendar date of the screening
@@ -17,24 +22,31 @@
 #' subjects recruited on the corresponding date. It must be a numeric vector.
 #' @return 
 #' This function does not return any value. It runs several tests and proccesses<br>
-#' the data. It prints a message to the console if the data is successfully loaded<br>
-#' or an error message if there is an issue with the input data. Once the dataset<br>
-#' is loaded, the following functions can be used:
+#' the data and stores internally the results. It prints a message to the console<br>
+#' if the data is successfully loaded  or an error message if there is an issue<br>
+#' with the input data. Once the dataset is loaded, the following functions can<br>
+#' be used:
 #' * [Time2Nsubjects()]: simulates the number of weeks needed to recruit a<br>
 #'  given number of subjects
-#'  * [GetDistance()]:calculates the Euclidean distance between the<br>
+#'  * [GetDistance()]: calculates the Euclidean distance between the<br>
 #'  prediction and the actual recruitment
 #'  * [GetWeekPredCI()]: calculates the median recruitment with 95% CI for<br>
 #'  the next 104 weeks (two years)
 #'  
 #' @examples 
-#' LoadData(gripsYR1, ScreenDt, Enrolled)     # Load using names as symbols
-#' LoadData(gripsYR1, "ScreenDt", "Enrolled") # Load using names as strings
-#' gripsYR1 |> LoadData(ScreenDt, Enrolled)   # Load using base pipe operator
+#' # Load using names as symbols
+#' LoadData(gripsYR1, ScreenDt, Enrolled)
+#'
+#' # Load using names as strings
+#' LoadData(gripsYR1, "ScreenDt", "Enrolled")
+#' 
+#' # Load using base pipe operator
+#' gripsYR1 |> LoadData(ScreenDt, Enrolled)
+#' 
+#' # Load using magrittr pipe operator
 #' if (base::requireNamespace("magrittr", quietly = TRUE)) {
-#'   # Load using magrittr pipe operator
 #'   library(magrittr)
-#'   gripsYR1 %>% LoadData(ScreenDt, Enrolled) # Load using base pipe operator
+#'   gripsYR1 %>% LoadData(ScreenDt, Enrolled) 
 #' }
 #' @family Links
 #' @export

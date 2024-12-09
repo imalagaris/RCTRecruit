@@ -2,7 +2,7 @@
 % Please edit documentation in R/exports.R
 \name{LoadData}
 \alias{LoadData}
-\title{Load recruitment data}
+\title{Load recruitment data.}
 \usage{
 LoadData(data, date, enrolled)
 }
@@ -29,29 +29,39 @@ subjects recruited on the corresponding date. It must be a numeric vector.}
 }
 \value{
 This function does not return any value. It runs several tests and proccesses\if{html}{\out{<br>}}
-the data. It prints a message to the console if the data is successfully loaded\if{html}{\out{<br>}}
-or an error message if there is an issue with the input data. Once the dataset\if{html}{\out{<br>}}
-is loaded, the following functions can be used:
+the data and stores internally the results. It prints a message to the console\if{html}{\out{<br>}}
+if the data is successfully loaded  or an error message if there is an issue\if{html}{\out{<br>}}
+with the input data. Once the dataset is loaded, the following functions can\if{html}{\out{<br>}}
+be used:
 \itemize{
 \item \code{\link[=Time2Nsubjects]{Time2Nsubjects()}}: simulates the number of weeks needed to recruit a\if{html}{\out{<br>}}
 given number of subjects
-\item \code{\link[=GetDistance]{GetDistance()}}:calculates the Euclidean distance between the\if{html}{\out{<br>}}
+\item \code{\link[=GetDistance]{GetDistance()}}: calculates the Euclidean distance between the\if{html}{\out{<br>}}
 prediction and the actual recruitment
 \item \code{\link[=GetWeekPredCI]{GetWeekPredCI()}}: calculates the median recruitment with 95\% CI for\if{html}{\out{<br>}}
 the next 104 weeks (two years)
 }
 }
 \description{
-Load recruitment data
+This function must be called before any other function in this package. It\if{html}{\out{<br>}}
+checks the input data and stores the results internally for the session.\if{html}{\out{<br>}}
+Calling this function more than once in the same session will overwrite the\if{html}{\out{<br>}}
+previously created internal data.
 }
 \examples{
-LoadData(gripsYR1, ScreenDt, Enrolled)     # Load using names as symbols
-LoadData(gripsYR1, "ScreenDt", "Enrolled") # Load using names as strings
-gripsYR1 |> LoadData(ScreenDt, Enrolled)   # Load using base pipe operator
+# Load using names as symbols
+LoadData(gripsYR1, ScreenDt, Enrolled)
+
+# Load using names as strings
+LoadData(gripsYR1, "ScreenDt", "Enrolled")
+
+# Load using base pipe operator
+gripsYR1 |> LoadData(ScreenDt, Enrolled)
+
+# Load using magrittr pipe operator
 if (base::requireNamespace("magrittr", quietly = TRUE)) {
-  # Load using magrittr pipe operator
   library(magrittr)
-  gripsYR1 \%>\% LoadData(ScreenDt, Enrolled) # Load using base pipe operator
+  gripsYR1 \%>\% LoadData(ScreenDt, Enrolled) 
 }
 }
 \seealso{

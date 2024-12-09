@@ -14,8 +14,8 @@ Details:
 
        Package:    RCTRecruit                                                                                      
        Type:       Package                                                                                         
-       Version:    0.1.21                                                                                          
-       Date:       2024-12-07                                                                                      
+       Version:    0.1.22                                                                                          
+       Date:       2024-12-09                                                                                      
        License:    MIT + file LICENSE                                                                              
        Functions:                                                                                                  
                    GetDistance         Euclidean distance between prediction and actual recruitment                
@@ -23,9 +23,9 @@ Details:
                    LoadData            Load recruitment data                                                       
                    Time2Nsubjects      Simulate number of weeks needed to recruit a given number of subjects       
        Datasets:                                                                                                   
-                   gripsWeeklyYR2      Weekly recruitment data for the 2nd year of the GRIPS study                 
                    gripsYR1            Daily recruitment data for the 1st year of the GRIPS study                  
                    gripsYR2            Daily recruitment data for the 2nd year of the GRIPS study                  
+                   gripsYR2Weekly      Weekly recruitment data for the 2nd year of the GRIPS study                 
       
 Author(s):
 
@@ -75,5 +75,5 @@ See Also:
           version 1.4, <https://CRAN.R-project.org/package=accrual>.
 
      Other Links: ‘GetDistance()’, ‘GetWeekPredCI()’, ‘LoadData()’,
-     ‘Time2Nsubjects()’, ‘gripsWeeklyYR2’, ‘gripsYR1’, ‘gripsYR2’
+     ‘Time2Nsubjects()’, ‘gripsYR1’, ‘gripsYR2’, ‘gripsYR2Weekly’
 

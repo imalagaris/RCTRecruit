@@ -31,6 +31,6 @@ Source:
 See Also:
 
      Other Links: ‘GetDistance()’, ‘GetWeekPredCI()’, ‘LoadData()’,
-     ‘RCTRecruit-package’, ‘Time2Nsubjects()’, ‘gripsWeeklyYR2’,
-     ‘gripsYR1’
+     ‘RCTRecruit-package’, ‘Time2Nsubjects()’, ‘gripsYR1’,
+     ‘gripsYR2Weekly’
 
