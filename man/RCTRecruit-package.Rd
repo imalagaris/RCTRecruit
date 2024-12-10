@@ -14,12 +14,12 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
    Package: \tab RCTRecruit \tab  \cr
    Type: \tab Package \tab  \cr
    Version: \tab 0.1.22 \tab  \cr
-   Date: \tab 2024-12-09 \tab  \cr
+   Date: \tab 2024-12-10 \tab  \cr
    License: \tab MIT + file LICENSE \tab  \cr
    Functions: \tab  \tab  \cr
     \tab \link{GetDistance} \tab Euclidean distance between prediction and actual recruitment \cr
     \tab \link{GetWeekPredCI} \tab Calculate median recruitment with 95\% CI for the next 104 weeks (two years) \cr
-    \tab \link{LoadData} \tab Load recruitment data \cr
+    \tab \link{LoadData} \tab Load recruitment data. \cr
     \tab \link{Time2Nsubjects} \tab Simulate number of weeks needed to recruit a given number of subjects \cr
    Datasets: \tab  \tab  \cr
     \tab \link{gripsYR1} \tab Daily recruitment data for the 1st year of the GRIPS study \cr

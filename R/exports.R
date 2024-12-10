@@ -71,7 +71,16 @@ LoadData <- \(data, date, enrolled) {
 #' @param cauchyWt Whether to use Cauchy weights for sampling. 
 #'     If FALSE (default),<br>
 #'     binomial weights are used.
-#' @param coeff A coefficient to apply to the recruitment rate (default = 1)
+#' @param efficiencyFactor 
+#' A efficiency coefficient to apply to the recruitment rate (default = 1).<br>
+#' If the efficiency of recruitment process is expected to be the same as<br>
+#' the provided data, this value should be set to 1. If the recruitment<br>
+#' process is expected to be slower, this value should be lower than 1. Finally<br>
+#' if the recruitment process is expected to be faster, this value should be<br>
+#' higher than 1. Accepted values are in the range of 0.1 to 2:<br>
+#' * 0.1: 10% of the original recruitment rate
+#' * 2.0: 100% more efficient than the original recruitment
+#' 
 #' @return
 #' An object of `RCTNWeeks` class with four elements.
 #' 1. `weeks` is an integer vector with length equal to `nSim` containing the
@@ -89,12 +98,12 @@ Time2Nsubjects <- \(
   nSim = 1e4L,
   fillGaps = FALSE,
   cauchyWt = FALSE,
-  coeff = 1
+  efficiencyFactor = 1
 ) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
-  applyCoeff(coeff)
+  applyCoeff(efficiencyFactor)
   out <- c(the$weeks2Nsubjects(nSim, nSub), getCall())
   structure(out, class = "RCTNWeeks")
 }
@@ -127,12 +136,12 @@ GetDistance <- \(
   nSim = 1e4L,
   fillGaps = FALSE,
   cauchyWt = FALSE,
-  coeff = 1
+  efficiencyFactor = 1
 ) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
-  applyCoeff(coeff)
+  applyCoeff(efficiencyFactor)
   target <- fixEnrolled(target)
   len <- length(the$train)
   if (length(target) < len) stop("target is smaller")
@@ -167,12 +176,12 @@ print.RCTDist <- function(x, ...) {
 #' 1. `r e$commonOutput`
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
-#' (res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
+#' (res <- GetWeekPredCI(fillGaps = TRUE, efficiencyFactor = 1.5))
 #' scenarios <- list(
 #'   sc1 = GetWeekPredCI(),
 #'   sc2 = GetWeekPredCI(cauchyWt = TRUE),
 #'   sc3 = GetWeekPredCI(fillGaps = TRUE),
-#'   sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
+#'   sc4 = GetWeekPredCI(fillGaps = TRUE, efficiencyFactor = 1.2)
 #' )
 #' maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 #' defaultGraphicParams <- par(no.readonly = TRUE)
@@ -185,12 +194,12 @@ GetWeekPredCI <- \(
   nSim = 1e4L,
   fillGaps = FALSE,
   cauchyWt = FALSE,
-  coeff = 1
+  efficiencyFactor = 1
 ) {
   checkExportedFunctionsArgs()
   useFilled(fillGaps)
   the$useCauchy(cauchyWt)
-  applyCoeff(coeff)
+  applyCoeff(efficiencyFactor)
   out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _) |> round()
   rownames(out) <- 0:(nrow(out) - 1)
   obj <- CreatePredCIplotObj(out)

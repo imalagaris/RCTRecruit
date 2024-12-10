@@ -4,7 +4,12 @@
 \alias{GetWeekPredCI}
 \title{Calculate median recruitment with 95\% CI for the next 104 weeks (two years)}
 \usage{
-GetWeekPredCI(nSim = 10000L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1)
+GetWeekPredCI(
+  nSim = 10000L,
+  fillGaps = FALSE,
+  cauchyWt = FALSE,
+  efficiencyFactor = 1
+)
 }
 \arguments{
 \item{nSim}{Number of simulations to run (default = 1e4L)}
@@ -15,7 +20,16 @@ GetWeekPredCI(nSim = 10000L, fillGaps = FALSE, cauchyWt = FALSE, coeff = 1)
 If FALSE (default),\if{html}{\out{<br>}}
 binomial weights are used.}
 
-\item{coeff}{A coefficient to apply to the recruitment rate (default = 1)}
+\item{efficiencyFactor}{A efficiency coefficient to apply to the recruitment rate (default = 1).\if{html}{\out{<br>}}
+If the efficiency of recruitment process is expected to be the same as\if{html}{\out{<br>}}
+the provided data, this value should be set to 1. If the recruitment\if{html}{\out{<br>}}
+process is expected to be slower, this value should be lower than 1. Finally\if{html}{\out{<br>}}
+if the recruitment process is expected to be faster, this value should be\if{html}{\out{<br>}}
+higher than 1. Accepted values are in the range of 0.1 to 2:\if{html}{\out{<br>}}
+\itemize{
+\item 0.1: 10\% of the original recruitment rate
+\item 2.0: 100\% more efficient than the original recruitment
+}}
 }
 \value{
 An object of \code{RCTPredCI} class with 5 elements.
@@ -41,12 +55,12 @@ Calculate median recruitment with 95\% CI for the next 104 weeks (two years)
 }
 \examples{
 LoadData(gripsYR1, ScreenDt, Enrolled)
-(res <- GetWeekPredCI(fillGaps = TRUE, coeff = 1.5))
+(res <- GetWeekPredCI(fillGaps = TRUE, efficiencyFactor = 1.5))
 scenarios <- list(
   sc1 = GetWeekPredCI(),
   sc2 = GetWeekPredCI(cauchyWt = TRUE),
   sc3 = GetWeekPredCI(fillGaps = TRUE),
-  sc4 = GetWeekPredCI(fillGaps = TRUE, coeff = 1.2)
+  sc4 = GetWeekPredCI(fillGaps = TRUE, efficiencyFactor = 1.2)
 )
 maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 defaultGraphicParams <- par(no.readonly = TRUE)

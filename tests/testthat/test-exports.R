@@ -26,7 +26,7 @@ test_that("Exported functions", {
   GetWeekPredCI(10L) |> expect_error()
   LoadData(gripsYR1, ScreenDt, Enrolled)
   nSimulations <- 10L
-  Time2Nsubjects(nSimulations, 10L, coeff = 2) |> print() |> expect_no_error()
+  Time2Nsubjects(nSimulations, 10L, efficiencyFactor = 2) |> print() |> expect_no_error()
   Time2Nsubjects(nSim = nSimulations, 10L) |> print() |> expect_no_error()
   GetWeekPredCI(10L) |> print() |> expect_no_error()
   c(gripsYR2Weekly$enrolled, 0L) |>

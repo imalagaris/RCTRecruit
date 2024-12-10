@@ -36,7 +36,7 @@ argsTests <- list(
     else if (notScalar(x)) err(msg$len, em(nam))
     else if (x < 1 || x > maxN) err(msg$range, em(nam), em(1), em(maxN))
   },
-  "coeff" = \(nam, x) {
+  "efficiencyFactor" = \(nam, x) {
     if (x < 0.1 || x > 2) err(msg$range, em(nam), em(.1), em(2))
   },
   "target" = \(nam, x) {
