@@ -60,3 +60,9 @@ test_that("When knitr is not available", {
   the$color <- TRUE
   LoadData(gripsYR1, ScreenDt, Enrolled) |> expect_no_error()
 })
+
+test_that("When knitr is not available2", {
+  local_mocked_bindings(hasPack = \(x) TRUE)
+  the$color <- TRUE
+  LoadData(gripsYR1, ScreenDt, Enrolled) |> expect_no_error()
+})
