@@ -1,3 +1,4 @@
+# LoadData ---------------------------------------------------------------------
 #' Load recruitment data. 
 #' 
 #' This function must be called before any other function in this package. It<br>
@@ -64,19 +65,22 @@ LoadData <- \(data, date, enrolled) {
   LoadSuccess(cargs)
 }
 
+# Time2Nsubjects ---------------------------------------------------------------
 #' Simulate number of weeks needed to recruit a given number of subjects
 #' @param nSub Number of subjects to recruit (default = 50L)
-#' @param nSim Number of simulations to run (default = 1e4L)
+#' @param nSim 
+#' Number of simulations to run (default = 1e4L). Accepted values are in the <br>
+#' range of 1 to 10,000.
 #' @param fillGaps Whether to fill gaps in the data (default = FALSE)
 #' @param cauchyWt Whether to use Cauchy weights for sampling. 
 #'     If FALSE (default),<br>
 #'     binomial weights are used.
 #' @param efficiencyFactor 
-#' A efficiency coefficient to apply to the recruitment rate (default = 1).<br>
+#' An efficiency coefficient to apply to the recruitment rate (default = 1).<br>
 #' If the efficiency of recruitment process is expected to be the same as<br>
 #' the provided data, this value should be set to 1. If the recruitment<br>
 #' process is expected to be slower, this value should be lower than 1. Finally<br>
-#' if the recruitment process is expected to be faster, this value should be<br>
+#' if the recruitment process is expected to proceed faster, this value should be<br>
 #' higher than 1. Accepted values are in the range of 0.1 to 2:<br>
 #' * 0.1: 10% of the original recruitment rate
 #' * 2.0: 100% more efficient than the original recruitment
@@ -115,6 +119,7 @@ print.RCTNWeeks <- function(x, ...) {
   invisible(x)
 }
 
+# GetDistance ------------------------------------------------------------------
 #' Euclidean distance between prediction and actual recruitment
 #' @param target A vector with the actual recruitment by week
 #' @inheritParams Time2Nsubjects
@@ -159,7 +164,7 @@ print.RCTDist <- function(x, ...) {
   invisible(x)
 }
 
-# GetWeekPredCI ----------------------------------------------------------
+# GetWeekPredCI ----------------------------------------------------------------
 #' Calculate median recruitment with 95% CI for the next 104 weeks (two years)
 #' @inheritParams Time2Nsubjects
 #' @return

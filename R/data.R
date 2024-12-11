@@ -1,5 +1,3 @@
-#' @include exports.R
-NULL
 #' Daily recruitment data for the 1st year of the GRIPS study
 #'
 #' Modified recruitment data from the GRIPS study for the first year the study

@@ -35,10 +35,3 @@ Suggests:
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
-Collate: 
-    '00_console.R'
-    '01_checks.R'
-    '02_helpers.R'
-    'exports.R'
-    'data.R'
-    'package-RCTRecruit.R'
