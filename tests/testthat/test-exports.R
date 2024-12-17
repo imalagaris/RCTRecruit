@@ -41,7 +41,6 @@ test_that("Exported functions", {
   res$pargs$reset() |> expect_no_error()
   res$pargs$addTarget(gripsYR2Weekly$enrolled) |> expect_no_error()
   gripsYR2Weekly$enrolled[[-1L]] |> GetDistance(10L) |>  expect_error()
-  
 })
 
 test_that("date and enrolled", {
@@ -54,4 +53,16 @@ test_that("date and enrolled", {
   fixDate(rep(NA_real_, 11)) |> suppressWarnings() |> expect_error()
   the$color <- FALSE
   em("color") |> expect_no_error()
+})
+
+test_that("When knitr is not available", {
+  local_mocked_bindings(hasPack = \(x) FALSE)
+  the$color <- TRUE
+  LoadData(gripsYR1, ScreenDt, Enrolled) |> expect_no_error()
+})
+
+test_that("When knitr is not available2", {
+  local_mocked_bindings(hasPack = \(x) TRUE)
+  the$color <- TRUE
+  LoadData(gripsYR1, ScreenDt, Enrolled) |> expect_no_error()
 })

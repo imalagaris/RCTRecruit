@@ -15,7 +15,8 @@ Time2Nsubjects(
 \arguments{
 \item{nSub}{Number of subjects to recruit (default = 50L)}
 
-\item{nSim}{Number of simulations to run (default = 1e4L)}
+\item{nSim}{Number of simulations to run (default = 1e4L). Accepted values are in the \if{html}{\out{<br>}}
+range of 1 to 10,000.}
 
 \item{fillGaps}{Whether to fill gaps in the data (default = FALSE)}
 
@@ -23,11 +24,11 @@ Time2Nsubjects(
 If FALSE (default),\if{html}{\out{<br>}}
 binomial weights are used.}
 
-\item{efficiencyFactor}{A efficiency coefficient to apply to the recruitment rate (default = 1).\if{html}{\out{<br>}}
+\item{efficiencyFactor}{An efficiency coefficient to apply to the recruitment rate (default = 1).\if{html}{\out{<br>}}
 If the efficiency of recruitment process is expected to be the same as\if{html}{\out{<br>}}
 the provided data, this value should be set to 1. If the recruitment\if{html}{\out{<br>}}
 process is expected to be slower, this value should be lower than 1. Finally\if{html}{\out{<br>}}
-if the recruitment process is expected to be faster, this value should be\if{html}{\out{<br>}}
+if the recruitment process is expected to proceed faster, this value should be\if{html}{\out{<br>}}
 higher than 1. Accepted values are in the range of 0.1 to 2:\if{html}{\out{<br>}}
 \itemize{
 \item 0.1: 10\% of the original recruitment rate
