@@ -126,17 +126,19 @@ days2weeks <- function(date, enrolled) {
 #
 CreatePredCIplotObj <- \(y) {
   self <- environment()
-  dat <-
-    data.frame(cbind(0:104, y)) |>
-    stats::setNames(c("x", "low", "pred", "high")) |>
-    as.list()
-  dat$train <- c(0, cumsum(the$TrainVector))
+  dat <- data.frame(cbind(seq_len(nrow(y)) - 1L, y)) |>
+    stats::setNames(c("x", "low", "pred", "high"))
+  len <- length(dat$pred)
+  dat$train <- c(0, cumsum(the$TrainVector), rep(NA, len - 53))
   if (utils::hasName(the, "target")) {
-    dat$target <- c(0, cumsum(the$target))
+    dat$target <- c(0, cumsum(the$target), rep(NA, len - 53))
   }
   addTarget <- \(x) {
     the$setTarget(x)
-    self$dat$target <- c(0, cumsum(the$target))
+    self$dat$target <- c(0, cumsum(the$target), rep(NA, len - 53))
+  }
+  getMaxYatWeek <- \(week) {
+    max(dat$high[week], dat$target[week], na.rm = TRUE)
   }
   len <- length(dat$pred)
   maxY <- dat$high[[len]]
@@ -152,7 +154,7 @@ CreatePredCIplotObj <- \(y) {
     type = "n",
     xlab = "Weeks",
     ylab = "Subjects",
-    xlim = c(0, 104),
+    xlim = c(0, dat$x[[len]]),
     ylim = c(0, maxY + 1)
   )
   CI95 <- list(
@@ -162,6 +164,7 @@ CreatePredCIplotObj <- \(y) {
     col = "gray90",
     border = "gray90"
   )
+  
   grid <- list(
     add = \() do.call(graphics::abline, grid[-1L]),
     v = seq(0, 100, by = 10),
@@ -191,7 +194,6 @@ CreatePredCIplotObj <- \(y) {
     pred   = list(col = "black", lab = "Predicted"),
     target = list(col = "red",   lab = "Target data")
   )
-  rm(y)
 
   initArgs <-
     as.list(sys.call(-1L))[-1L] |>
@@ -208,7 +210,7 @@ CreatePredCIplotObj <- \(y) {
     self$grid$h <- seq(0, y, by = 10)
   }
 
-  predPlot <- \(yMax = NULL, Title = NULL)  {
+  predPlot <- \(yMax = NULL, Title = NULL, aek)  {
     if (!is.null(yMax)) setNewMaxYplot(yMax)
     if (!is.null(Title)) self$main[["main"]] <- Title
     do.call(graphics::par, parArgs)
