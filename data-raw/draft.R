@@ -96,8 +96,42 @@ fn <- \(...) {
 }
 
 
+fn <- \(l) {
+  for (x in names(l)) {
+    if (!is.atomic(l[[x]])) {
+      if (!is.list(l[[x]]))  l[[x]] <- NULL
+      else l[[x]] <- fn(l[[x]])
+    }
+    else if (is.character(l[[x]])) l[[x]] <- NULL
+  }
+  return(l)
+}
+  
 
 
+fn <- \(l, out = NULL) {
+  for (x in names(l)) {
+    if (!is.atomic(l[[x]])) {
+      if (!is.list(l[[x]]))  l[[x]] <- NULL
+      else l[[x]] <- fn(l[[x]], c(out, x))
+    }
+    else if (is.character(l[[x]])) l[[x]] <- NULL
+    else l[[x]] <- paste0(c(out, x), collapse = "$")
+  }
+  return(l)
+
+}
+
+fn <- \(l) {
+  for (x in names(l)) {
+    if (!is.atomic(l[[x]])) {
+      if (!is.list(l[[x]]))  l[[x]] <- NULL
+      else l[[x]] <- paste(x, names(fn(l[[x]])), sep = "$")
+    }
+    else if (is.character(l[[x]])) l[[x]] <- NULL
+  }
+  return(l)
+}
 
 
 

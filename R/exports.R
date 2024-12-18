@@ -208,7 +208,7 @@ GetWeekPredCI <- \(
   out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _) |> round()
   rownames(out) <- 0:(nrow(out) - 1)
   obj <- CreatePredCIplotObj(out)
-  out <- c(getCall(), list(predCI = out, plot = obj$predPlot, pargs = obj))
+  out <- c(getCall(), list(predCI = out, plot = obj$.f$predPlot, pargs = obj))
   structure(out, class = "RCTPredCI")
 }
 

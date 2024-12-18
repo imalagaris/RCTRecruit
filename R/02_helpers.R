@@ -123,106 +123,139 @@ days2weeks <- function(date, enrolled) {
   return(datw[1L:52L, ])
 }
 
+addDfCol <- \(df, col, nam = NULL) {
+  if (is.null(nam)) nam <- deparse(substitute(col))
+  dfN <- nrow(df)
+  colN <- length(col)
+  if (colN < dfN) col <- c(col, rep(NA, dfN - colN))
+  else if (colN > dfN) col <- col[seq_len(dfN)]
+  df[[nam]] <- col
+  df
+}
+
 #
 CreatePredCIplotObj <- \(y) {
-  self <- environment()
-  dat <-
-    data.frame(cbind(0:104, y)) |>
-    stats::setNames(c("x", "low", "pred", "high")) |>
-    as.list()
-  dat$train <- c(0, cumsum(the$TrainVector))
-  if (utils::hasName(the, "target")) {
-    dat$target <- c(0, cumsum(the$target))
+  .s <- environment()
+  isInit <- !is.data.frame(y)
+  if (isInit) {
+    Par <- list(
+      las = 1,
+      cex.axis = 1.2,
+      cex.lab = 1.2
+    )
+    .d <- list()
+    .d$y <- y
+    df <- data.frame(cbind(seq_len(nrow(y)) - 1L, y)) |>
+      stats::setNames(c("x", "low", "pred", "high")) |> 
+      addDfCol(c(0, cumsum(the$TrainVector)), "train")
+    if (utils::hasName(the, "target")) {
+      df <- df |> addDfCol(c(0, cumsum(the$target)), "target")
+    }
+    .d$df <- df
+    .f <- list()
+    .f$addTarget <- \(x) {
+      the$setTarget(x)
+      .s$.d$df <- .s$.d$df |> addDfCol(c(0, cumsum(the$target)), "target")
+      .s <- .s$.f$selectRange(52)
+    }
+    .f$selectRange <- \(n) {
+      s <- seq_len(n + 1L)
+      newDat <- .s$.d$df[s, ]
+      newE <- CreatePredCIplotObj(newDat)
+      .s$maxY <- newE$maxY
+      c("x", "y", "xlim", "ylim") |> (\(x) .s$main[x] <- newE$main[x])()
+      c("x", "y") |> (\(x) .s$CI95[x] <- newE$CI95[x])()
+      c("v", "h") |> (\(x) .s$grid[x] <- newE$grid[x])()
+      for (vec in names(.s$lines)) {
+        .s$lines[[vec]]$x <- newE$lines[[vec]]$x
+        .s$lines[[vec]]$y <- newE$lines[[vec]]$y
+      }
+      invisible(.s)
+    }
+    .f$setNewMaxYplot <- \(y) {
+      .s$main$ylim[[2]] <-  y
+      .s$grid$h <- seq(0, y, by = 10)
+    }
+
+    .f$mainPlot = \() do.call(plot, .s$main)
+    .f$CI95Add <- \() do.call(graphics::polygon, .s$CI95)
+    .f$gridAdd <-  \() do.call(graphics::abline, .s$grid)
+    .f$linesAdd <- \() {
+      arg <- .s$lines |> (\(x) x[vapply(x, \(z) !is.null(z$y), TRUE)])()
+      colVec <-  vapply(arg, \(x) x$col, "")
+      labVec <-  vapply(arg, \(x) x$lab, "")
+      arg <- lapply(arg, \(x) {x$lab <- NULL; c(x, lwd = 3)})
+      lapply(arg, do.call, what = graphics::lines) |> invisible()
+      graphics::legend("topleft", legend = labVec, col = colVec, lwd = 3)
+    }
+    .f$predPlot <- \(yMax = NULL, Title = NULL, includeYR2 = FALSE)  {
+      if (includeYR2) {
+        .s$.f$selectRange(104)$.f$predPlot(yMax, Title)
+        .s <- .s$.f$selectRange(52)
+        return(invisible(NULL))
+      }
+      if (!is.null(yMax)) .f$setNewMaxYplot(yMax)
+      if (!is.null(Title)) .s$main[["main"]] <- Title
+      do.call(graphics::par, .s$Par)
+      .f$mainPlot()
+      .f$CI95Add()
+      .f$gridAdd()
+      .f$linesAdd()
+    }
   }
-  addTarget <- \(x) {
-    the$setTarget(x)
-    self$dat$target <- c(0, cumsum(the$target))
-  }
-  len <- length(dat$pred)
-  maxY <- dat$high[[len]]
-  parArgs <- list(
-    las = 1,
-    cex.axis = 1.2,
-    cex.lab = 1.2
-  )
+  else df <- y
+  
+  len <- length(df$pred)
+  maxY <- df$high[[len]]
   main <- list(
-    plot = \() do.call(plot, main[-1L]),
-    x = dat$x,
-    y = dat$pred,
+    x = df$x,
+    y = df$pred,
     type = "n",
     xlab = "Weeks",
     ylab = "Subjects",
-    xlim = c(0, 104),
+    xlim = c(0, df$x[[len]]),
     ylim = c(0, maxY + 1)
   )
+  
   CI95 <- list(
-    add = \() do.call(graphics::polygon, CI95[-1L]),
-    x = with(dat, c(x,      x[len], rev(  x[-len]))),
-    y = with(dat, c(high, low[len], rev(low[-len]))),
+    x = c(df$x,    df$x[len],   rev(df$x[-len])),
+    y = c(df$high, df$low[len], rev(df$low[-len])),
     col = "gray90",
     border = "gray90"
   )
+  
   grid <- list(
-    add = \() do.call(graphics::abline, grid[-1L]),
     v = seq(0, 100, by = 10),
-    h = seq(0, maxY, by = 10),
+    h = seq(0, .s$maxY, by = 10),
     col = "gray70"
   )
-  Xs <- \(y) 0L:(length(dat[[y]]) - 1L)
-
-  lines_ <- list(
-    add = \() {
-      arg <- lines_[-1L]
-      vec <-  c("train", "pred")
-      if (!is.null(dat$target)) vec <- c(vec, "target")
-      colVec <- NULL
-      labVec <- NULL
-      for (ln in vec) {
-        vArgs <- arg[[ln]]
-        colVec <- c(colVec, vArgs$col)
-        labVec <- c(labVec, vArgs$lab)
-        vArgs$lab <- NULL
-        list(x = Xs(ln), y = dat[[ln]], lwd = 3) |> c(vArgs) |>
-          do.call(graphics::lines, args = _)
-      }
-      graphics::legend("topleft", legend = labVec, col = colVec, lwd = 3)
-    },
-    train  = list(col = "blue",  lab = "Training data"),
-    pred   = list(col = "black", lab = "Predicted"),
-    target = list(col = "red",   lab = "Target data")
+  
+  lines <- list(
+    train  = list(x = df$x, y = df$train, col = "blue", lab = "Training data"),
+    pred   = list(x = df$x, y = df$pred, col = "black", lab = "Predicted"),
+    target = list(x = df$x, col = "red", lab = "Target data",
+      y = if (is.null(df$target)) NULL else df$target)
   )
-  rm(y)
-
-  initArgs <-
-    as.list(sys.call(-1L))[-1L] |>
-    (\(x) names(x) |> lapply(\(y) paste0(y, " = ", x[[y]])) )() |>
-    unlist() |>
-    paste0(collapse = ", ") |>
-    paste0("(", ... = _, ")") |>
-    (\(x) if (x == "()") "Default" else x)()
-
-  initState <- as.list(self)
-
-  setNewMaxYplot <- \(y) {
-    self$main$ylim[[2]] <-  y
-    self$grid$h <- seq(0, y, by = 10)
-  }
-
-  predPlot <- \(yMax = NULL, Title = NULL)  {
-    if (!is.null(yMax)) setNewMaxYplot(yMax)
-    if (!is.null(Title)) self$main[["main"]] <- Title
-    do.call(graphics::par, parArgs)
-    main$plot()
-    CI95$add()
-    grid$add()
-    lines_$add()
-  }
-
-  reset <- \(yMax = NULL, Title = NULL) {
-    for (nm in names(initState)) {
-      self[[nm]] <- initState[[nm]]
+  
+  if (isInit) {
+    .s <- .s$.f$selectRange(52)
+    .d$initArgs <-
+      as.list(sys.call(-1L))[-1L] |>
+      (\(x) names(x) |> lapply(\(y) paste0(y, " = ", x[[y]])) )() |>
+      unlist() |>
+      paste0(collapse = ", ") |>
+      paste0("(", ... = _, ")") |>
+      (\(x) if (x == "()") "Default" else x)()
+    
+    .d$init <- as.list(.s)[c("maxY", "main", "CI95", "grid", "lines", "Par")]
+    reset <- \(yMax = NULL, Title = NULL) {
+      for (nm in names(.d$init)) {
+        .s[[nm]] <- .d$init[[nm]]
+      }
+      .s$.f$predPlot(yMax, Title)
     }
-    predPlot(yMax, Title)
+    rm(y, df, envir = .s)
   }
-  self
+  rm(isInit, len, envir = .s)
+  .s
 }
