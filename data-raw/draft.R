@@ -134,5 +134,8 @@ fn <- \(l) {
 }
 
 
+b <- mainEnv$lines
+
+v <- c("legend", "col", "lwd")
 
 
