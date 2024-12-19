@@ -123,13 +123,10 @@ days2weeks <- function(date, enrolled) {
   return(datw[1L:52L, ])
 }
 
-addDfCol <- \(df, col, nam = NULL) {
-  if (is.null(nam)) nam <- deparse(substitute(col))
-  dfN <- nrow(df)
-  colN <- length(col)
-  if (colN < dfN) col <- c(col, rep(NA, dfN - colN))
-  else if (colN > dfN) col <- col[seq_len(dfN)]
-  df[[nam]] <- col
+addDfCol <- \(df, v, nm = NULL, dfn = nrow(df), d = dfn - length(v)) {
+  if (is.null(nm)) nm <- deparse(substitute(v))
+  v <- if (!d) v else if (d < 0) v[seq_len(dfn)] else c(v, rep(NA, d))
+  df[[nm]] <- v
   df
 }
 
