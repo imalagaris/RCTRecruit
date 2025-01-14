@@ -18,14 +18,16 @@ one year prior to the latest date will be retained.\if{html}{\out{<br>}}
 \if{html}{\out{<br>}}}
 
 \item{date}{The name (symbol or string) of the column in the dataset with the calendar\if{html}{\out{<br>}}
-dates of active screening. The date column must be:
+dates of active screening. All active calendar dates should be included, even\if{html}{\out{<br>}}
+if the recruitment for that date is 0. Only dates with truly non-active\if{html}{\out{<br>}}
+recruitment should be omitted. The date column must be:
 \itemize{
 \item an object inheriting from class the \code{Date} class
 \item or a character vector with a valid date format.
 }}
 
 \item{enrolled}{The name (symbol or string) of the column in the dataset with the number of\if{html}{\out{<br>}}
-subjects recruited on the corresponding date. It must be a numeric vector.}
+subjects recruited on the corresponding calendar date. It must be a numeric vector.}
 }
 \value{
 This function does not return any value. It runs several tests and proccesses\if{html}{\out{<br>}}
@@ -37,13 +39,13 @@ be used:
 \item \code{\link[=Time2Nsubjects]{Time2Nsubjects()}}: simulates the number of weeks needed to recruit a\if{html}{\out{<br>}}
 given number of subjects
 \item \code{\link[=GetDistance]{GetDistance()}}: calculates the Euclidean distance between the\if{html}{\out{<br>}}
-prediction and the actual recruitment
+predicted and actual recruitment
 \item \code{\link[=GetWeekPredCI]{GetWeekPredCI()}}: calculates the median recruitment with 95\% CI for\if{html}{\out{<br>}}
-the next 104 weeks (two years)
+up to the next 104 weeks (two years)
 }
 }
 \description{
-This function must be called before any other function in this package. It\if{html}{\out{<br>}}
+This function must be called before any other function in this package. LoadData\if{html}{\out{<br>}}
 checks the input data and stores the results internally for the session.\if{html}{\out{<br>}}
 Calling this function more than once in the same session will overwrite the\if{html}{\out{<br>}}
 previously created internal data.

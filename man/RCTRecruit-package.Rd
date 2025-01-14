@@ -6,7 +6,7 @@
 \alias{RCTRecruit-package}
 \title{RCTRecruit: Non-Parametric Recruitment Prediction for Randomized Clinical Trials}
 \description{
-Accurate prediction of subject recruitment for randomized clinical trials (RCT) remains an ongoing challenge. Previous prediction models rely on parametric assumptions. We present functions for non-parametric RCT recruitment prediction under several scenarios.
+Accurate prediction of subject recruitment for randomized clinical trials (RCT) remains an ongoing challenge. Many previous prediction models rely on parametric assumptions. We present functions for non-parametric RCT recruitment prediction under several scenarios.
 }
 \details{
 \tabular{lll}{
@@ -14,7 +14,7 @@ Accurate prediction of subject recruitment for randomized clinical trials (RCT) 
    Package: \tab RCTRecruit \tab  \cr
    Type: \tab Package \tab  \cr
    Version: \tab 0.1.22 \tab  \cr
-   Date: \tab 2024-12-17 \tab  \cr
+   Date: \tab 2025-01-14 \tab  \cr
    License: \tab MIT + file LICENSE \tab  \cr
    Functions: \tab  \tab  \cr
     \tab \link{GetDistance} \tab Euclidean distance between prediction and actual recruitment \cr

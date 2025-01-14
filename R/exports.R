@@ -1,7 +1,7 @@
 # LoadData ---------------------------------------------------------------------
 #' Load recruitment data. 
 #' 
-#' This function must be called before any other function in this package. It<br>
+#' This function must be called before any other function in this package. LoadData<br>
 #' checks the input data and stores the results internally for the session.<br>
 #' Calling this function more than once in the same session will overwrite the<br>
 #' previously created internal data.
@@ -15,12 +15,14 @@
 #' <br>
 #' @param date 
 #' The name (symbol or string) of the column in the dataset with the calendar<br>
-#' dates of active screening. The date column must be:  
+#' dates of active screening. All active calendar dates should be included, even<br>
+#' if the recruitment for that date is 0. Only dates with truly non-active<br>
+#' recruitment should be omitted. The date column must be:  
 #' * an object inheriting from class the `Date` class
 #' * or a character vector with a valid date format. 
 #' @param enrolled 
 #' The name (symbol or string) of the column in the dataset with the number of<br>
-#' subjects recruited on the corresponding date. It must be a numeric vector.
+#' subjects recruited on the corresponding calendar date. It must be a numeric vector.
 #' @return 
 #' This function does not return any value. It runs several tests and proccesses<br>
 #' the data and stores internally the results. It prints a message to the console<br>
@@ -30,9 +32,9 @@
 #' * [Time2Nsubjects()]: simulates the number of weeks needed to recruit a<br>
 #'  given number of subjects
 #'  * [GetDistance()]: calculates the Euclidean distance between the<br>
-#'  prediction and the actual recruitment
+#'  predicted and actual recruitment
 #'  * [GetWeekPredCI()]: calculates the median recruitment with 95% CI for<br>
-#'  the next 104 weeks (two years)
+#'  up to the next 104 weeks (two years)
 #'  
 #' @examples 
 #' # Load using names as symbols
@@ -66,24 +68,27 @@ LoadData <- \(data, date, enrolled) {
 }
 
 # Time2Nsubjects ---------------------------------------------------------------
-#' Simulate number of weeks needed to recruit a given number of subjects
+#' Simulate the number of weeks needed to recruit a given number of subjects
 #' @param nSub Number of subjects to recruit (default = 50L)
 #' @param nSim 
 #' Number of simulations to run (default = 1e4L). Accepted values are in the <br>
 #' range of 1 to 10,000.
-#' @param fillGaps Whether to fill gaps in the data (default = FALSE)
+#' @param fillGaps Whether to fill recruitment gaps in the data (default = FALSE).<br>
+#' Recruitment gaps are defined as any full week (Monday through Sunday) with<br>
+#' no dates recorded in the loaded data. If at least one date is present within<br>
+#' a given week, that week will not be considered a gap in recruitment.
 #' @param cauchyWt Whether to use Cauchy weights for sampling. 
 #'     If FALSE (default),<br>
 #'     binomial weights are used.
 #' @param efficiencyFactor 
 #' An efficiency coefficient to apply to the recruitment rate (default = 1).<br>
-#' If the efficiency of recruitment process is expected to be the same as<br>
+#' If the efficiency of the recruitment process is expected to match<br>
 #' the provided data, this value should be set to 1. If the recruitment<br>
-#' process is expected to be slower, this value should be lower than 1. Finally<br>
+#' process is expected to be slower, this value should less than 1. Finally,<br>
 #' if the recruitment process is expected to proceed faster, this value should be<br>
-#' higher than 1. Accepted values are in the range of 0.1 to 2:<br>
-#' * 0.1: 10% of the original recruitment rate
-#' * 2.0: 100% more efficient than the original recruitment
+#' greater than 1. Accepted values range from 0.1 to 2:<br>
+#' * 0.1: Indicates that the recruitment rate is expected to be 10% of the original rate.
+#' * 2.0: Indicates that the recruitment rate is expected to be double the original rate.
 #' 
 #' @return
 #' An object of `RCTNWeeks` class with four elements.
@@ -120,7 +125,7 @@ print.RCTNWeeks <- function(x, ...) {
 }
 
 # GetDistance ------------------------------------------------------------------
-#' Euclidean distance between prediction and actual recruitment
+#' Euclidean distance between predicted and actual recruitment
 #' @param target A vector with the actual recruitment by week
 #' @inheritParams Time2Nsubjects
 #' @return
@@ -172,7 +177,7 @@ print.RCTDist <- function(x, ...) {
 #' 1. `predCI`: An 104x3 matrix with the 2.5%, 50% and 97.5% weekly percentiles
 #' 1. `plot(yMax = NULL, Title = NULL)`:<br>
 #'     Function which plots the results. It accepts the following arguments:
-#'    - `yMax` sets the high limit of the y-axis
+#'    - `yMax` sets the upper limit of the y-axis
 #'    - `Title` sets the main title for the plot
 #' 1. `pargs`:<br> 
 #'     An environment which contains objects and functions used to construct<br>

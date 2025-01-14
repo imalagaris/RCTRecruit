@@ -20,7 +20,11 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 ## Installation
-The goal of RCTRecruit is to ...
+Accurate prediction of subject recruitment for randomized clinical
+    trials (RCT) remains an ongoing challenge. Many previous prediction models rely
+    on parametric assumptions. We present functions for non-parametric RCT
+    recruitment prediction under several scenarios.  
+
 
 You can install the development version of RCTRecruit from 
 [GitHub](https://github.com/imalagaris/RCTRecruit) with:
@@ -31,18 +35,13 @@ devtools::install_github("imalagaris/RCTRecruit")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
 ```{r example}
 library(RCTRecruit)
-## basic example code
+LoadData(gripsYR1, ScreenDt, Enrolled)a
+Time2Nsubjects()
+GetDistance(gripsYR2Weekly$enrolled)
+res <- GetWeekPredCI()
+res$plot()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
 

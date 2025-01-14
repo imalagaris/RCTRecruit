@@ -11,7 +11,7 @@ Authors@R: c(
     person("Xiaoying", "Yu", , "xiyu@utmb.edu", role = "aut")
   )
 Description: Accurate prediction of subject recruitment for randomized clinical
-    trials (RCT) remains an ongoing challenge. Previous prediction models rely
+    trials (RCT) remains an ongoing challenge. Many previous prediction models rely
     on parametric assumptions. We present functions for non-parametric RCT
     recruitment prediction under several scenarios.
 License: MIT + file LICENSE

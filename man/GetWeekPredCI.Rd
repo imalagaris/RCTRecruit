@@ -15,21 +15,24 @@ GetWeekPredCI(
 \item{nSim}{Number of simulations to run (default = 1e4L). Accepted values are in the \if{html}{\out{<br>}}
 range of 1 to 10,000.}
 
-\item{fillGaps}{Whether to fill gaps in the data (default = FALSE)}
+\item{fillGaps}{Whether to fill recruitment gaps in the data (default = FALSE).\if{html}{\out{<br>}}
+Recruitment gaps are defined as any full week (Monday through Sunday) with\if{html}{\out{<br>}}
+no dates recorded in the loaded data. If at least one date is present within\if{html}{\out{<br>}}
+a given week, that week will not be considered a gap in recruitment.}
 
 \item{cauchyWt}{Whether to use Cauchy weights for sampling.
 If FALSE (default),\if{html}{\out{<br>}}
 binomial weights are used.}
 
 \item{efficiencyFactor}{An efficiency coefficient to apply to the recruitment rate (default = 1).\if{html}{\out{<br>}}
-If the efficiency of recruitment process is expected to be the same as\if{html}{\out{<br>}}
+If the efficiency of the recruitment process is expected to match\if{html}{\out{<br>}}
 the provided data, this value should be set to 1. If the recruitment\if{html}{\out{<br>}}
-process is expected to be slower, this value should be lower than 1. Finally\if{html}{\out{<br>}}
+process is expected to be slower, this value should less than 1. Finally,\if{html}{\out{<br>}}
 if the recruitment process is expected to proceed faster, this value should be\if{html}{\out{<br>}}
-higher than 1. Accepted values are in the range of 0.1 to 2:\if{html}{\out{<br>}}
+greater than 1. Accepted values range from 0.1 to 2:\if{html}{\out{<br>}}
 \itemize{
-\item 0.1: 10\% of the original recruitment rate
-\item 2.0: 100\% more efficient than the original recruitment
+\item 0.1: Indicates that the recruitment rate is expected to be 10\% of the original rate.
+\item 2.0: Indicates that the recruitment rate is expected to be double the original rate.
 }}
 }
 \value{
@@ -39,7 +42,7 @@ An object of \code{RCTPredCI} class with 5 elements.
 \item \code{plot(yMax = NULL, Title = NULL)}:\if{html}{\out{<br>}}
 Function which plots the results. It accepts the following arguments:
 \itemize{
-\item \code{yMax} sets the high limit of the y-axis
+\item \code{yMax} sets the upper limit of the y-axis
 \item \code{Title} sets the main title for the plot
 }
 \item \code{pargs}:\if{html}{\out{<br>}}
