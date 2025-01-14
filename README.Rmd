@@ -37,7 +37,7 @@ devtools::install_github("imalagaris/RCTRecruit")
 
 ```{r example}
 library(RCTRecruit)
-LoadData(gripsYR1, ScreenDt, Enrolled)a
+LoadData(gripsYR1, ScreenDt, Enrolled)
 Time2Nsubjects()
 GetDistance(gripsYR2Weekly$enrolled)
 res <- GetWeekPredCI()
