@@ -9,3 +9,5 @@
 ^\.github$
 ^README\.Rmd$
 ^Rplots\.pdf$
+^CRAN-SUBMISSION$
+^README_files$
