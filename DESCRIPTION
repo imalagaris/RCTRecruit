@@ -1,7 +1,7 @@
 Type: Package
 Package: RCTRecruit
 Title: Non-Parametric Recruitment Prediction for Randomized Clinical Trials
-Version: 0.1.23
+Version: 0.1.24
 Authors@R: c(
     person("Ioannis", "Malagaris", , "iomalaga@utmb.edu", 
            role = c("aut", "cre", "cph"),
@@ -10,8 +10,8 @@ Authors@R: c(
     person("Christopher", "Kurinec", , "chkurine@utmb.edu", role = "aut"),
     person("Xiaoying", "Yu", , "xiyu@utmb.edu", role = "aut")
   )
-Description: Accurate prediction of subject recruitment for randomized clinical
-    trials (RCT) remains an ongoing challenge. Many previous prediction models rely
+Description: Accurate prediction of subject recruitment for Randomized Clinical
+    Trials (RCT) remains an ongoing challenge. Many previous prediction models rely
     on parametric assumptions. We present functions for non-parametric RCT
     recruitment prediction under several scenarios.
 License: MIT + file LICENSE
