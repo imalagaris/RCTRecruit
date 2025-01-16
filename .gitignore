@@ -3,3 +3,6 @@
 comms_files
 .vscode
 Rplots.pdf
+*.Rproj
+README_files/
+.github/
