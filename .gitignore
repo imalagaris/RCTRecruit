@@ -6,3 +6,5 @@ Rplots.pdf
 *.Rproj
 README_files/
 .github/
+.Rprofile
+cran-comments.md
