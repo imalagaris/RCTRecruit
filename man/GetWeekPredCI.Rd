@@ -39,16 +39,9 @@ greater than 1. Accepted values range from 0.1 to 2:\if{html}{\out{<br>}}
 An object of \code{RCTPredCI} class with 5 elements.
 \enumerate{
 \item \code{predCI}: An 104x3 matrix with the 2.5\%, 50\% and 97.5\% weekly percentiles
-\item \code{plot(yMax = NULL, Title = NULL)}:\if{html}{\out{<br>}}
-Function which plots the results. It accepts the following arguments:
-\itemize{
-\item \code{yMax} sets the upper limit of the y-axis
-\item \code{Title} sets the main title for the plot
-}
 \item \code{pargs}:\if{html}{\out{<br>}}
 An environment which contains objects and functions used to construct\if{html}{\out{<br>}}
-the plot. Additional plot configuration to what the \code{plot()} function\if{html}{\out{<br>}}
-currently supports, can be achieved by modifying those objects
+the plot with \code{\link[base:plot]{base::plot()}}. For internal use only.
 \item \code{call.}: The call (deparsed) that created the object
 \item \code{cargs}: A list with the arguments of the call that created the object\if{html}{\out{<br>}}
 including the default arguments
@@ -68,8 +61,8 @@ scenarios <- list(
 )
 maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 defaultGraphicParams <- par(no.readonly = TRUE)
-graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
-for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
+graphics::par(mfrow = c(2, 2), cex.main = 1)
+for (x in scenarios) plot(x, yMax = maxY, main = x$call.)
 do.call(par, defaultGraphicParams)
 }
 \seealso{
@@ -80,6 +73,7 @@ Other Links:
 \code{\link{Time2Nsubjects}()},
 \code{\link{gripsYR1}},
 \code{\link{gripsYR2}},
-\code{\link{gripsYR2Weekly}}
+\code{\link{gripsYR2Weekly}},
+\code{\link{plot.RCTPredCI}()}
 }
 \concept{Links}

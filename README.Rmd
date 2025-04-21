@@ -41,7 +41,7 @@ LoadData(gripsYR1, ScreenDt, Enrolled)
 Time2Nsubjects()
 GetDistance(gripsYR2Weekly$enrolled)
 res <- GetWeekPredCI()
-res$plot()
+plot(res)
 ```
 
 

@@ -13,13 +13,14 @@ Accurate prediction of subject recruitment for Randomized Clinical Trials (RCT) 
     \tab  \tab  \cr
    Package: \tab RCTRecruit \tab  \cr
    Type: \tab Package \tab  \cr
-   Version: \tab 0.1.24 \tab  \cr
-   Date: \tab 2025-01-14 \tab  \cr
+   Version: \tab 0.2.0 \tab  \cr
+   Date: \tab 2025-04-21 \tab  \cr
    License: \tab MIT + file LICENSE \tab  \cr
    Functions: \tab  \tab  \cr
     \tab \link{GetDistance} \tab Euclidean distance between predicted and actual recruitment \cr
     \tab \link{GetWeekPredCI} \tab Calculate median recruitment with 95\% CI for the next 104 weeks (two years) \cr
     \tab \link{LoadData} \tab Load recruitment data. \cr
+    \tab \link{plot.RCTPredCI} \tab Plots RCTPredCI object \cr
     \tab \link{Time2Nsubjects} \tab Simulate the number of weeks needed to recruit a given number of subjects \cr
    Datasets: \tab  \tab  \cr
     \tab \link{gripsYR1} \tab Daily recruitment data for the 1st year of the GRIPS study \cr
@@ -66,7 +67,8 @@ Other Links:
 \code{\link{Time2Nsubjects}()},
 \code{\link{gripsYR1}},
 \code{\link{gripsYR2}},
-\code{\link{gripsYR2Weekly}}
+\code{\link{gripsYR2Weekly}},
+\code{\link{plot.RCTPredCI}()}
 }
 \author{
 \strong{Maintainer}: Ioannis Malagaris \email{iomalaga@utmb.edu} (\href{https://orcid.org/0000-0001-5126-2068}{ORCID}) [copyright holder]

@@ -32,15 +32,15 @@ LoadData(gripsYR1, ScreenDt, Enrolled)
 #> 
 #> Variables Enrolled and ScreenDt were successfully loaded
 Time2Nsubjects()
-#> Enrolling 50 subjects requires 148 weeks
+#> Enrolling 50 subjects requires 137 weeks
 #> 
 #>  2.5%   50% 97.5% 
-#>   106   148   197
+#>   137   137   137
 GetDistance(gripsYR2Weekly$enrolled)
 #>  2.5%   50% 97.5% 
-#>    65   104   138
+#>    85    85    85
 res <- GetWeekPredCI()
-res$plot()
+plot(res)
 ```
 
 <img src="README_files/figure-gfm/example-1.png" width="100%" />

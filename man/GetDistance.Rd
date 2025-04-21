@@ -66,6 +66,7 @@ Other Links:
 \code{\link{Time2Nsubjects}()},
 \code{\link{gripsYR1}},
 \code{\link{gripsYR2}},
-\code{\link{gripsYR2Weekly}}
+\code{\link{gripsYR2Weekly}},
+\code{\link{plot.RCTPredCI}()}
 }
 \concept{Links}

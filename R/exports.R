@@ -119,7 +119,7 @@ Time2Nsubjects <- \(
 
 #' @export
 print.RCTNWeeks <- function(x, ...) {
-  log(msg$enrollWeeks, bold(x$cargs$nSub, 28), bold(x$CI[[2L]], 28))
+  ilog(msg$enrollWeeks, bold(x$cargs$nSub, 28), bold(x$CI[[2L]], 28))
   print(round(x$CI))
   invisible(x)
 }
@@ -175,14 +175,9 @@ print.RCTDist <- function(x, ...) {
 #' @return
 #' An object of `RCTPredCI` class with 5 elements.
 #' 1. `predCI`: An 104x3 matrix with the 2.5%, 50% and 97.5% weekly percentiles
-#' 1. `plot(yMax = NULL, Title = NULL)`:<br>
-#'     Function which plots the results. It accepts the following arguments:
-#'    - `yMax` sets the upper limit of the y-axis
-#'    - `Title` sets the main title for the plot
 #' 1. `pargs`:<br> 
 #'     An environment which contains objects and functions used to construct<br>
-#'     the plot. Additional plot configuration to what the `plot()` function<br>
-#'     currently supports, can be achieved by modifying those objects
+#'     the plot with [base::plot()]. For internal use only.
 #' 1. `r e$commonOutput`
 #' @examples
 #' LoadData(gripsYR1, ScreenDt, Enrolled)
@@ -195,8 +190,8 @@ print.RCTDist <- function(x, ...) {
 #' )
 #' maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
 #' defaultGraphicParams <- par(no.readonly = TRUE)
-#' graphics::par(mfrow = c(2, 2), oma = c(0, 1, 0, 7), mar = c(4, 4, 3, 1))
-#' for (x in scenarios) x$plot(yMax = maxY, Title = x$call.)
+#' graphics::par(mfrow = c(2, 2), cex.main = 1)
+#' for (x in scenarios) plot(x, yMax = maxY, main = x$call.)
 #' do.call(par, defaultGraphicParams)
 #' @family Links
 #' @export
@@ -213,7 +208,7 @@ GetWeekPredCI <- \(
   out <- the$PredCIbyWk(nSim) |> rbind(rep(0, 3), ... = _) |> round()
   rownames(out) <- 0:(nrow(out) - 1)
   obj <- CreatePredCIplotObj(out)
-  out <- c(getCall(), list(predCI = out, plot = obj$.f$predPlot, pargs = obj))
+  out <- c(getCall(), list(predCI = out, pargs = obj))
   structure(out, class = "RCTPredCI")
 }
 
@@ -224,3 +219,26 @@ print.RCTPredCI <- function(x, ...) {
   print(x$predCI |> utils::tail())
   invisible(x)
 }
+
+#' Plots RCTPredCI object
+#' 
+#' @param x RCTPredCI object
+#' @param yMax It sets upper value for the y-axis. It is useful when several
+#' figures are plotted together
+#' @param includeYR2 Whether to plot predictions for 104 weeks. By default (default = FALSE) 
+#' it only plots the first 52 weeks.
+#' @param xGrid Whether to plot vertical grid lines (default = TRUE)
+#' @param yGrid Whether to plot horizontal grid lines (default = TRUE)
+#' @param ... Additional arguments to be passed as in [base::plot()] function
+#' @family Links
+#' @export
+plot.RCTPredCI <- \(x, yMax = NULL, includeYR2 = FALSE, xGrid = TRUE, yGrid = TRUE, ...) {
+  inp <- list(...)
+  main <- x$pargs$main
+  for (name in names(inp)) {
+    x$pargs$main[[name]] <- inp[[name]]
+  }
+  x$pargs$.f$predPlot(yMax = yMax, includeYR2 = includeYR2, xGrid = xGrid, yGrid = yGrid)
+  x$pargs$main <- main
+}
+
