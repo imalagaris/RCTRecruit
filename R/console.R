@@ -1,5 +1,5 @@
 # Utilities to print custom notes, warnings, and errors to the console
-log <- \(x, ...) do.call(sprintf, c(x, list(...))) |> cat()
+ilog <- \(x, ...) do.call(sprintf, c(x, list(...))) |> cat()
 err <- \(x, ...) do.call(sprintf, c(x, list(...))) |> stop(call. = FALSE)
 wrn <- \(x, ...) do.call(sprintf, c(x, list(...))) |>
   warning(call. = FALSE, immediate. = TRUE)

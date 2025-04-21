@@ -10,6 +10,7 @@ the$color <- .Platform$GUI %in% c("RStudio", "RTerm")
 the$initPar <- graphics::par(no.readonly = TRUE)
 the$resetPar <- \() do.call(graphics::par, the$initPar)
 
+
 # On data load, export the methods of the C++ module to the `the`
 # internal environment
 exportModuleMethods <- \(instance) {
@@ -169,14 +170,17 @@ CreatePredCIplotObj <- \(y) {
       }
       invisible(.s)
     }
-    .f$setNewMaxYplot <- \(y) {
-      .s$main$ylim[[2]] <-  y
-      .s$grid$h <- seq(0, y, by = 10)
-    }
+    .f$setNewMaxYplot <- \(y) .s$main$ylim[[2]] <-  y
 
     .f$mainPlot = \() do.call(plot, .s$main)
     .f$CI95Add <- \() do.call(graphics::polygon, .s$CI95)
-    .f$gridAdd <-  \() do.call(graphics::abline, .s$grid)
+    .f$gridAdd <-  \(xGrid = TRUE, yGrid = TRUE) {
+      if (!any(xGrid, yGrid)) return(invisible(NULL))
+      argL <- .s$grid
+      argL$v <- if (xGrid) graphics::axTicks(1) else NULL
+      argL$h <- if (yGrid) graphics::axTicks(2) else NULL
+      do.call(graphics::abline, argL)
+    }
     .f$linesAdd <- \() {
       arg <- .s$lines |> (\(x) x[vapply(x, \(z) !is.null(z$y), TRUE)])()
       colVec <-  vapply(arg, \(x) x$col, "")
@@ -185,18 +189,16 @@ CreatePredCIplotObj <- \(y) {
       lapply(arg, do.call, what = graphics::lines) |> invisible()
       graphics::legend("topleft", legend = labVec, col = colVec, lwd = 3)
     }
-    .f$predPlot <- \(yMax = NULL, Title = NULL, includeYR2 = FALSE)  {
+    .f$predPlot <- \(yMax = NULL, includeYR2 = FALSE, xGrid = TRUE, yGrid = TRUE,  ...)  {
       if (includeYR2) {
-        .s$.f$selectRange(104)$.f$predPlot(yMax, Title)
+        .s$.f$selectRange(104)$.f$predPlot(yMax = yMax, xGrid = xGrid, yGrid = yGrid)
         .s <- .s$.f$selectRange(52)
         return(invisible(NULL))
       }
       if (!is.null(yMax)) .f$setNewMaxYplot(yMax)
-      if (!is.null(Title)) .s$main[["main"]] <- Title
-      do.call(graphics::par, .s$Par)
       .f$mainPlot()
       .f$CI95Add()
-      .f$gridAdd()
+      .f$gridAdd(xGrid, yGrid)
       .f$linesAdd()
     }
   }
@@ -245,12 +247,6 @@ CreatePredCIplotObj <- \(y) {
       (\(x) if (x == "()") "Default" else x)()
     
     .d$init <- as.list(.s)[c("maxY", "main", "CI95", "grid", "lines", "Par")]
-    reset <- \(yMax = NULL, Title = NULL) {
-      for (nm in names(.d$init)) {
-        .s[[nm]] <- .d$init[[nm]]
-      }
-      .s$.f$predPlot(yMax, Title)
-    }
     rm(y, df, envir = .s)
   }
   rm(isInit, len, envir = .s)

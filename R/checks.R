@@ -110,7 +110,7 @@ checkArgs <- function() {
 # Print success message after loading data
 LoadSuccess <- \(x) {
   y <- lapply(x, bold, 28)
-  log(msg$success, y$enrolled, y$date)
+  ilog(msg$success, y$enrolled, y$date)
 }
 
 checkDate <- function(x) {
