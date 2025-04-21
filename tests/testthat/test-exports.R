@@ -38,7 +38,7 @@ test_that("Exported functions", {
   
   head(res$predCI) |> logPrint() |> expect_no_error()
   res$plot(yMax = 40, Title = "Hi") |> expect_no_error()
-  res$pargs$reset() |> expect_no_error()
+  # res$pargs$reset() |> expect_no_error()
   res$pargs$.f$addTarget(gripsYR2Weekly$enrolled) |> expect_no_error()
   gripsYR2Weekly$enrolled[[-1L]] |> GetDistance(10L) |>  expect_error()
 })

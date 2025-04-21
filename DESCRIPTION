@@ -1,7 +1,7 @@
 Type: Package
 Package: RCTRecruit
 Title: Non-Parametric Recruitment Prediction for Randomized Clinical Trials
-Version: 0.1.25
+Version: 0.2.0
 Authors@R: c(
     person("Ioannis", "Malagaris", , "iomalaga@utmb.edu", 
            role = c("aut", "cre", "cph"),
