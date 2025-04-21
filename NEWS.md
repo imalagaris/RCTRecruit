@@ -1,3 +1,5 @@
+# RCTRecruit (development version)
+
 # RCTRecruit 0.2.0
 * Added s3 plot method for RCTPredCI objects
 * Changed naming convention for internal files
