@@ -1,0 +1,91 @@
+---
+title: "Introduction_to_RCTRecruit"
+output: distill::distill_article
+vignette: >
+  %\VignetteIndexEntry{Introduction_to_RCTRecruit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Data Initialization
+
+The `LoadData` function ensures that input data is properly formatted, processed for analysis, and stored internally for the session. The package includes the `gripsYR1` dataset, which contains the first year of recruitment data from the GRIPS study. We will use the `ScreenDt` and `Enrolled` columns to initialize our baseline.
+
+```{r setup, message=FALSE, warning=FALSE}
+library(RCTRecruit)
+
+# View the structure of the historical data
+head(gripsYR1)
+
+# Load the data into the package's internal memory
+LoadData(data = gripsYR1, date = ScreenDt, enrolled = Enrolled)
+```
+
+# Cumulative Projections
+
+The `GetWeekPredCI` function predicts cumulative weekly recruitment, providing median estimates and a 95% projection band. By default, weight functions are generated using a Binomial (51, 0.5) probability mass function, anchoring the peak of the curve at the same calendar week in the empirical data to capture seasonal patterns. An s3 plot method is available to visualize the results.
+
+```{r cumulative-projections, fig.width=8, fig.height=6}
+set.seed(123)
+res <- GetWeekPredCI()
+
+# View the first 10 weeks of the prediction matrix
+res$predCI[1:10, ]
+
+# Plot the predicted recruitment against the input data
+plot(res)
+```
+
+# Anomaly Adjustments (Gap Weeks & Efficiency)
+
+There are instances where the empirical data contains prolonged periods with zero enrollment, referred to as "gap weeks," which are not expected to recur (e.g., pandemic disruptions). Setting `fillGaps = TRUE` replaces these with expected values. To adjust for other anticipated changes, such as a 50% increase in recruitment efficiency, use the `efficiencyFactor` multiplier.
+
+```{r anomaly-adjustments}
+set.seed(123)
+res_anomaly <- GetWeekPredCI(fillGaps = TRUE, efficiencyFactor = 1.5)
+
+# View the first 10 weeks of the adjusted prediction matrix for comparison
+res_anomaly$predCI[1:10, ]
+```
+
+# Timeline Estimations
+
+The `Time2Nsubjects` function estimates the number of weeks required to recruit a specified number of subjects based on the historical recruitment data. The default target is 50 subjects.
+
+```{r timeline-estimations}
+set.seed(123)
+Time2Nsubjects()
+```
+
+# Validation Metrics and Scenario Comparison
+
+The `GetDistance` function calculates the Euclidean Distance (ED) between predicted and actual weekly recruitment to assess model accuracy. It requires a target cumulative enrollment vector. Here, we use the second year of recruitment (`gripsYR2Weekly`) as our target benchmark. 
+
+We can evaluate how adjustments affect predictive accuracy by comparing the distance of a default model against an adjusted model.
+
+```{r validation-metrics, fig.width=8, fig.height=8}
+# Set the target vector
+target <- gripsYR2Weekly$enrolled
+
+# Calculate Euclidean Distance using defaults
+set.seed(123)
+GetDistance(target = target)
+
+# Calculate Euclidean Distance accounting for gap weeks
+set.seed(123)
+GetDistance(target = target, fillGaps = TRUE)
+
+# Compare four different predictive scenarios visually
+scenarios <- list(
+  sc1 = GetWeekPredCI(),
+  sc2 = GetWeekPredCI(cauchyWt = TRUE),
+  sc3 = GetWeekPredCI(fillGaps = TRUE),
+  sc4 = GetWeekPredCI(fillGaps = TRUE, efficiencyFactor = 1.5)
+)
+
+maxY <- sapply(scenarios, \(x) x$pargs$maxY) |> max()
+
+defaultGraphicParams <- par(no.readonly = TRUE)
+graphics::par(mfrow = c(2, 2), cex.main = 1)
+for (x in scenarios) plot(x, yMax = maxY, main = x$call.)
+```

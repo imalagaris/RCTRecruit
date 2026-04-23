@@ -30,8 +30,11 @@ RoxygenNote: 7.3.2
 URL: https://github.com/imalagaris/RCTRecruit
 BugReports: https://github.com/imalagaris/RCTRecruit/issues
 Suggests: 
+    distill,
     knitr,
     magrittr,
+    rmarkdown,
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
+VignetteBuilder: knitr
